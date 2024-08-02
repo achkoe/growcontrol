@@ -1,0 +1,17 @@
+<!doctype html>
+<html>
+
+<head>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Hello from Flask</title>
+    </head>
+    
+    <body>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <h1>Hello, World!</h1>
+    <p>Temperature <span id="temperature"></span></p>
+    <p>Humidity <span id="humidity"></span></p>
+</body>
+
+</html>
