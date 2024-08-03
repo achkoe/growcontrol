@@ -3,7 +3,7 @@
 import xmlrpc.client
 import settings
 
-ht_proxy = xmlrpc.client.ServerProxy(f"http://localhost:{settings.ht_server_port}")
+sensors_proxy = xmlrpc.client.ServerProxy(f"http://localhost:{settings.sensors_server_port}")
 fan_proxy = xmlrpc.client.ServerProxy(f"http://localhost:{settings.fan_server_port}")
 
 help = """
@@ -22,11 +22,11 @@ while True:
    elif command == "f":
      reply = fan_proxy.get()
    elif command == "t":
-     reply = ht_proxy.temperature()
+     reply = sensors_proxy.temperature()
    elif command == "h":
-     reply = ht_proxy.humidity()
+     reply = sensors_proxy.humidity()
    elif command == "s":
       arg = input("set temperature to:")
-      reply = ht_proxy.settemperature(float(arg))
+      reply = sensors_proxy.settemperature(float(arg))
    print(reply)
 

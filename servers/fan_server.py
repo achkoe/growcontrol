@@ -23,7 +23,7 @@ def process(inqueue: multiprocessing.Queue, outqueue: multiprocessing.Queue) -> 
    logger.setLevel(LOGLEVEL)
    logger.critical("FAN PROCESS STARTED")
 
-   ht_proxy = xmlrpc.client.ServerProxy(f"http://localhost:{settings.ht_server_port}")
+   ht_proxy = xmlrpc.client.ServerProxy(f"http://localhost:{settings.sensors_server_port}")
 
    # fan status
    fan_status = True

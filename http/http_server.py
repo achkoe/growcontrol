@@ -4,7 +4,7 @@ from flask import Flask, render_template
 import xmlrpc.client
 import settings
 
-ht_proxy = xmlrpc.client.ServerProxy(f"http://localhost:{settings.ht_server_port}")
+sensors_proxy = xmlrpc.client.ServerProxy(f"http://localhost:{settings.sensors_server_port}")
 fan_proxy = xmlrpc.client.ServerProxy(f"http://localhost:{settings.fan_server_port}")
 
 app = Flask(__name__)
@@ -17,8 +17,8 @@ def index():
 
 @app.route("/update")
 def udate():
-    humidity = ht_proxy.humidity()
-    temperature = ht_proxy.temperature()
+    humidity = sensors_proxy.humidity()
+    temperature = sensors_proxy.temperature()
     fan  = fan_proxy.get()
     return {
         "humidity": humidity,
