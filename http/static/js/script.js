@@ -14,10 +14,13 @@ function callServerEveryTwoSeconds() {
             .then(data => {
                 console.log('Success:', data);
                 console.log('humidity:', data.humidity);
-                var e = document.getElementById("humidity");
+                var e;
+                e = document.getElementById("humidity");
                 e.innerText = data["humidity"];
-                var e = document.getElementById("temperature");
+                e = document.getElementById("temperature");
                 e.innerText = data["temperature"];
+                e = document.getElementById("fan");
+                e.innerText = data["fan"];
             })
             .catch(error => {
                 console.error('There has been a problem with your fetch operation:', error);

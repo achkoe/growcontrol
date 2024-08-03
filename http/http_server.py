@@ -11,7 +11,7 @@ app = Flask(__name__)
 bus = SessionBus()
 #get the object
 ht_server = bus.get("net.ak.pydbus.htserver")
-
+fan_server = bus.get("net.ak.pydbus.fanserver")
 
 @app.route("/")
 def index():
@@ -22,9 +22,11 @@ def index():
 def udate():
     humidity = ht_server.humidity()
     temperature = ht_server.temperature()
+    fan  = fan_server.get()
     return {
         "humidity": humidity,
-        "temperature": temperature
+        "temperature": temperature,
+        "fan": fan
     }
 
 
