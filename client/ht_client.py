@@ -3,30 +3,14 @@
 # Based on http://stackoverflow.com/questions/22390064/use-dbus-to-just-send-a-message-in-python
 # Python script to call the methods of the DBUS ht server
 
-from pydbus import SessionBus
-
+import xmlrpc.client
 
 if __name__ == "__main__":
-   # get the session bus
-   bus = SessionBus()
-   #get the object
-   ht_server = bus.get("net.ak.pydbus.htserver")
+   proxy = xmlrpc.client.ServerProxy('http://localhost:4000')
 
-   print("Commands: 'identity' or 'humidity' or 'temperature' or 'quit'")
-   while True:
-      command = input("Command: ")
-      print(f"{command!r}")
-      if command == "quit":
-         break
-      elif command in ["humidity"]:
-         reply = ht_server.humidity()
-      elif command == "temperature":
-         reply = ht_server.temperature()
-      elif command == "identity":
-         reply = ht_server.identity()
-      else:
-         print(f"Invalid command: {command!r}")
-         continue
-      print(reply)
+   # Print list of available methods
+   print(proxy.system.listMethods())
 
-ht_server.quit()
+   print(proxy.temperature())
+
+

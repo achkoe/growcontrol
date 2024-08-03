@@ -1,17 +1,14 @@
 # flask --app http_server run --debug --host 0.0.0.0
 
 from flask import Flask, render_template
-from pydbus import SessionBus
+import xmlrpc.client
+import settings
 
-
+ht_proxy = xmlrpc.client.ServerProxy(f"http://localhost:{settings.ht_server_port}")
+fan_proxy = xmlrpc.client.ServerProxy(f"http://localhost:{settings.fan_server_port}")
 
 app = Flask(__name__)
 
-# get the session bus
-bus = SessionBus()
-#get the object
-ht_server = bus.get("net.ak.pydbus.htserver")
-fan_server = bus.get("net.ak.pydbus.fanserver")
 
 @app.route("/")
 def index():
@@ -20,9 +17,9 @@ def index():
 
 @app.route("/update")
 def udate():
-    humidity = ht_server.humidity()
-    temperature = ht_server.temperature()
-    fan  = fan_server.get()
+    humidity = ht_proxy.humidity()
+    temperature = ht_proxy.temperature()
+    fan  = fan_proxy.get()
     return {
         "humidity": humidity,
         "temperature": temperature,

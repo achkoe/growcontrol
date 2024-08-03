@@ -1,16 +1,10 @@
 #!/usr/bin/env python
 
-# Based on http://stackoverflow.com/questions/22390064/use-dbus-to-just-send-a-message-in-python
+import xmlrpc.client
+import settings
 
-# Python script to call the methods of the DBUS Test Server
-
-from pydbus import SessionBus
-
-#get the session bus
-bus = SessionBus()
-#get the object
-ht_server = bus.get("net.ak.pydbus.htserver")
-fan_server = bus.get("net.ak.pydbus.fanserver")
+ht_proxy = xmlrpc.client.ServerProxy(f"http://localhost:{settings.ht_server_port}")
+fan_proxy = xmlrpc.client.ServerProxy(f"http://localhost:{settings.fan_server_port}")
 
 help = """
 Valid commands:
@@ -26,15 +20,13 @@ while True:
    if command == "q":
       break
    elif command == "f":
-     reply = fan_server.get()
+     reply = fan_proxy.get()
    elif command == "t":
-     reply = ht_server.temperature()
+     reply = ht_proxy.temperature()
    elif command == "h":
-     reply = ht_server.humidity()
+     reply = ht_proxy.humidity()
    elif command == "s":
       arg = input("set temperature to:")
-      reply = ht_server.settemperature(float(arg))
+      reply = ht_proxy.settemperature(float(arg))
    print(reply)
 
-fan_server.quit()
-ht_server.quit()

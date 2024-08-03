@@ -9,19 +9,21 @@ import time
 import logging
 import atexit
 from gi.repository import GLib
-from pydbus import SessionBus
+from base import create_server
+import settings
+
 
 IDENTITY = "ht_server.py v0.0.1"
-loop = GLib.MainLoop()
 send_queue = multiprocessing.Queue()
 recv_queue = multiprocessing.Queue()
 logging.basicConfig(format="%(module)s:%(levelname)s:%(message)s", level=logging.DEBUG)
+LOGLEVEL = logging.CRITICAL
 
 
 def process(inqueue: multiprocessing.Queue, outqueue: multiprocessing.Queue) -> None:
     # So far just for testing
     logger = logging.getLogger()
-    logger.setLevel(logging.CRITICAL)
+    logger.setLevel(LOGLEVEL)
     logger.critical("HT PROCESS STARTED")
     temperature = 24.23456
     humidity = 48.1
@@ -45,7 +47,7 @@ def process(inqueue: multiprocessing.Queue, outqueue: multiprocessing.Queue) -> 
 
 		
 LOGGER = logging.getLogger()
-LOGGER.setLevel(logging.CRITICAL)
+LOGGER.setLevel(LOGLEVEL)
 
 PROCESS = multiprocessing.Process(target=process, args=(send_queue, recv_queue))
 PROCESS.start()
@@ -59,31 +61,7 @@ def terminate():
 atexit.register(terminate)
 
 
-class TheDBUSService(object):
-   """
-      <node>
-         <interface name='net.ak.pydbus.htserver'>
-            <method name='identity'>
-               <arg type='s' name='response' direction='out'/>
-            </method>
-            <method name='temperature'>
-               <arg type='s' name='response' direction='out'/>
-            </method>
-            <method name='humidity'>
-               <arg type='s' name='response' direction='out'/>
-            </method>
-            <method name='quit'/>
-            <method name="settemperature">
-               <arg type='d' name='a' direction='in'/>
-               <arg type='s' name='response' direction='out'/>
-            </method>
-         </interface>
-      </node>
-	"""
-   def quit(self):
-     """removes this object from the DBUS connection and exits"""
-     loop.quit()
-
+class Bridge():
    def settemperature(self, value):
        LOGGER.info(("settemperature", repr(value), type(value)))
        return self._communicate(f"settemperature{value}")
@@ -97,7 +75,7 @@ class TheDBUSService(object):
 
    def humidity(self):
       LOGGER.info("humidity")
-      return "{:4.1f}".format(self._communicate("humidity")       )
+      return "{:4.1f}".format(self._communicate("humidity"))
    
    def _communicate(self, command):
       global PROCESS
@@ -105,6 +83,7 @@ class TheDBUSService(object):
       return recv_queue.get()
 	
 
-bus = SessionBus()
-bus.publish("net.ak.pydbus.htserver", TheDBUSService())
-loop.run()
+LOGGER.critical(f"HT SERVER AT PORT {settings.ht_server_port} STARTED")
+create_server(Bridge, settings.ht_server_port)
+
+
