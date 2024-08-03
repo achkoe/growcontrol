@@ -1,7 +1,5 @@
 #!/usr/bin/env python
-"""Server to deliver temperature and humidity over dbus."""
-
-# Based on http://stackoverflow.com/questions/22390064/use-dbus-to-just-send-a-message-in-python
+"""Server to deliver temperature and humidity over xmlrpc."""
 
 
 import multiprocessing
@@ -10,7 +8,7 @@ import logging
 import atexit
 from gi.repository import GLib
 from base import create_server
-import settings
+import configuration
 
 
 IDENTITY = "ht_server.py v0.0.1"
@@ -24,7 +22,7 @@ def process(inqueue: multiprocessing.Queue, outqueue: multiprocessing.Queue) -> 
     # So far just for testing
     logger = logging.getLogger()
     logger.setLevel(LOGLEVEL)
-    logger.critical("HT PROCESS STARTED")
+    logger.critical("SENSORS PROCESS STARTED")
     temperature = 24.23456
     humidity = 48.1
     while True:
@@ -54,7 +52,7 @@ PROCESS.start()
 
 
 def terminate():
-   LOGGER.critical("TERMINATE HT PROCESS")    
+   LOGGER.critical("TERMINATE SENSORS PROCESS")    
    PROCESS.terminate()
    
 
@@ -83,7 +81,7 @@ class Bridge():
       return recv_queue.get()
 	
 
-LOGGER.critical(f"HT SERVER AT PORT {settings.ht_server_port} STARTED")
-create_server(Bridge, settings.ht_server_port)
+LOGGER.critical(f"SENSORS SERVER AT PORT {configuration.sensors_server_port} STARTED")
+create_server(Bridge, configuration.sensors_server_port)
 
 

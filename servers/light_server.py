@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Server to deliver fan status and control the fan."""
+"""Server to deliver light status and control the light."""
 
 import logging
 import multiprocessing
@@ -8,9 +8,10 @@ import atexit
 import xmlrpc.client
 from base import create_server
 import  configuration
+import json
 
 
-IDENTITY = "fan_server.py v0.0.1"
+IDENTITY = "light_server.py v0.0.1"
 send_queue = multiprocessing.Queue()
 recv_queue = multiprocessing.Queue()
 logging.basicConfig(format="%(module)s:%(levelname)s:%(message)s", level=logging.DEBUG)
@@ -21,26 +22,23 @@ def process(inqueue: multiprocessing.Queue, outqueue: multiprocessing.Queue) -> 
    # So far just for testing
    logger = logging.getLogger()
    logger.setLevel(LOGLEVEL)
-   logger.critical("FAN PROCESS STARTED")
+   logger.critical("LIGHT PROCESS STARTED")
 
-   sensors_proxy = xmlrpc.client.ServerProxy(f"http://localhost:{configuration.sensors_server_port}")
-
-   # fan status
-   fan_status = True
+   # light status
+   light_1_status = True
+   light_2_status = True
 
    while True:
-      time.sleep(0.01)
-      temperature = float(sensors_proxy.temperature())
-      if temperature > 25:
-         fan_status = True
-      else:
-         fan_status = False    
+      time.sleep(0.1)
 
       if not inqueue.empty():
          query = inqueue.get()
          logger.info(f"query -> {query!r}")
          if query == "get":
-             reply = "ON" if fan_status is True else "OFF"
+             reply = {
+                 "light_1": "ON" if light_1_status else "OFF",
+                 "light_2": "ON" if light_2_status else "OFF"
+             }
              outqueue.put(reply)
          else:
              logger.info(f"out <- ?{str(query)}")
@@ -55,7 +53,7 @@ PROCESS.start()
 
 
 def terminate():
-   LOGGER.critical("TERMINATE FAN PROCESS")    
+   LOGGER.critical("TERMINATE LIGHT PROCESS")    
    PROCESS.terminate()
    
 
@@ -74,5 +72,5 @@ class Bridge():
       return recv_queue.get()
 	
 
-LOGGER.critical(f"FAN SERVER AT PORT {configuration.fan_server_port} STARTED")
-create_server(Bridge, configuration.fan_server_port)
+LOGGER.critical(f"LIGHT SERVER AT PORT {configuration.light_server_port} STARTED")
+create_server(Bridge, configuration.light_server_port)

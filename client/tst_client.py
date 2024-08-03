@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 
 import xmlrpc.client
-import settings
+import configuration
 
-sensors_proxy = xmlrpc.client.ServerProxy(f"http://localhost:{settings.sensors_server_port}")
-fan_proxy = xmlrpc.client.ServerProxy(f"http://localhost:{settings.fan_server_port}")
+sensors_proxy = xmlrpc.client.ServerProxy(f"http://localhost:{configuration.sensors_server_port}")
+fan_proxy = xmlrpc.client.ServerProxy(f"http://localhost:{configuration.fan_server_port}")
 
 help = """
 Valid commands:
