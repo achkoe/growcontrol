@@ -11,55 +11,12 @@ import  configuration
 
 
 IDENTITY = "fan_server.py v0.0.1"
-send_queue = multiprocessing.Queue()
-recv_queue = multiprocessing.Queue()
+inqueue = multiprocessing.Queue()
+outqueue = multiprocessing.Queue()
 logging.basicConfig(format="%(module)s:%(levelname)s:%(message)s", level=logging.DEBUG)
 LOGLEVEL = logging.CRITICAL
-
-
-def process(inqueue: multiprocessing.Queue, outqueue: multiprocessing.Queue) -> None:
-   # So far just for testing
-   logger = logging.getLogger()
-   logger.setLevel(LOGLEVEL)
-   logger.critical("FAN PROCESS STARTED")
-
-   sensors_proxy = xmlrpc.client.ServerProxy(f"http://localhost:{configuration.sensors_server_port}")
-
-   # fan status
-   fan_status = True
-
-   while True:
-      time.sleep(0.01)
-      temperature = float(sensors_proxy.temperature())
-      if temperature > 25:
-         fan_status = True
-      else:
-         fan_status = False    
-
-      if not inqueue.empty():
-         query = inqueue.get()
-         logger.info(f"query -> {query!r}")
-         if query == "get":
-             reply = "ON" if fan_status is True else "OFF"
-             outqueue.put(reply)
-         else:
-             logger.info(f"out <- ?{str(query)}")
-             outqueue.put(f"?{str(query)}")
-
-
 LOGGER = logging.getLogger()
 LOGGER.setLevel(LOGLEVEL)
-		
-PROCESS = multiprocessing.Process(target=process, args=(send_queue, recv_queue))
-PROCESS.start()
-
-
-def terminate():
-   LOGGER.critical("TERMINATE FAN PROCESS")    
-   PROCESS.terminate()
-   
-
-atexit.register(terminate)
 
 
 class Bridge():
@@ -70,9 +27,46 @@ class Bridge():
       return self._communicate("get")
    
    def _communicate(self, command):
-      send_queue.put(command)
-      return recv_queue.get()
-	
+      inqueue.put(command)
+      return outqueue.get()
 
-LOGGER.critical(f"FAN SERVER AT PORT {configuration.fan_server_port} STARTED")
-create_server(Bridge, configuration.fan_server_port)
+
+def process() -> None:
+   logger = logging.getLogger()
+   logger.setLevel(LOGLEVEL)
+   logger.critical(f"FAN SERVER AT PORT {configuration.fan_server_port} STARTED")
+   create_server(Bridge, configuration.fan_server_port)
+
+
+def terminate():
+   LOGGER.critical("TERMINATE FAN SERVER")    
+   PROCESS.terminate()
+
+
+PROCESS = multiprocessing.Process(target=process, args=())
+PROCESS.start()
+atexit.register(terminate)
+
+
+sensors_proxy = xmlrpc.client.ServerProxy(f"http://localhost:{configuration.sensors_server_port}")
+# fan status
+fan_status = True
+
+LOGGER.critical("FAN PROCESS STARTED")
+while True:
+   time.sleep(0.01)
+   temperature = float(sensors_proxy.temperature())
+   if temperature > 25:
+      fan_status = True
+   else:
+      fan_status = False    
+
+   if not inqueue.empty():
+      query = inqueue.get()
+      LOGGER.info(f"query -> {query!r}")
+      if query == "get":
+          reply = "ON" if fan_status is True else "OFF"
+          outqueue.put(reply)
+      else:
+          LOGGER.info(f"out <- ?{str(query)}")
+          outqueue.put(f"?{str(query)}")
