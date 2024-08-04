@@ -43,17 +43,9 @@ def toggle_fan():
     # {'fan': 'Manual', 'fanOnOff': 'Off'}
     fan_mode = request.get_json()["fan"]  # either 'Manual' or 'Auto'
     fan_state = request.get_json()["fanOnOff"]
-    if fan_mode == "Manual":
-        reply = fan_proxy.manual()
-    else:
-        reply = fan_proxy.auto()
+    reply = fan_proxy.set(fan_mode, fan_state)
     print(f"reply -> {reply}")
-    if fan_state == "On":
-        reply = fan_proxy.fanon()
-    else:
-        reply = fan_proxy.fanoff()
-    print(f"reply -> {reply}")
-    return {"status": "OK"}
+    return {"status": reply}
 
 
 @app.route("/toggleLight", methods=("POST", ))
@@ -66,23 +58,3 @@ def toggle_light():
     reply = light_proxy.set(light_mode, light_1_state, light_2_state)
     return {"status": reply}
     
-    
-    if light_mode == "Manual":
-        reply = light_proxy.manual()
-    else:
-        reply = light_proxy.auto()
-    print(f"reply -> {reply}")
-    
-    if light_1_state == "On":
-        reply = light_proxy.light1on()
-    else:
-        reply = light_proxy.light1off()
-    print(f"reply -> {reply}")
-    
-    if light_2_state == "On":
-        reply = light_proxy.light2on()
-    else:
-        reply = light_proxy.light2off()
-    print(f"reply -> {reply}")
-
-    return {"status": "OK"}
