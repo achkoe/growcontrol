@@ -13,7 +13,7 @@ import configuration
 IDENTITY = "sensors_server.py v0.0.1"
 inqueue = multiprocessing.Queue()
 outqueue = multiprocessing.Queue()
-logging.basicConfig(format="%(module)s:%(levelname)s:%(message)s", level=logging.DEBUG)
+logging.basicConfig(format=configuration.log_format, level=logging.DEBUG)
 LOGLEVEL = logging.CRITICAL
 LOGGER = logging.getLogger()
 LOGGER.setLevel(LOGLEVEL)

@@ -1,3 +1,44 @@
 h1 {
     font-size: 100%;
 }
+
+.toggle-container {
+    display: flex;
+    align-items: center;
+}
+.toggle-button {
+    display: inline-block;
+    width: 60px;
+    height: 30px;
+    background: #ccc;
+    border-radius: 15px;
+    position: relative;
+    cursor: pointer;
+    margin-right: 10px;
+    margin-left: 10px;
+}
+.toggle-button:before {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 26px;
+    height: 26px;
+    background: #fff;
+    border-radius: 50%;
+    transition: all 0.3s;
+}
+.toggle-button.active {
+    background: #4caf50;
+}
+.toggle-button.active:before {
+    transform: translateX(30px);
+}
+
+.toggle-button.disabled {
+    background: #e0e0e0;
+    cursor: not-allowed;
+}
+.toggle-button.disabled:before {
+    background: #c0c0c0;
+}

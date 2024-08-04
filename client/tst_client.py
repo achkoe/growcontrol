@@ -14,6 +14,8 @@ h  - return humidity
 f - get fan status
 l - get light status
 s <value> - set temperature
+a - fan auto
+o - fan on
 """
 print(help)
 
@@ -23,6 +25,10 @@ while True:
       break
    elif command == "f":
      reply = fan_proxy.get()
+   elif command == "a":
+     reply = fan_proxy.auto()
+   elif command == "o":
+     reply = fan_proxy.on()
    elif command == "l":
      reply = light_proxy.get()
    elif command == "t":

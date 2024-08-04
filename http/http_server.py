@@ -2,7 +2,7 @@
 
 import xmlrpc.client
 import time
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 import configuration
 
 sensors_proxy = xmlrpc.client.ServerProxy(f"http://localhost:{configuration.sensors_server_port}")
@@ -33,4 +33,21 @@ def udate():
     return reply
 
 
+@app.route("/toggle", methods=("POST", ))
+def toggle_fan():
+    fan_mode = request.get_json()["toggleState"]  # True means 'Manual', False means 'Auto'
+    fan_state = request.get_json()["isOn"]
+    print(f"fan_mode -> {fan_mode}, fan_state -> {fan_state}")
+    if fan_mode is True:
+        reply = fan_proxy.manual()
+    else:
+        reply = fan_proxy.auto()
+    print(f"reply -> {reply}")
+    if fan_state is True:
+        reply = fan_proxy.fanon()
+    else:
+        reply = fan_proxy.fanoff()
+    print(f"reply -> {reply}")
+
+    return {"status": "OK"}    
 
