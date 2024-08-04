@@ -1,14 +1,15 @@
 #!/usr/bin/env python
-"""Server to deliver light status and control the light."""
+"""   Server to deliver light status and control the light."""
 
 import logging
 import multiprocessing
 import time
 import pathlib
 import atexit
+import json
+import datetime
 from base import create_server
 import  configuration
-import json
 
 
 IDENTITY = "light_server.py v0.0.1"
@@ -52,7 +53,12 @@ atexit.register(terminate)
 
 
 def load_settings():
-   pass
+   with pathlib.Path(__file__).parent.parent.joinpath("settings.json").open("r") as fh:
+      settings = json.load(fh)
+   for key in ("light_1_on_time", "light_1_off_time", "light_2_on_time", "light_2_off_time"):
+      (hour, minute, second) = (int(item) for item in settings[key].split(":"))
+      settings[key] = hour * 60 * 60 + minute * 60 + second
+   return settings
       
 
 # light status
@@ -60,8 +66,17 @@ light_1_status = True
 light_2_status = True
 
 LOGGER.critical("LIGHT PROCESS STARTED")
+settings = load_settings()
+print(settings)
+
 while True:
-   time.sleep(0.1)
+   time.sleep(1)
+   
+   time_struct = time.localtime()
+   current_time = time_struct.tm_hour * 60 * 60 + time_struct.tm_min * 60 + time_struct.tm_sec
+   light_1_status = current_time >= settings["light_1_on_time"] and current_time <= settings["light_1_off_time"]
+   light_2_status = current_time >= settings["light_2_on_time"] and current_time <= settings["light_2_off_time"]
+   LOGGER.critical(f"light_1_status -> {light_1_status}, light_2_status -> {light_2_status}")
 
    if not inqueue.empty():
       query = inqueue.get()
@@ -73,7 +88,8 @@ while True:
           }
           outqueue.put(reply)
       elif query == "reload":
-         pass            
+         settings = load_settings()
+         outqueue.put("OK")
       else:
           LOGGER.info(f"out <- ?{str(query)}")
           outqueue.put(f"?{str(query)}")

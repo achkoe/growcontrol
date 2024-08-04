@@ -1,6 +1,6 @@
 {
-    "light_1_on_time": "6:00:00",
-    "light_1_off_time": "18:00:00",
+    "light_1_on_time": "9:30:00",
+    "light_1_off_time": "9:32:00",
     "light_2_on_time": "7:00:00",
     "light_2_off_time": "17:00:00",
     "moisture_low_level": 50,

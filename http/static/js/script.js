@@ -25,6 +25,8 @@ function callServerEveryTwoSeconds() {
                 e.innerText = data["light_1"];
                 e = document.getElementById("light_2");
                 e.innerText = data["light_2"];
+                e = document.getElementById("time");
+                e.innerText = data["time"];
             })
             .catch(error => {
                 console.error('There has been a problem with your fetch operation:', error);

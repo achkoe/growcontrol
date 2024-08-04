@@ -1,7 +1,8 @@
 # flask --app http_server run --debug --host 0.0.0.0
 
-from flask import Flask, render_template
 import xmlrpc.client
+import time
+from flask import Flask, render_template
 import configuration
 
 sensors_proxy = xmlrpc.client.ServerProxy(f"http://localhost:{configuration.sensors_server_port}")
@@ -25,7 +26,8 @@ def udate():
     reply = {
         "humidity": humidity,
         "temperature": temperature,
-        "fan": fan
+        "fan": fan,
+        "time": time.strftime("%X")
     }
     reply.update(light)
     return reply
