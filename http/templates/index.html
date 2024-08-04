@@ -17,12 +17,20 @@
     <p>Light 1 <span id="light_1"></span></p>
     <p>Light 2 <span id="light_2"></span></p>
 
-    <div class="toggle-container">
-        Fan
-        <div class="toggle-button" id="toggleFanModeButton"></div>
-        <span id="toggleFanModeCaption">Auto</span>
-        <div class="toggle-button disabled" id="toggleFanOnOffButton"></div>
-        <span id="toggleFanOnOffCaption">Off</span>
+
+    <div>
+        <label for="fanToggle">Fan:</label>
+        <button id="fanToggle" class="auto">Auto</button>
+        <label for="fanOnOffToggle">Fan On/Off:</label>
+        <button class="off" id="fanOnOffToggle" disabled>Off</button>
+    </div>
+    <div>
+        <label for="lightToggle">Light:</label>
+        <button id="lightToggle" class="auto">Auto</button>
+        <label for="light1Toggle">Light 1:</label>
+        <button class="off" id="light1Toggle" disabled>Off</button>
+        <label for="light2Toggle">Light 2:</label>
+        <button class="off" id="light2Toggle" disabled>Off</button>
     </div>
 </body>
 

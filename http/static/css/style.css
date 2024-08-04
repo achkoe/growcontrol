@@ -2,43 +2,54 @@ h1 {
     font-size: 100%;
 }
 
-.toggle-container {
-    display: flex;
-    align-items: center;
-}
-.toggle-button {
-    display: inline-block;
-    width: 60px;
-    height: 30px;
-    background: #ccc;
-    border-radius: 15px;
-    position: relative;
-    cursor: pointer;
-    margin-right: 10px;
-    margin-left: 10px;
-}
-.toggle-button:before {
-    content: "";
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    width: 26px;
-    height: 26px;
-    background: #fff;
-    border-radius: 50%;
-    transition: all 0.3s;
-}
-.toggle-button.active {
-    background: #4caf50;
-}
-.toggle-button.active:before {
-    transform: translateX(30px);
+body {
+    font-family: Arial, sans-serif;
 }
 
-.toggle-button.disabled {
-    background: #e0e0e0;
-    cursor: not-allowed;
+div {
+    margin: 10px 0;
 }
-.toggle-button.disabled:before {
-    background: #c0c0c0;
+
+button {
+    margin: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    background-color: #f0f0f0;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+button.manual {
+    background-color: #4caf50;
+    color: white;
+    border-color: #4caf50;
+}
+
+button.auto {
+    background-color: #f44336;
+    color: white;
+    border-color: #f44336;
+}
+
+button.on {
+    background-color: #4caf50;
+    color: white;
+    border-color: #4caf50;
+}
+
+button.off {
+    background-color: #f44336;
+    color: white;
+    border-color: #f44336;
+}
+
+label {
+    margin-right: 10px;
 }
