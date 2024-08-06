@@ -9,10 +9,10 @@
     "temperature_high_level": 50,
     "temperature_low_level": 50,
     "temperature_high_critical_level": 50,
-    "temperature_low_critical_level": 50,
+    "temperature_low_critical_level": 20,
     "humidity_high_level": 50,
     "humidity_low_level": 50,
-    "humidity_high_critical_level": 50,
-    "humidity_low_critical_level": 50,
+    "humidity_high_critical_level": 60,
+    "humidity_low_critical_level": 40,
     "fan_minutes_in_hour": 15
 }

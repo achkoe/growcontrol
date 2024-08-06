@@ -5,6 +5,8 @@ import time
 from flask import Flask, render_template, request
 import configuration
 import logging
+from servers.base import load_settings
+
 
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
@@ -12,6 +14,7 @@ log.setLevel(logging.ERROR)
 sensors_proxy = xmlrpc.client.ServerProxy(f"http://localhost:{configuration.sensors_server_port}")
 fan_proxy = xmlrpc.client.ServerProxy(f"http://localhost:{configuration.fan_server_port}")
 light_proxy = xmlrpc.client.ServerProxy(f"http://localhost:{configuration.light_server_port}")
+settings = load_settings()
 
 app = Flask(__name__)
 
@@ -34,6 +37,7 @@ def udpate():
         "time": time.strftime("%X")
     }
     reply.update(light)
+    reply.update(settings)
     return reply
 
 

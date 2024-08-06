@@ -12,23 +12,27 @@ function callServerEveryTwoSeconds() {
                 return response.json();  // Change to response.json() if expecting JSON
             })
             .then(data => {
-                console.log('Success:', data);
-                console.log('humidity:', data.humidity);
+                // console.log('Success:', data);
+                // console.log('humidity:', data.humidity);
                 var e;
                 ["humidity", "temperature", "fan", "light_1", "light_2", "time"].forEach(function(field) {
                     e = document.getElementById(field);
                     e.innerText = data[field];
                 });
-                // e = document.getElementById("temperature");
-                // e.innerText = data["temperature"];
-                // e = document.getElementById("fan");
-                // e.innerText = data["fan"];
-                // e = document.getElementById("light_1");
-                // e.innerText = data["light_1"];
-                // e = document.getElementById("light_2");
-                // e.innerText = data["light_2"];
-                // e = document.getElementById("time");
-                // e.innerText = data["time"];
+                e = document.getElementById("boxtemperature");
+                if ((data.temperature > data.temperature_high_critical_level) | (data.temperature < data.temperature_low_critical_level)){
+                    e.classList.add("alert");
+                    console.log("alert");
+                } else {
+                    e.classList.remove("alert");
+                }
+                e = document.getElementById("boxhumidity");
+                if ((data.humidity > data.humidity_high_critical_level) | (data.humidity < data.humidity_low_critical_level)){
+                    e.classList.add("alert");
+                    console.log("alert");
+                } else {
+                    e.classList.remove("alert");
+                }
             })
             .catch(error => {
                 console.error('There has been a problem with your fetch operation:', error);

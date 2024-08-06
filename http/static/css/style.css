@@ -33,9 +33,9 @@ button.manual {
 }
 
 button.auto {
-    background-color: #f44336;
+    background-color: #368ff4;
     color: white;
-    border-color: #f44336;
+    border-color: #368ff4;
 }
 
 button.on {
@@ -52,4 +52,46 @@ button.off {
 
 label {
     margin-right: 10px;
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.box {
+    width: 15%;
+    border-radius: 10px;
+    background-color: green;
+    color: white;
+    padding: 10px;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.alert {
+    background-color: #f44336;
+}
+
+.statuslabel {
+    color: black;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+    margin-right: 20px;
+}
+.row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.row label {
+    width: 100px; /* Set the desired width */
+    margin-right: 10px;
+    text-align: center;
+}
+.row button {
+    flex-shrink: 0; /* Prevent button from shrinking */
 }

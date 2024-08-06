@@ -4,34 +4,67 @@
 <head>
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <title>Hello from Flask</title>
+    <title>Grow Control</title>
     </head>
     
     <body>
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
-    <h1>Hello, World!</h1>
-    <p>Time <span id="time"></span></p>
-    <p>Temperature <span id="temperature"></span></p>
-    <p>Humidity <span id="humidity"></span></p>
-    <p>Fan <span id="fan"></span></p>
-    <p>Light 1 <span id="light_1"></span></p>
-    <p>Light 2 <span id="light_2"></span></p>
+    <h1>Grow Control Center</h1>
 
-
-    <div>
-        <label for="fanToggle">Fan:</label>
-        <button id="fanToggle" class="auto">Auto</button>
-        <label for="fanOnOffToggle">Fan On/Off:</label>
-        <button class="off" id="fanOnOffToggle" disabled>Off</button>
+    <div class="container">
+        <div class="box">
+            <p class="statuslabel">Time</p>
+            <p id="time"></p>
+        </div>
+        <div id="boxtemperature" class="box">
+            <p class="statuslabel">Temperature</p>
+            <p id="temperature"></p>
+        </div>
+        <div id="boxhumidity" class="box">
+            <p class="statuslabel">Humidity</p>
+            <p id="humidity"></p>
+        </div>
+        <div class="box">
+            <p class="statuslabel">Fan</p>
+            <p id="fan"></p>
+        </div>
+        <div class="box">
+            <p class="statuslabel">Light 1</p>
+            <p id="light_1"></p>
+        </div>
+        <div class="box">
+            <p class="statuslabel">Light 2</p>
+            <p id="light_2"></p>
+        </div>
     </div>
-    <div>
-        <label for="lightToggle">Light:</label>
-        <button id="lightToggle" class="auto">Auto</button>
-        <label for="light1Toggle">Light 1:</label>
-        <button class="off" id="light1Toggle" disabled>Off</button>
-        <label for="light2Toggle">Light 2:</label>
-        <button class="off" id="light2Toggle" disabled>Off</button>
+    <div class="container">
+        <div class="row">
+            <div class="column">
+                <label for="fanToggle">Fan</label>
+                <button id="fanToggle" class="auto">Auto</button>
+            </div>
+            <div class="column">
+                <label for="fanOnOffToggle">Fan On/Off</label>
+                <button class="off" id="fanOnOffToggle" disabled>Off</button>
+            </div>
+        </div>
+        </div>
+    <div class="container">
+        <div class="row">
+            <div class="column">
+                <label for="lightToggle">Light</label>
+                <button id="lightToggle" class="auto">Auto</button>
+            </div>
+            <div class="column">
+                <label for="light1Toggle">Light 1</label>
+                <button class="off" id="light1Toggle" disabled>Off</button>
+            </div>
+            <div class="column">
+                <label for="light2Toggle">Light 2</label>
+                <button class="off" id="light2Toggle" disabled>Off</button>
+            </div>
+        </div>
     </div>
-</body>
+</body>    
 
 </html>
