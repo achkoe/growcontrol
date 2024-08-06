@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grow Control Settings</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .form-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+        .form-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            width: 60%;
+            text-align: right;
+            margin-right: 10px;
+        }
+        .form-group input {
+            width: 35%;
+        }
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+        }
+        .form-actions button {
+            width: 30%;
+            padding: 10px;
+            border: none;
+            color: white;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .form-actions button.submit {
+            background-color: #28a745;
+        }
+        .form-actions button.submit:hover {
+            background-color: #218838;
+        }
+        .form-actions button.cancel {
+            background-color: #dc3545;
+        }
+        .form-actions button.cancel:hover {
+            background-color: #c82333;
+        }
+        .form-actions button.back {
+            background-color: #007bff;
+        }
+        .form-actions button.back:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Grow Control Settings</h2>
+        <form method="POST">
+            <div class="form-group">
+                <label for="light_1_on_time">Light 1 On Time:</label>
+                <input type="time" id="light_1_on_time" name="light_1_on_time" value="{{ settings['light_1_on_time'] }}" required >
+            </div>
+            <div class="form-group">
+                <label for="light_1_off_time">Light 1 Off Time:</label>
+                <input type="time" id="light_1_off_time" name="light_1_off_time" value="{{ settings['light_1_off_time'] }}" required>
+            </div>
+            <div class="form-group">
+                <label for="light_2_on_time">Light 2 On Time:</label>
+                <input type="time" id="light_2_on_time" name="light_2_on_time" value="{{ settings['light_2_on_time'] }}" required>
+            </div>
+            <div class="form-group">
+                <label for="light_2_off_time">Light 2 Off Time:</label>
+                <input type="time" id="light_2_off_time" name="light_2_off_time" value="{{ settings['light_2_off_time'] }}" required>
+            </div>
+            <div class="form-group">
+                <label for="moisture_low_level">Moisture Low Level:</label>
+                <input type="number" id="moisture_low_level" name="moisture_low_level" min="0" value="{{ settings['moisture_low_level'] }}" required>
+            </div>
+            <div class="form-group">
+                <label for="moisture_high_level">Moisture High Level:</label>
+                <input type="number" id="moisture_high_level" name="moisture_high_level" min="0" value="{{ settings['moisture_high_level'] }}" required>
+            </div>
+            <div class="form-group">
+                <label for="moisture_low_critical_level">Moisture Low Critical Level:</label>
+                <input type="number" id="moisture_low_critical_level" name="moisture_low_critical_level" min="0" value="{{ settings['moisture_low_critical_level'] }}" required>
+            </div>
+            <div class="form-group">
+                <label for="temperature_high_level">Temperature High Level:</label>
+                <input type="number" id="temperature_high_level" name="temperature_high_level" min="0" value="{{ settings['temperature_high_level'] }}" required>
+            </div>
+            <div class="form-group">
+                <label for="temperature_low_level">Temperature Low Level:</label>
+                <input type="number" id="temperature_low_level" name="temperature_low_level" min="0" value="{{ settings['temperature_low_level'] }}" required>
+            </div>
+            <div class="form-group">
+                <label for="temperature_high_critical_level">Temperature High Critical Level:</label>
+                <input type="number" id="temperature_high_critical_level" name="temperature_high_critical_level" min="0" value="{{ settings['temperature_high_critical_level'] }}" required>
+            </div>
+            <div class="form-group">
+                <label for="temperature_low_critical_level">Temperature Low Critical Level:</label>
+                <input type="number" id="temperature_low_critical_level" name="temperature_low_critical_level" min="0" value="{{ settings['temperature_low_critical_level'] }}" required>
+            </div>
+            <div class="form-group">
+                <label for="humidity_high_level">Humidity High Level:</label>
+                <input type="number" id="humidity_high_level" name="humidity_high_level" min="0" value="{{ settings['humidity_high_level'] }}" required>
+            </div>
+            <div class="form-group">
+                <label for="humidity_low_level">Humidity Low Level:</label>
+                <input type="number" id="humidity_low_level" name="humidity_low_level" min="0" value="{{ settings['humidity_low_level'] }}" required>
+            </div>
+            <div class="form-group">
+                <label for="humidity_high_critical_level">Humidity High Critical Level:</label>
+                <input type="number" id="humidity_high_critical_level" name="humidity_high_critical_level" min="0" value="{{ settings['humidity_high_critical_level'] }}" required>
+            </div>
+            <div class="form-group">
+                <label for="humidity_low_critical_level">Humidity Low Critical Level:</label>
+                <input type="number" id="humidity_low_critical_level" name="humidity_low_critical_level" min="0" value="{{ settings['humidity_low_critical_level'] }}"required>
+            </div>
+            <div class="form-group">
+                <label for="fan_minutes_in_hour">Fan Minutes in Hour:</label>
+                <input type="number" id="fan_minutes_in_hour" name="fan_minutes_in_hour" min="0" max="60", value="{{ settings['fan_minutes_in_hour'] }}" required>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="submit">Submit</button>
+                <button type="button" class="cancel" onclick="window.location.href='/'">Cancel</button>
+                <button type="button" class="back" onclick="history.back()">Back</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

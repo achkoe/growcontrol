@@ -41,6 +41,15 @@ def udpate():
     return reply
 
 
+@app.route("/settings", methods=("POST", "GET"))
+def editsettings():
+    if request.method == "POST":
+        print("POST")
+        pass 
+    print(settings)
+    return render_template("settings.html", settings=settings)
+
+
 @app.route("/toggleFan", methods=("POST", ))
 def toggle_fan():
     print(request.get_json())

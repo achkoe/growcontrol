@@ -21,5 +21,5 @@ def load_settings():
       settings = json.load(fh)
    for key in ("light_1_on_time", "light_1_off_time", "light_2_on_time", "light_2_off_time"):
       (hour, minute, second) = (int(item) for item in settings[key].split(":"))
-      settings[key] = hour * 60 * 60 + minute * 60 + second
+      settings[f"{key}_i"] = hour * 60 * 60 + minute * 60 + second
    return settings
