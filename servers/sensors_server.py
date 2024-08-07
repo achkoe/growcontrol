@@ -21,6 +21,7 @@ class Bridge():
     def __init__(self):
         self._temperature = 24.1
         self._humidity = 48
+        self.settings = load_settings()
     
     def _execute(self):
         pass
@@ -41,7 +42,11 @@ class Bridge():
         LOGGER.info("humidity")
         return "{:4.1f}".format(self._humidity)
    
-   
+    def reload(self):
+        self.settings = load_settings()
+        return "OK"
+
+
 class TheServer(SimpleXMLRPCServer):
    def service_actions(self):
       self.instance._execute()

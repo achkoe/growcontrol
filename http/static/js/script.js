@@ -13,7 +13,8 @@ function callServerEveryTwoSeconds() {
             })
             .then(data => {
                 // console.log('Success:', data);
-                // console.log('humidity:', data.humidity);
+                console.log('humidity:', data.humidity);
+                console.log('humidity_high_level:', data.humidity_high_level);
                 var e;
                 ["humidity", "temperature", "fan", "light_1", "light_2", "time"].forEach(function(field) {
                     e = document.getElementById(field);

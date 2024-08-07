@@ -38,7 +38,7 @@ class Bridge():
       humidity = float(self.sensors_proxy.humidity())
       
       if self.fan_mode_manual is False:
-         if temperature > self.settings["temperature_high_level"] or humidity > self.settings["humidity_high_level"]:
+         if temperature > float(self.settings["temperature_high_level"]) or humidity > float(self.settings["humidity_high_level"]):
             # start fan to reduce temperature or humidity
             self.fan_status = True
             self.state = WAIT
@@ -53,7 +53,7 @@ class Bridge():
                else:
                   self.fan_status = False
             else:
-               if time_struct.tm_min == START_AT_MINUTE + self.settings["fan_minutes_in_hour"]:
+               if time_struct.tm_min == START_AT_MINUTE + int(self.settings["fan_minutes_in_hour"]):
                   # stop fan every hour + START_AT_MINUTE minutes + fan_minutes_in_hour
                   self.fan_status = False
                   self.state = WAIT

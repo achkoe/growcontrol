@@ -16,10 +16,27 @@ def create_server(theclass, port):
         server.serve_forever()
 
 
+def _make_integer_time(timestr: str) -> int:
+   hms = (int(item) for item in timestr.split(":"))
+   rval = 0
+   for item, factor in zip(hms, (60 * 60, 60, 1)):
+      rval += item * factor
+   return rval
+   
+   
 def load_settings():
    with pathlib.Path(__file__).parent.parent.joinpath("settings.json").open("r") as fh:
       settings = json.load(fh)
    for key in ("light_1_on_time", "light_1_off_time", "light_2_on_time", "light_2_off_time"):
-      (hour, minute, second) = (int(item) for item in settings[key].split(":"))
-      settings[f"{key}_i"] = hour * 60 * 60 + minute * 60 + second
+      settings[f"{key}_i"] = _make_integer_time(settings[key])
    return settings
+
+
+def save_settings(settings):
+   with pathlib.Path(__file__).parent.parent.joinpath("settings.json").open("w") as fh:
+      json.dump(settings, fh, indent=4)
+   for key in ("light_1_on_time", "light_1_off_time", "light_2_on_time", "light_2_off_time"):
+      settings[f"{key}_i"] = _make_integer_time(settings[key])
+   return settings
+
+

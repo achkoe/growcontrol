@@ -5,7 +5,7 @@ import time
 from flask import Flask, render_template, request
 import configuration
 import logging
-from servers.base import load_settings
+from servers.base import load_settings, save_settings
 
 
 log = logging.getLogger('werkzeug')
@@ -43,10 +43,14 @@ def udpate():
 
 @app.route("/settings", methods=("POST", "GET"))
 def editsettings():
+    global settings
     if request.method == "POST":
-        print("POST")
-        pass 
-    print(settings)
+        for key in request.form:
+            settings[key] = request.form[key]
+        settings = save_settings(settings)
+        sensors_proxy.reload()
+        fan_proxy.reload()
+        light_proxy.reload()
     return render_template("settings.html", settings=settings)
 
 
