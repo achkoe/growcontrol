@@ -37,6 +37,8 @@ class Bridge():
       temperature = float(self.sensors_proxy.temperature())
       humidity = float(self.sensors_proxy.humidity())
       
+      ts = lambda time_struct: time_struct.tm_min
+      
       if self.fan_mode_manual is False:
          if temperature > float(self.settings["temperature_high_level"]) or humidity > float(self.settings["humidity_high_level"]):
             # start fan to reduce temperature or humidity
@@ -44,8 +46,9 @@ class Bridge():
             self.state = WAIT
          else:
             time_struct = time.localtime()
+            # LOGGER.critical(f"state -> {self.state}, tm_min -> {time_struct.tm_sec}, START_AT_MINUTE -> {START_AT_MINUTE}")
             if self.state == WAIT:
-               if time_struct.tm_min == START_AT_MINUTE:   
+               if ts(time_struct) == START_AT_MINUTE:   
                   # start fan every hour + START_AT_MINUTE minutes
                   LOGGER.info(f"state 0 -> 1")
                   self.fan_status = True
@@ -53,7 +56,7 @@ class Bridge():
                else:
                   self.fan_status = False
             else:
-               if time_struct.tm_min == START_AT_MINUTE + int(self.settings["fan_minutes_in_hour"]):
+               if ts(time_struct) == START_AT_MINUTE + int(self.settings["fan_minutes_in_hour"]):
                   # stop fan every hour + START_AT_MINUTE minutes + fan_minutes_in_hour
                   self.fan_status = False
                   self.state = WAIT
@@ -88,14 +91,15 @@ class RequestHandler(SimpleXMLRPCRequestHandler):
     rpc_paths = ('/RPC2',)
 
 
-LOGGER.critical("FAN PROCESS STARTED")
-port = configuration.fan_server_port      
-with TheServer(('localhost', port), requestHandler=RequestHandler, logRequests=False) as server:
-   server.register_introspection_functions()
-   server.register_instance(Bridge())
-   server.serve_forever()
+if __name__ == "__main__":
+   LOGGER.critical("FAN PROCESS STARTED")
+   port = configuration.fan_server_port      
+   with TheServer(('localhost', port), requestHandler=RequestHandler, logRequests=False) as server:
+      server.register_introspection_functions()
+      server.register_instance(Bridge())
+      server.serve_forever()
 
-   
+      
 
 
 

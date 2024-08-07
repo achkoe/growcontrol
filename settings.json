@@ -10,7 +10,7 @@
     "temperature_low_level": "20",
     "temperature_high_critical_level": "35",
     "temperature_low_critical_level": "15",
-    "humidity_high_level": "40",
+    "humidity_high_level": "50",
     "humidity_low_level": "20",
     "humidity_high_critical_level": "90",
     "humidity_low_critical_level": "10",
