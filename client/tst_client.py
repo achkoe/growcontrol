@@ -10,10 +10,11 @@ light_proxy = xmlrpc.client.ServerProxy(f"http://localhost:{configuration.light_
 help = """
 Valid commands:
 t - return temperature
+T <value> - set temperature
 h  - return humidity
+H <value> - set humidity
 f - get fan status
 l - get light status
-s <value> - set temperature
 a - fan auto
 o - fan on
 """
@@ -35,8 +36,11 @@ while True:
      reply = sensors_proxy.temperature()
    elif command == "h":
      reply = sensors_proxy.humidity()
-   elif command == "s":
+   elif command == "T":
       arg = input("set temperature to:")
       reply = sensors_proxy.settemperature(float(arg))
+   elif command == "H":
+      arg = input("set humidity to:")
+      reply = sensors_proxy.sethumidity(float(arg))
    print(reply)
 

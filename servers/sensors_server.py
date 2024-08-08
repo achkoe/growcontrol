@@ -30,6 +30,11 @@ class Bridge():
        LOGGER.info(("settemperature", repr(value), type(value)))
        self._temperature = value
        return self._temperature
+
+    def sethumidity(self, value):
+       LOGGER.info(("sethumidity", repr(value), type(value)))
+       self._humidity = value
+       return self._humidity
    
     def identity(self):
        return IDENTITY

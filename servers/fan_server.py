@@ -16,10 +16,8 @@ LOGLEVEL = logging.CRITICAL
 LOGGER = logging.getLogger()
 LOGGER.setLevel(LOGLEVEL)
 
-WAIT, RUN = 0, 1
+WAIT, RUN, DOWN = 0, 1, 2
 START_AT_MINUTE = 5
-
-
 
 
 class Bridge():
@@ -37,20 +35,25 @@ class Bridge():
       temperature = float(self.sensors_proxy.temperature())
       humidity = float(self.sensors_proxy.humidity())
       
-      ts = lambda time_struct: time_struct.tm_min
+      ts = lambda time_struct: time_struct.tm_sec
       
       if self.fan_mode_manual is False:
          if temperature > float(self.settings["temperature_high_level"]) or humidity > float(self.settings["humidity_high_level"]):
             # start fan to reduce temperature or humidity
             self.fan_status = True
+            self.state = DOWN
+            LOGGER.log(LOGLEVEL, f"1:state: DOWN")
+         elif self.state == DOWN and temperature < float(self.settings["temperature_low_level"]) and humidity < float(self.settings["humidity_low_level"]):
+            self.fan_status = False
             self.state = WAIT
+            LOGGER.log(LOGLEVEL, f"2:state: WAIT")
          else:
             time_struct = time.localtime()
             # LOGGER.critical(f"state -> {self.state}, tm_min -> {time_struct.tm_sec}, START_AT_MINUTE -> {START_AT_MINUTE}")
             if self.state == WAIT:
                if ts(time_struct) == START_AT_MINUTE:   
                   # start fan every hour + START_AT_MINUTE minutes
-                  LOGGER.info(f"state 0 -> 1")
+                  LOGGER.log(LOGLEVEL, f"3: state WAIT -> RUN")
                   self.fan_status = True
                   self.state = RUN
                else:
@@ -60,7 +63,7 @@ class Bridge():
                   # stop fan every hour + START_AT_MINUTE minutes + fan_minutes_in_hour
                   self.fan_status = False
                   self.state = WAIT
-                  LOGGER.info(f"state 1 -> 0")
+                  LOGGER.log(LOGLEVEL, f"4:state: RUN -> WAIT")
       else:
          self.fan_status = self.fan_on
       
