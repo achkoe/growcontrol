@@ -5,7 +5,7 @@ UNDER DEVELOPMENT
 
 ## Tasks of software
 
-* soil moisture: regulate it
+* soil moisture: regulate different pots frrom a single water reservoir
 * temperature: measure it
 * humidity: measure it
 * fan: regulate it

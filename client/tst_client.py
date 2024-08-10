@@ -6,6 +6,7 @@ import configuration
 sensors_proxy = xmlrpc.client.ServerProxy(f"http://localhost:{configuration.sensors_server_port}")
 fan_proxy = xmlrpc.client.ServerProxy(f"http://localhost:{configuration.fan_server_port}")
 light_proxy = xmlrpc.client.ServerProxy(f"http://localhost:{configuration.light_server_port}")
+moisture_proxy = xmlrpc.client.ServerProxy(f"http://localhost:{configuration.moisture_server_port_dict[1]['moisture']}")
 
 help = """
 Valid commands:
@@ -43,10 +44,10 @@ while True:
       arg = input("set humidity to:")
       reply = sensors_proxy.sethumidity(float(arg))
    elif command == "m":
-     reply = sensors_proxy.moisture()
+     reply = moisture_proxy.moisture()
    elif command == "M":
       arg = input("set moisture to:")
-      reply = sensors_proxy.setmoisture(int(arg))
+      reply = moisture_proxy.setmoisture(int(arg))
    elif command == "w":
      reply = sensors_proxy.waterlevel()
    elif command == "W":
