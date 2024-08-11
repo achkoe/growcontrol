@@ -17,34 +17,47 @@ fan_proxy = xmlrpc.client.ServerProxy(
     f"http://localhost:{configuration.fan_server_port}")
 light_proxy = xmlrpc.client.ServerProxy(
     f"http://localhost:{configuration.light_server_port}")
+pump_proxies = dict((key, xmlrpc.client.ServerProxy(
+    f"http://localhost:{configuration.moisture_server_port_dict[key]['pump']}")) for key in configuration.moisture_server_port_dict)
+moisture_proxies = dict((key, xmlrpc.client.ServerProxy(
+    f"http://localhost:{configuration.moisture_server_port_dict[key]['moisture']}")) for key in configuration.moisture_server_port_dict)
+
+
 settings = load_settings()
 
 app = Flask(__name__)
 
 
-@app.route("/")
+@ app.route("/")
 def index():
-    return render_template('index.html')
+    return render_template('index.html', configuration=configuration)
 
 
-@app.route("/update")
+@ app.route("/update")
 def udpate():
     humidity = sensors_proxy.humidity()
     temperature = sensors_proxy.temperature()
+    waterlevel = sensors_proxy.waterlevel()
     fan = fan_proxy.get()
     light = light_proxy.get()
+    pump = dict((key, pump_proxies[key].get()) for key in pump_proxies)
+    moisture = dict((key, moisture_proxies[key].moisture())
+                    for key in moisture_proxies)
     reply = {
         "humidity": humidity,
         "temperature": temperature,
         "fan": fan,
-        "time": time.strftime("%X")
+        "time": time.strftime("%X"),
+        "pump": pump,
+        "moisture": moisture,
+        "waterlevel": waterlevel
     }
     reply.update(light)
     reply.update(settings)
     return reply
 
 
-@app.route("/settings", methods=("POST", "GET"))
+@ app.route("/settings", methods=("POST", "GET"))
 def editsettings():
     global settings
     if request.method == "POST":
@@ -57,7 +70,7 @@ def editsettings():
     return render_template("settings.html", settings=load_settings(raw=True))
 
 
-@app.route("/toggleFan", methods=("POST", ))
+@ app.route("/toggleFan", methods=("POST", ))
 def toggle_fan():
     print(request.get_json())
     # {'fan': 'Manual', 'fanOnOff': 'Off'}
@@ -68,7 +81,7 @@ def toggle_fan():
     return {"status": reply}
 
 
-@app.route("/toggleLight", methods=("POST", ))
+@ app.route("/toggleLight", methods=("POST", ))
 def toggle_light():
     print(request.get_json())
     # 'light': 'Manual', 'light1': 'Off', 'light2': 'Off'}

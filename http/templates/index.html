@@ -37,6 +37,20 @@
             <p id="light_2"></p>
         </div>
     </div>
+    <br/>
+    <div class="container">
+        <div id="boxwaterlevel", class="box">
+            <p class="statuslabel">Water Supply Level</p>
+            <p id="waterlevel">?</p>
+        </div>
+        {% for key in configuration["moisture_server_port_dict"] %}
+        <div class="box" id="boxpump_{{key}}">
+            <p class="statuslabel">Pump {{ key }}</p>
+            <p>State: <span id="pump_{{key}}">?</span></p>
+            <p>Soil moisture: <span id="moisture_{{key}}">?</span></p>
+        </div>        
+        {% endfor %}
+    </div>
     <div class="container">
         <div class="row">
             <div class="column">

@@ -13,10 +13,9 @@ function callServerEveryTwoSeconds() {
             })
             .then(data => {
                 // console.log('Success:', data);
-                console.log('humidity:', data.humidity);
-                console.log('humidity_high_level:', data.humidity_high_level);
+                console.log('data:', data);
                 var e;
-                ["humidity", "temperature", "fan", "light_1", "light_2", "time"].forEach(function(field) {
+                ["waterlevel", "humidity", "temperature", "fan", "light_1", "light_2", "time"].forEach(function(field) {
                     e = document.getElementById(field);
                     e.innerText = data[field];
                 });
@@ -33,6 +32,25 @@ function callServerEveryTwoSeconds() {
                     console.log("alert");
                 } else {
                     e.classList.remove("alert");
+                }
+                e = document.getElementById("boxwaterlevel");
+                if (data.waterlevel <= data.waterlevel_low) {
+                    e.classList.add("alert");
+                } else {
+                    e.classList.remove("alert");
+                }
+                for (index = 1; index < 10; index++) {
+                    e = document.getElementById("pump_" + index);
+                    if (e === null) break;
+                    e.innerText = data["pump"][index];
+                    e = document.getElementById("moisture_" + index);
+                    e.innerText = data["moisture"][index];
+                    e = document.getElementById("boxpump_" + index)
+                    if (data["moisture"][index] <= data["moisture_low_level"]) {
+                        e.classList.add("alert");
+                    } else {
+                        e.classList.remove("alert");
+                    }
                 }
             })
             .catch(error => {

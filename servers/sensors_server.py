@@ -50,7 +50,7 @@ class Bridge():
 
     def waterlevel(self):
         LOGGER.info("waterlevel")
-        return "{:d}".format(self._waterlevel)
+        return self._waterlevel
 
     def setwaterlevel(self, value):
         LOGGER.info(("setwaterlevel", repr(value), type(value)))

@@ -56,7 +56,8 @@ label {
 
 .container {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around; 
+    /* justify-content: space-between; */
 }
 
 .box {

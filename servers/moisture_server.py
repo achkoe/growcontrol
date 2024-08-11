@@ -31,7 +31,7 @@ class Bridge:
 
     def moisture(self):
         LOGGER.info("moisture")
-        return "{:d}".format(self._moisture)
+        return self._moisture
 
     def setmoisture(self, value):
         LOGGER.info(("setmoisture", repr(value), type(value)))
