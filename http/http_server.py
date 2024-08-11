@@ -67,6 +67,10 @@ def editsettings():
         sensors_proxy.reload()
         fan_proxy.reload()
         light_proxy.reload()
+        for key, pump_proxy in pump_proxies.items():
+            pump_proxy.reload()
+        for key, moisture_proxy in moisture_proxies.items():
+            moisture_proxy.reload()
     return render_template("settings.html", settings=load_settings(raw=True))
 
 

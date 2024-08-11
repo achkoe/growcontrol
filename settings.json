@@ -27,7 +27,7 @@
         "max": 100
     },
     "moisture_ok_level": {
-        "value": "100",
+        "value": "40",
         "title": "Moisture OK Level",
         "type": "number",
         "min": 0,

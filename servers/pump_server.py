@@ -45,7 +45,8 @@ class Bridge:
         moisture = float(self.moisture_proxy.moisture())
         if self.state == WAIT:
             if moisture < float(self.settings["moisture_low_level"]):
-                LOGGER.info("state: WAIT -> RUN")
+                LOGGER.info(
+                    f"state: WAIT -> RUN (moisture={moisture}, moisture_low_level={float(self.settings['moisture_low_level'])})")
                 self.state = RUN
         if self.state == RUN:
             if moisture >= float(self.settings["moisture_ok_level"]):
@@ -69,7 +70,7 @@ class Bridge:
         return IDENTITY
 
     def get(self):
-        return "ON" if self.pump_on else "OFF"
+        return "{} ({})".format(["WAIT", "RUN"][self.state], "ON" if self.pump_on else "OFF")
 
     def set(self, mode, pump_state):
         print(f"Brigde-set {mode} {pump_state}")
