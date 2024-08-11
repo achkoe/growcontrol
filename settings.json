@@ -1,22 +1,141 @@
 {
-    "light_1_on_time": "07:19:00",
-    "light_1_off_time": "07:20",
-    "light_2_on_time": "07:00",
-    "light_2_off_time": "17:00",
-    "moisture_low_level": 5,
-    "moisture_ok_level": 100,
-    "moisture_low_critical_level": "20",
-    "temperature_high_level": "28",
-    "temperature_low_level": "24",
-    "temperature_high_critical_level": "35",
-    "temperature_low_critical_level": "15",
-    "humidity_high_level": "60",
-    "humidity_low_level": "50",
-    "humidity_high_critical_level": "70",
-    "humidity_low_critical_level": "40",
-    "fan_minutes_in_hour": "30",
-    "light_1_on_time_i": 26340,
-    "light_1_off_time_i": 26400,
-    "light_2_on_time_i": 25200,
-    "light_2_off_time_i": 61200
+    "light_1_on_time": {
+        "value": "07:19:00",
+        "title": "Light 1 On Time",
+        "type": "time"
+    },
+    "light_1_off_time": {
+        "value": "07:20",
+        "title": "Light 1 Off Time",
+        "type": "time"
+    },
+    "light_2_on_time": {
+        "value": "07:00",
+        "title": "Light 2 On Time",
+        "type": "time"
+    },
+    "light_2_off_time": {
+        "value": "17:00",
+        "title": "Light 2 Off Time",
+        "type": "time"
+    },
+    "moisture_low_level": {
+        "value": "5",
+        "title": "Moisture Low Level",
+        "type": "number",
+        "min": 0,
+        "max": 100
+    },
+    "moisture_ok_level": {
+        "value": "100",
+        "title": "Moisture OK Level",
+        "type": "number",
+        "min": 0,
+        "max": 100
+    },
+    "moisture_low_critical_level": {
+        "value": "20",
+        "title": "Moisture Low Critical Level",
+        "type": "number",
+        "min": 0,
+        "max": 100
+    },
+    "temperature_high_level": {
+        "value": "28",
+        "title": "Temperature High Level",
+        "type": "number",
+        "min": 0,
+        "max": 100
+    },
+    "temperature_low_level": {
+        "value": "24",
+        "title": "Temperature Low Level",
+        "type": "number",
+        "min": 0,
+        "max": 100
+    },
+    "temperature_high_critical_level": {
+        "value": "35",
+        "title": "Temperature High Critical Level",
+        "type": "number",
+        "min": 0,
+        "max": 100
+    },
+    "temperature_low_critical_level": {
+        "value": "15",
+        "title": "Temperature Low Critical Level",
+        "type": "number",
+        "min": 0,
+        "max": 100
+    },
+    "humidity_high_level": {
+        "value": "60",
+        "title": "Humidity High Level",
+        "type": "number",
+        "min": 0,
+        "max": 100
+    },
+    "humidity_low_level": {
+        "value": "50",
+        "title": "Humidity Low Level",
+        "type": "number",
+        "min": 0,
+        "max": 100
+    },
+    "humidity_high_critical_level": {
+        "value": "70",
+        "title": "Humidity High Critical Level",
+        "type": "number",
+        "min": 0,
+        "max": 100
+    },
+    "humidity_low_critical_level": {
+        "value": "40",
+        "title": "Humidity Low Critical Level",
+        "type": "number",
+        "min": 0,
+        "max": 100
+    },
+    "fan_minutes_in_hour": {
+        "value": "15",
+        "title": "Fan Minutes in Hour",
+        "type": "number",
+        "min": 0,
+        "max": 60
+    },
+    "light_1_on_time_i": {
+        "value": 26340,
+        "title": null,
+        "type": "number",
+        "min": 0,
+        "max": 100
+    },
+    "light_1_off_time_i": {
+        "value": 26400,
+        "title": null,
+        "type": "number",
+        "min": 0,
+        "max": 100
+    },
+    "light_2_on_time_i": {
+        "value": 25200,
+        "title": null,
+        "type": "number",
+        "min": 0,
+        "max": 100
+    },
+    "light_2_off_time_i": {
+        "value": 61200,
+        "title": null,
+        "type": "number",
+        "min": 0,
+        "max": 100
+    },
+    "waterlevel_low": {
+        "value": "1",
+        "title": "Water Low Level",
+        "type": "number",
+        "min": 0,
+        "max": 100
+    }
 }

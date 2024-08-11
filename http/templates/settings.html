@@ -77,70 +77,21 @@
     <div class="form-container">
         <h2>Grow Control Settings</h2>
         <form method="POST">
+            {% for item in settings %}
+            {% if settings[item]["title"] %}
             <div class="form-group">
-                <label for="light_1_on_time">Light 1 On Time:</label>
-                <input type="time" id="light_1_on_time" name="light_1_on_time" value="{{ settings['light_1_on_time'] }}" required >
+                <label for="{{ item }}">{{ settings[item]["title"] }}:</label>
+                <input 
+                    type="{{ settings[item]['type'] }}" 
+                    id="{{ item }}" 
+                    name="{{ item }}" 
+                    value="{{ settings[item]['value'] }}" 
+                    {% if settings[item].get("min", "notset") != "notset" %}min={{settings[item]["min"]}} {% endif %}
+                    {% if settings[item].get("max", "notset") != "notset" %}max={{settings[item]["max"]}} {% endif %}
+                    required >
             </div>
-            <div class="form-group">
-                <label for="light_1_off_time">Light 1 Off Time:</label>
-                <input type="time" id="light_1_off_time" name="light_1_off_time" value="{{ settings['light_1_off_time'] }}" required>
-            </div>
-            <div class="form-group">
-                <label for="light_2_on_time">Light 2 On Time:</label>
-                <input type="time" id="light_2_on_time" name="light_2_on_time" value="{{ settings['light_2_on_time'] }}" required>
-            </div>
-            <div class="form-group">
-                <label for="light_2_off_time">Light 2 Off Time:</label>
-                <input type="time" id="light_2_off_time" name="light_2_off_time" value="{{ settings['light_2_off_time'] }}" required>
-            </div>
-            <div class="form-group">
-                <label for="moisture_low_level">Moisture Low Level:</label>
-                <input type="number" id="moisture_low_level" name="moisture_low_level" min="0" value="{{ settings['moisture_low_level'] }}" required>
-            </div>
-            <div class="form-group">
-                <label for="moisture_high_level">Moisture High Level:</label>
-                <input type="number" id="moisture_high_level" name="moisture_high_level" min="0" value="{{ settings['moisture_high_level'] }}" required>
-            </div>
-            <div class="form-group">
-                <label for="moisture_low_critical_level">Moisture Low Critical Level:</label>
-                <input type="number" id="moisture_low_critical_level" name="moisture_low_critical_level" min="0" value="{{ settings['moisture_low_critical_level'] }}" required>
-            </div>
-            <div class="form-group">
-                <label for="temperature_high_level">Temperature High Level:</label>
-                <input type="number" id="temperature_high_level" name="temperature_high_level" min="0" value="{{ settings['temperature_high_level'] }}" required>
-            </div>
-            <div class="form-group">
-                <label for="temperature_low_level">Temperature Low Level:</label>
-                <input type="number" id="temperature_low_level" name="temperature_low_level" min="0" value="{{ settings['temperature_low_level'] }}" required>
-            </div>
-            <div class="form-group">
-                <label for="temperature_high_critical_level">Temperature High Critical Level:</label>
-                <input type="number" id="temperature_high_critical_level" name="temperature_high_critical_level" min="0" value="{{ settings['temperature_high_critical_level'] }}" required>
-            </div>
-            <div class="form-group">
-                <label for="temperature_low_critical_level">Temperature Low Critical Level:</label>
-                <input type="number" id="temperature_low_critical_level" name="temperature_low_critical_level" min="0" value="{{ settings['temperature_low_critical_level'] }}" required>
-            </div>
-            <div class="form-group">
-                <label for="humidity_high_level">Humidity High Level:</label>
-                <input type="number" id="humidity_high_level" name="humidity_high_level" min="0" value="{{ settings['humidity_high_level'] }}" required>
-            </div>
-            <div class="form-group">
-                <label for="humidity_low_level">Humidity Low Level:</label>
-                <input type="number" id="humidity_low_level" name="humidity_low_level" min="0" value="{{ settings['humidity_low_level'] }}" required>
-            </div>
-            <div class="form-group">
-                <label for="humidity_high_critical_level">Humidity High Critical Level:</label>
-                <input type="number" id="humidity_high_critical_level" name="humidity_high_critical_level" min="0" value="{{ settings['humidity_high_critical_level'] }}" required>
-            </div>
-            <div class="form-group">
-                <label for="humidity_low_critical_level">Humidity Low Critical Level:</label>
-                <input type="number" id="humidity_low_critical_level" name="humidity_low_critical_level" min="0" value="{{ settings['humidity_low_critical_level'] }}"required>
-            </div>
-            <div class="form-group">
-                <label for="fan_minutes_in_hour">Fan Minutes in Hour:</label>
-                <input type="number" id="fan_minutes_in_hour" name="fan_minutes_in_hour" min="0" max="60", value="{{ settings['fan_minutes_in_hour'] }}" required>
-            </div>
+            {% endif %}
+            {% endfor %}
             <div class="form-actions">
                 <button type="submit" class="submit">Submit</button>
                 <button type="button" class="cancel" onclick="window.location.href='/'">Cancel</button>

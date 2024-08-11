@@ -25,8 +25,9 @@ class Bridge:
     def __init__(self, moisture_server_port: int):
         self.settings = load_settings()
         self.moisture_proxy = xmlrpc.client.ServerProxy(
-            f"http://localhost:{moisture_server_port}"
-        )
+            f"http://localhost:{moisture_server_port}")
+        self.sensor_proxy = xmlrpc.client.ServerProxy(
+            f"http://localhost:{configuration.sensors_server_port}")
         self.pump_mode_manual = False
         self.pump_on = False
         self.state = WAIT
@@ -35,6 +36,12 @@ class Bridge:
         self.last_time = -1
 
     def _execute(self):
+        waterlevel = float(self.sensor_proxy.waterlevel())
+        if waterlevel <= float(self.settings["waterlevel_low"]):
+            # permit the pump to fall dry
+            self.pump_on = False
+            LOGGER.info("pump OFF")
+            return
         moisture = float(self.moisture_proxy.moisture())
         if self.state == WAIT:
             if moisture < float(self.settings["moisture_low_level"]):

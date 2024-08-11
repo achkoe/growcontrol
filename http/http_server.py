@@ -11,9 +11,12 @@ from servers.base import load_settings, save_settings
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
 
-sensors_proxy = xmlrpc.client.ServerProxy(f"http://localhost:{configuration.sensors_server_port}")
-fan_proxy = xmlrpc.client.ServerProxy(f"http://localhost:{configuration.fan_server_port}")
-light_proxy = xmlrpc.client.ServerProxy(f"http://localhost:{configuration.light_server_port}")
+sensors_proxy = xmlrpc.client.ServerProxy(
+    f"http://localhost:{configuration.sensors_server_port}")
+fan_proxy = xmlrpc.client.ServerProxy(
+    f"http://localhost:{configuration.fan_server_port}")
+light_proxy = xmlrpc.client.ServerProxy(
+    f"http://localhost:{configuration.light_server_port}")
 settings = load_settings()
 
 app = Flask(__name__)
@@ -28,7 +31,7 @@ def index():
 def udpate():
     humidity = sensors_proxy.humidity()
     temperature = sensors_proxy.temperature()
-    fan  = fan_proxy.get()
+    fan = fan_proxy.get()
     light = light_proxy.get()
     reply = {
         "humidity": humidity,
@@ -51,7 +54,7 @@ def editsettings():
         sensors_proxy.reload()
         fan_proxy.reload()
         light_proxy.reload()
-    return render_template("settings.html", settings=settings)
+    return render_template("settings.html", settings=load_settings(raw=True))
 
 
 @app.route("/toggleFan", methods=("POST", ))
@@ -74,4 +77,3 @@ def toggle_light():
     light_2_state = request.get_json()["light2"]
     reply = light_proxy.set(light_mode, light_1_state, light_2_state)
     return {"status": reply}
-    
