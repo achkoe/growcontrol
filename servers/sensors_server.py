@@ -6,9 +6,14 @@ import logging
 import time
 from xmlrpc.server import SimpleXMLRPCServer
 from xmlrpc.server import SimpleXMLRPCRequestHandler
+import smbus2
+from bme280 import BME280
 from base import load_settings
 import configuration
 
+
+# set to True to use mocked values
+USE_MOCK_VALUES = False
 
 IDENTITY = "sensors_server.py v0.0.1"
 logging.basicConfig(format=configuration.log_format, level=logging.DEBUG)
@@ -19,13 +24,20 @@ LOGGER.setLevel(LOGLEVEL)
 
 class Bridge():
     def __init__(self):
-        self._temperature = 24.1
-        self._humidity = 48
-        self._waterlevel = 10
+        # initialize BME280 sensor for temperature and humidity
+        bus = smbus2.SMBus(1)
+        self.bme280 = BME280(i2c_dev=bus)
         self.settings = load_settings()
+        self._execute()
 
     def _execute(self):
-        pass
+        if USE_MOCK_VALUES:
+            self._temperature = 24.1
+            self._humidity = 48
+        else:
+            self._temperature = self.bme280.get_temperature()
+            self._humidity = self.bme280.get_humidity()
+        self._waterlevel = 10
 
     def settemperature(self, value):
         LOGGER.info(("settemperature", repr(value), type(value)))

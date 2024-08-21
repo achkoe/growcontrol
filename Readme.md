@@ -13,3 +13,11 @@ UNDER DEVELOPMENT
 * provide an html interface to set all parameters
   and monitor current measurements
 * send notification (e.g. mail) if any issues
+
+
+## Required Python packages
+
+```
+pip3 install smbus2
+pip3 install pimoroni-bme280==0.0.2
+```
