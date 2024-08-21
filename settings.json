@@ -41,21 +41,21 @@
         "max": 100
     },
     "temperature_high_level": {
-        "value": "28",
+        "value": "27",
         "title": "Temperature High Level",
         "type": "number",
         "min": 0,
         "max": 100
     },
     "temperature_low_level": {
-        "value": "24",
+        "value": "26",
         "title": "Temperature Low Level",
         "type": "number",
         "min": 0,
         "max": 100
     },
     "temperature_high_critical_level": {
-        "value": "35",
+        "value": "27",
         "title": "Temperature High Critical Level",
         "type": "number",
         "min": 0,

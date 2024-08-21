@@ -15,9 +15,13 @@ function callServerEveryTwoSeconds() {
                 // console.log('Success:', data);
                 console.log('data:', data);
                 var e;
-                ["waterlevel", "humidity", "temperature", "fan", "light_1", "light_2", "time"].forEach(function(field) {
+                ["waterlevel", "fan", "light_1", "light_2", "time"].forEach(function(field) {
                     e = document.getElementById(field);
                     e.innerText = data[field];
+                });
+                ["humidity", "temperature"].forEach(function(field) {
+                    e = document.getElementById(field);
+                    e.innerText = data[field].toFixed(1);
                 });
                 e = document.getElementById("boxtemperature");
                 if ((data.temperature > data.temperature_high_critical_level) | (data.temperature < data.temperature_low_critical_level)){

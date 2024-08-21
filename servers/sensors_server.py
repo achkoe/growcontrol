@@ -54,11 +54,11 @@ class Bridge():
 
     def temperature(self):
         LOGGER.info("temperature")
-        return "{:4.1f}".format(self._temperature)
+        return self._temperature
 
     def humidity(self):
         LOGGER.info("humidity")
-        return "{:4.1f}".format(self._humidity)
+        return self._humidity
 
     def waterlevel(self):
         LOGGER.info("waterlevel")
