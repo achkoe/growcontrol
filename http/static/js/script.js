@@ -48,7 +48,7 @@ function callServerEveryTwoSeconds() {
                     if (e === null) break;
                     e.innerText = data["pump"][index];
                     e = document.getElementById("moisture_" + index);
-                    e.innerText = data["moisture"][index];
+                    e.innerText = data["moisture"][index].toFixed(1);
                     e = document.getElementById("boxpump_" + index)
                     if (data["moisture"][index] <= data["moisture_low_level"]) {
                         e.classList.add("alert");
