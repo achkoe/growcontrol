@@ -20,21 +20,21 @@
         "type": "time"
     },
     "moisture_low_level": {
-        "value": "5",
+        "value": "50",
         "title": "Moisture Low Level",
         "type": "number",
         "min": 0,
         "max": 100
     },
     "moisture_ok_level": {
-        "value": "40",
+        "value": "70",
         "title": "Moisture OK Level",
         "type": "number",
         "min": 0,
         "max": 100
     },
     "moisture_low_critical_level": {
-        "value": "20",
+        "value": "10",
         "title": "Moisture Low Critical Level",
         "type": "number",
         "min": 0,

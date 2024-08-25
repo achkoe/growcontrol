@@ -18,9 +18,7 @@ fan_proxy = xmlrpc.client.ServerProxy(
 light_proxy = xmlrpc.client.ServerProxy(
     f"http://localhost:{configuration.light_server_port}")
 pump_proxies = dict((key, xmlrpc.client.ServerProxy(
-    f"http://localhost:{configuration.moisture_server_port_dict[key]['pump']}")) for key in configuration.moisture_server_port_dict)
-moisture_proxies = dict((key, xmlrpc.client.ServerProxy(
-    f"http://localhost:{configuration.moisture_server_port_dict[key]['moisture']}")) for key in configuration.moisture_server_port_dict)
+    f"http://localhost:{configuration.pump_moisture_dict[key]['pump']}")) for key in configuration.pump_moisture_dict)
 
 
 settings = load_settings()
@@ -41,8 +39,8 @@ def udpate():
     fan = fan_proxy.get()
     light = light_proxy.get()
     pump = dict((key, pump_proxies[key].get()) for key in pump_proxies)
-    moisture = dict((key, moisture_proxies[key].moisture())
-                    for key in moisture_proxies)
+    moisture = dict((key, sensors_proxy.moisture(configuration.pump_moisture_dict[key]["channel"]))
+                    for key in configuration.pump_moisture_dict)
     reply = {
         "humidity": humidity,
         "temperature": temperature,
@@ -69,8 +67,6 @@ def editsettings():
         light_proxy.reload()
         for key, pump_proxy in pump_proxies.items():
             pump_proxy.reload()
-        for key, moisture_proxy in moisture_proxies.items():
-            moisture_proxy.reload()
     return render_template("settings.html", settings=load_settings(raw=True))
 
 

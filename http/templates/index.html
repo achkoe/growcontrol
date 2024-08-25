@@ -43,7 +43,7 @@
             <p class="statuslabel">Water Supply Level</p>
             <p id="waterlevel">?</p>
         </div>
-        {% for key in configuration["moisture_server_port_dict"] %}
+        {% for key in configuration["pump_moisture_dict"] %}
         <div class="box" id="boxpump_{{key}}">
             <p class="statuslabel">Pump {{ key }}</p>
             <p>State: <span id="pump_{{key}}">?</span></p>

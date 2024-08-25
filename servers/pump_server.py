@@ -4,35 +4,45 @@
 import logging
 import argparse
 import time
+import os
 import xmlrpc.client
+from dotenv import load_dotenv
 from xmlrpc.server import SimpleXMLRPCServer
 from xmlrpc.server import SimpleXMLRPCRequestHandler
+import RPi.GPIO as GPIO
+
 from base import load_settings
 import configuration
 
 
-IDENTITY = "moisture_server.py v0.0.1"
+load_dotenv()
+
+
+IDENTITY = "pump_server.py v0.0.1"
 logging.basicConfig(format=configuration.log_format, level=logging.DEBUG)
-LOGLEVEL = logging.INFO
+LOGLEVEL = int(os.getenv("PUMP_SERVER_LOGLEVEL", logging.CRITICAL))
 LOGGER = logging.getLogger()
 LOGGER.setLevel(LOGLEVEL)
 
 
 WAIT, RUN = 0, 1
 
+GPIO.setmode(GPIO.BCM)
+
 
 class Bridge:
-    def __init__(self, moisture_server_port: int):
+    def __init__(self, moisture_channel: int, pump_gpio: int):
         self.settings = load_settings()
-        self.moisture_proxy = xmlrpc.client.ServerProxy(
-            f"http://localhost:{moisture_server_port}")
         self.sensor_proxy = xmlrpc.client.ServerProxy(
             f"http://localhost:{configuration.sensors_server_port}")
+        self.moisture_channel = moisture_channel
+        self.pump_gpio = pump_gpio
+        GPIO.setup(pump_gpio, GPIO.OUT)
         self.pump_mode_manual = False
         self.pump_on = False
         self.state = WAIT
-        self.wait_between = 6  # wait between two pump shots
-        self.shot_time = 1     # time to for one single pump
+        self.wait_between = 60  # wait seconds between two pump shots
+        self.shot_time = 2      # time to for one single pump in seconds
         self.last_time = -1
 
     def _execute(self):
@@ -40,9 +50,10 @@ class Bridge:
         if waterlevel <= float(self.settings["waterlevel_low"]):
             # permit the pump to fall dry
             self.pump_on = False
+            GPIO.output(self.pump_gpio, GPIO.LOW)
             LOGGER.info("pump OFF")
             return
-        moisture = float(self.moisture_proxy.moisture())
+        moisture = float(self.sensor_proxy.moisture(self.moisture_channel))
         if self.state == WAIT:
             if moisture < float(self.settings["moisture_low_level"]):
                 LOGGER.info(
@@ -51,6 +62,7 @@ class Bridge:
         if self.state == RUN:
             if moisture >= float(self.settings["moisture_ok_level"]):
                 self.pump_on = False
+                GPIO.output(self.pump_gpio, GPIO.LOW)
                 LOGGER.info("state: RUN -> WAIT")
                 self.state = WAIT
                 return
@@ -59,11 +71,13 @@ class Bridge:
                 if t - self.last_time >= self.shot_time:
                     LOGGER.info("pump OFF")
                     self.pump_on = False
+                    GPIO.output(self.pump_gpio, GPIO.LOW)
                     self.last_time = t
             else:
                 if t - self.last_time >= self.wait_between:
                     LOGGER.info("pump ON")
                     self.pump_on = True
+                    GPIO.output(self.pump_gpio, GPIO.HIGH)
                     self.last_time = t
 
     def identity(self):
@@ -97,12 +111,12 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "number",
-        choices=configuration.moisture_server_port_dict.keys(),
+        choices=configuration.pump_moisture_dict.keys(),
         type=int,
-        help=f"server number, one of {configuration.moisture_server_port_dict.keys()}",
+        help=f"server number, one of {configuration.pump_moisture_dict.keys()}",
     )
     args = parser.parse_args()
-    port = configuration.moisture_server_port_dict[args.number]["pump"]
+    port = configuration.pump_moisture_dict[args.number]["pump"]
     LOGGER.critical(f"PUMP PROCESS STARTED AT PORT {port}")
     with TheServer(
         ("localhost", port), requestHandler=RequestHandler, logRequests=False
@@ -110,6 +124,8 @@ if __name__ == "__main__":
         server.register_introspection_functions()
         server.register_instance(
             Bridge(
-                configuration.moisture_server_port_dict[args.number]["moisture"])
+                configuration.pump_moisture_dict[args.number]["channel"],
+                configuration.pump_moisture_dict[args.number]["gpio"]
+            )
         )
         server.serve_forever()

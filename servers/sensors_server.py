@@ -3,21 +3,26 @@
 
 
 import logging
-import time
+import os
 from xmlrpc.server import SimpleXMLRPCServer
 from xmlrpc.server import SimpleXMLRPCRequestHandler
+from dotenv import load_dotenv
 import smbus2
 from bme280 import BME280
+import ADS1x15
 from base import load_settings
 import configuration
 
 
+load_dotenv()
+
 # set to True to use mocked values
-USE_MOCK_VALUES = False
+USE_MOCK_VALUES = os.getenv("USE_MOCK_VALUES", False)
+
 
 IDENTITY = "sensors_server.py v0.0.1"
 logging.basicConfig(format=configuration.log_format, level=logging.DEBUG)
-LOGLEVEL = logging.CRITICAL
+LOGLEVEL = int(os.getenv("SENSOR_SERVER_LOGLEVEL", logging.CRITICAL))
 LOGGER = logging.getLogger()
 LOGGER.setLevel(LOGLEVEL)
 
@@ -27,6 +32,18 @@ class Bridge():
         # initialize BME280 sensor for temperature and humidity
         bus = smbus2.SMBus(1)
         self.bme280 = BME280(i2c_dev=bus)
+
+        # settings for moisture
+        # max value ~17390: dry
+        # min value ~7470: wet
+        self._min = 7500
+        self._max = 17000
+        self._slope = (100.0 - 0.0) / (self._min - self._max)
+        self._offset = - self._slope * self._max
+        self.adc = ADS1x15.ADS1115(1, 0x48)
+        self.adc.setGain(self.adc.PGA_4_096V)
+        self.adc.setMode(self.adc.MODE_CONTINUOUS)
+
         self.settings = load_settings()
         self._execute()
 
@@ -53,11 +70,9 @@ class Bridge():
         return IDENTITY
 
     def temperature(self):
-        LOGGER.info("temperature")
         return self._temperature
 
     def humidity(self):
-        LOGGER.info("humidity")
         return self._humidity
 
     def waterlevel(self):
@@ -69,15 +84,15 @@ class Bridge():
         self._waterlevel = value
         return self._waterlevel
 
-    def moisture(self):
-        LOGGER.info("moisture")
-        return ["{:d}".format(item) for item in self._moisture_list]
-
-    def setmoisture(self, value):
-        LOGGER.info(("setmoisture", repr(value), type(value)))
-        self._moisture_list = [value] * \
-            configuration.number_of_moisture_sensors
-        return self._moisture_list
+    def moisture(self, channel):
+        """Return moisture between 0 ... 100"""
+        self.adc.requestADC(channel)
+        rval = self.adc.getValue()
+        LOGGER.info(f"moisture:getValue() -> {rval}")
+        rval = min(self._max, rval)      # set upper limit
+        rval = max(self._min, rval)      # set lower limit
+        rval = self._slope * rval + self._offset
+        return rval
 
     def reload(self):
         self.settings = load_settings()
