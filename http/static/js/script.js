@@ -15,7 +15,7 @@ function callServerEveryTwoSeconds() {
                 // console.log('Success:', data);
                 console.log('data:', data);
                 var e;
-                ["waterlevel", "fan", "light_1", "light_2", "time"].forEach(function(field) {
+                ["fan", "light_1", "light_2", "time"].forEach(function(field) {
                     e = document.getElementById(field);
                     e.innerText = data[field];
                 });
@@ -23,6 +23,16 @@ function callServerEveryTwoSeconds() {
                     e = document.getElementById(field);
                     e.innerText = data[field].toFixed(1);
                 });
+
+                e = document.getElementById("waterlevel");
+                e.innerText = data["waterlevel"] > 0 ? "LOW" : "OK";
+                e = document.getElementById("boxwaterlevel");
+                if (data.waterlevel > 0) {
+                    e.classList.add("alert");
+                } else {
+                    e.classList.remove("alert");
+                }
+
                 e = document.getElementById("boxtemperature");
                 if ((data.temperature > data.temperature_high_critical_level) | (data.temperature < data.temperature_low_critical_level)){
                     e.classList.add("alert");
@@ -34,12 +44,6 @@ function callServerEveryTwoSeconds() {
                 if ((data.humidity > data.humidity_high_critical_level) | (data.humidity < data.humidity_low_critical_level)){
                     e.classList.add("alert");
                     console.log("alert");
-                } else {
-                    e.classList.remove("alert");
-                }
-                e = document.getElementById("boxwaterlevel");
-                if (data.waterlevel <= data.waterlevel_low) {
-                    e.classList.add("alert");
                 } else {
                     e.classList.remove("alert");
                 }

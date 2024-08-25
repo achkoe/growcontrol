@@ -130,12 +130,5 @@
         "type": "number",
         "min": 0,
         "max": 100
-    },
-    "waterlevel_low": {
-        "value": "1",
-        "title": "Water Low Level",
-        "type": "number",
-        "min": 0,
-        "max": 100
     }
 }

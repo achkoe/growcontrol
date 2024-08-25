@@ -46,8 +46,9 @@ class Bridge:
         self.last_time = -1
 
     def _execute(self):
-        waterlevel = float(self.sensor_proxy.waterlevel())
-        if waterlevel <= float(self.settings["waterlevel_low"]):
+        waterlevel = int(self.sensor_proxy.waterlevel())
+        # waterlevel 1 means out of water
+        if waterlevel > 0:
             # permit the pump to fall dry
             self.pump_on = False
             GPIO.output(self.pump_gpio, GPIO.LOW)

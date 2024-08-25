@@ -7,6 +7,7 @@ import os
 from xmlrpc.server import SimpleXMLRPCServer
 from xmlrpc.server import SimpleXMLRPCRequestHandler
 from dotenv import load_dotenv
+import RPi.GPIO as GPIO
 import smbus2
 from bme280 import BME280
 import ADS1x15
@@ -26,9 +27,13 @@ LOGLEVEL = int(os.getenv("SENSOR_SERVER_LOGLEVEL", logging.CRITICAL))
 LOGGER = logging.getLogger()
 LOGGER.setLevel(LOGLEVEL)
 
+GPIO.setmode(GPIO.BCM)
+
 
 class Bridge():
     def __init__(self):
+        GPIO.setup(configuration.port_waterlow, GPIO.IN)
+
         # initialize BME280 sensor for temperature and humidity
         bus = smbus2.SMBus(1)
         self.bme280 = BME280(i2c_dev=bus)
@@ -51,10 +56,13 @@ class Bridge():
         if USE_MOCK_VALUES:
             self._temperature = 24.1
             self._humidity = 48
+            self._waterlevel = 0
         else:
             self._temperature = self.bme280.get_temperature()
             self._humidity = self.bme280.get_humidity()
-        self._waterlevel = 10
+            self._waterlevel = GPIO.input(configuration.port_waterlow)
+            LOGGER.info(
+                f"T={self._temperature:4.1f}°C, H={self._humidity:5.1f}%, WL={self._waterlevel}")
 
     def settemperature(self, value):
         LOGGER.info(("settemperature", repr(value), type(value)))
@@ -76,7 +84,6 @@ class Bridge():
         return self._humidity
 
     def waterlevel(self):
-        LOGGER.info("waterlevel")
         return self._waterlevel
 
     def setwaterlevel(self, value):
@@ -88,7 +95,7 @@ class Bridge():
         """Return moisture between 0 ... 100"""
         self.adc.requestADC(channel)
         rval = self.adc.getValue()
-        LOGGER.info(f"moisture:getValue() -> {rval}")
+        LOGGER.debug(f"moisture:getValue() -> {rval}")
         rval = min(self._max, rval)      # set upper limit
         rval = max(self._min, rval)      # set lower limit
         rval = self._slope * rval + self._offset
