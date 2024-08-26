@@ -13,7 +13,7 @@ function callServerEveryTwoSeconds() {
             })
             .then(data => {
                 // console.log('Success:', data);
-                console.log('data:', data);
+                // console.log('data:', data);
                 var e;
                 ["fan", "light_1", "light_2", "time"].forEach(function(field) {
                     e = document.getElementById(field);
@@ -77,9 +77,6 @@ function callServerEveryTwoSeconds() {
 callServerEveryTwoSeconds();
 
 
-
-
-
 document.addEventListener("DOMContentLoaded", function() {
     const fanToggle = document.getElementById('fanToggle');
     const fanOnOffToggle = document.getElementById('fanOnOffToggle');
@@ -87,6 +84,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const light1Toggle = document.getElementById('light1Toggle');
     const light2Toggle = document.getElementById('light2Toggle');
 
+    
     function sendState(url, state) {
         fetch(url, {
             method: 'POST',
@@ -102,7 +100,7 @@ document.addEventListener("DOMContentLoaded", function() {
             console.error('Error sending state to server:', error);
         });
     }
-
+    
     function updateFanState() {
         const state = {
             fan: fanToggle.textContent === 'Manual' ? 'Manual' : 'Auto',
@@ -186,7 +184,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
         updateLightState();
     });
-
+    
     light2Toggle.addEventListener('click', function() {
         if (light2Toggle.textContent === 'Off') {
             light2Toggle.textContent = 'On';
@@ -199,4 +197,58 @@ document.addEventListener("DOMContentLoaded", function() {
         }
         updateLightState();
     });
+
+    function updatePumpState(id) {
+        console.log(id);
+        index = id.split("_").pop();
+        const pumpToggle = document.getElementById("pumpToggle_" + index);
+        const pumpOnOffToggle = document.getElementById("pumpOnOffToggle_" + index);
+        const state = {
+            index: index,
+            mode: pumpToggle.textContent === 'Manual' ? 'Manual' : 'Auto',
+            pumpOnOff: pumpOnOffToggle.textContent === 'On' ? 'On' : 'Off'
+        };
+        // console.log(state);
+        sendState('/togglePump', state);
+    }
+
+    var pumpToggle;
+    for (index=1; index < 10; index++) {
+        pumpToggle = document.getElementById("pumpToggle_" + index);
+        if (pumpToggle == null) break;
+        
+        pumpToggle.addEventListener('click', function() {
+            var index = this.id.split("_").pop();
+            const pumpOnOffToggle = document.getElementById("pumpOnOffToggle_" + index);
+            if (this.textContent === 'Auto') {
+                this.textContent = 'Manual';
+                this.classList.remove('auto');
+                this.classList.add('manual');
+                pumpOnOffToggle.disabled = false;
+            } else {
+                this.textContent = 'Auto';
+                this.classList.remove('manual');
+                this.classList.add('auto');
+                pumpOnOffToggle.disabled = true;
+                pumpOnOffToggle.textContent = 'Off';  // Reset the pump On/Off button to Off
+                pumpOnOffToggle.classList.remove('on');
+                pumpOnOffToggle.classList.add('off');
+            }
+            updatePumpState(this.id);    
+        });
+        
+        const pumpOnOffToggle = document.getElementById("pumpOnOffToggle_" + index);
+        pumpOnOffToggle.addEventListener('click', function() {
+            if (this.textContent === 'Off') {
+                this.textContent = 'On';
+                this.classList.remove('off');
+                this.classList.add('on');
+            } else {
+                this.textContent = 'Off';
+                this.classList.remove('on');
+                this.classList.add('off');
+            }
+            updatePumpState(this.id);
+        });
+        }
 });

@@ -25,7 +25,7 @@ LOGGER = logging.getLogger()
 LOGGER.setLevel(LOGLEVEL)
 
 
-WAIT, RUN = 0, 1
+WAIT, RUN, MANUAL = 0, 1, 2
 
 GPIO.setmode(GPIO.BCM)
 
@@ -42,7 +42,7 @@ class Bridge:
         self.pump_on = False
         self.state = WAIT
         self.wait_between = 60  # wait seconds between two pump shots
-        self.shot_time = 2      # time to for one single pump in seconds
+        self.shot_time = 3      # time to for one single pump in seconds
         self.last_time = -1
 
     def _execute(self):
@@ -53,6 +53,11 @@ class Bridge:
             self.pump_on = False
             GPIO.output(self.pump_gpio, GPIO.LOW)
             LOGGER.info("pump OFF")
+            return
+        if self.pump_mode_manual is True:
+            GPIO.output(self.pump_gpio,
+                        GPIO.HIGH if self.pump_on else GPIO.LOW)
+            LOGGER.info("pump {}".format("ON" if self.pump_on else "OFF"))
             return
         moisture = float(self.sensor_proxy.moisture(self.moisture_channel))
         if self.state == WAIT:
@@ -85,7 +90,8 @@ class Bridge:
         return IDENTITY
 
     def get(self):
-        return "{} ({})".format(["WAIT", "RUN"][self.state], "ON" if self.pump_on else "OFF")
+        state = "MANUAL" if self.pump_mode_manual is True else ["WAIT", "RUN"][self.state]
+        return "{} ({})".format(state, "ON" if self.pump_on else "OFF")
 
     def set(self, mode, pump_state):
         print(f"Brigde-set {mode} {pump_state}")

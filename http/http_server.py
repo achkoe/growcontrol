@@ -90,3 +90,12 @@ def toggle_light():
     light_2_state = request.get_json()["light2"]
     reply = light_proxy.set(light_mode, light_1_state, light_2_state)
     return {"status": reply}
+
+
+@ app.route("/togglePump", methods=("POST", ))
+def toggle_pump():
+    pump = request.get_json()
+    print(pump)
+    pump_proxy = pump_proxies[int(pump["index"])]
+    reply = pump_proxy.set(pump["mode"], pump["pumpOnOff"])
+    return {"status": reply}

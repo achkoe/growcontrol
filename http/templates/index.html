@@ -43,12 +43,22 @@
             <p class="statuslabel">Water Supply Level</p>
             <p id="waterlevel">?</p>
         </div>
+    </div>
+    <div class="container">
         {% for key in configuration["pump_moisture_dict"] %}
         <div class="box" id="boxpump_{{key}}">
             <p class="statuslabel">Pump {{ key }}</p>
             <p>State: <span id="pump_{{key}}">?</span></p>
             <p>Soil moisture: <span id="moisture_{{key}}">?</span></p>
         </div>        
+        <div class="column">
+            <label for="pumpToggle_{{key}}">Pump {{key}}</label>
+            <button id="pumpToggle_{{key}}" class="auto">Auto</button>
+        </div>
+        <div class="column">
+            <label for="pumpOnOffToggle_{{key}}">Pump {{key}} On/Off</label>
+            <button class="off" id="pumpOnOffToggle_{{key}}" disabled>Off</button>
+        </div>
         {% endfor %}
     </div>
     <div class="container">

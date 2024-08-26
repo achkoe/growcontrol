@@ -20,14 +20,14 @@
         "type": "time"
     },
     "moisture_low_level": {
-        "value": "50",
+        "value": "60",
         "title": "Moisture Low Level",
         "type": "number",
         "min": 0,
         "max": 100
     },
     "moisture_ok_level": {
-        "value": "70",
+        "value": "62",
         "title": "Moisture OK Level",
         "type": "number",
         "min": 0,
@@ -69,14 +69,14 @@
         "max": 100
     },
     "humidity_high_level": {
-        "value": "60",
+        "value": "62",
         "title": "Humidity High Level",
         "type": "number",
         "min": 0,
         "max": 100
     },
     "humidity_low_level": {
-        "value": "50",
+        "value": "60",
         "title": "Humidity Low Level",
         "type": "number",
         "min": 0,
