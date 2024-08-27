@@ -20,6 +20,7 @@ button {
     border-radius: 5px;
     background-color: #f0f0f0;
     transition: background-color 0.3s, color 0.3s;
+    height: 100%;
 }
 
 button:disabled {
@@ -61,8 +62,22 @@ label {
     /* justify-content: space-between; */
 }
 
+.pumpcontainer {
+    display: flex;
+    justify-content: space-around; 
+    background-color: darkslategrey;
+    border-radius: 10px;
+    /* justify-content: space-between; */
+}
+
+.pumplabel {
+    color: white;
+    font-size: 120%;
+}
+
+
 .box {
-    width: 15%;
+    width: 10%;
     border-radius: 10px;
     background-color: green;
     color: white;
@@ -96,4 +111,13 @@ label {
 }
 .row button {
     flex-shrink: 0; /* Prevent button from shrinking */
+}
+
+.settings {
+    border-top: #368ff4 solid;
+    text-align: center;
+}
+
+.settings > p {
+    font-size: 120%;
 }

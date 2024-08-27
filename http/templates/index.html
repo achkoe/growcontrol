@@ -24,6 +24,10 @@
             <p class="statuslabel">Humidity</p>
             <p><span id="humidity"></span>%</p>
         </div>
+        <div id="boxwaterlevel", class="box">
+            <p class="statuslabel">Water Supply Level</p>
+            <p id="waterlevel">?</p>
+        </div>
         <div class="box">
             <p class="statuslabel">Fan</p>
             <p id="fan"></p>
@@ -38,29 +42,25 @@
         </div>
     </div>
     <br/>
-    <div class="container">
-        <div id="boxwaterlevel", class="box">
-            <p class="statuslabel">Water Supply Level</p>
-            <p id="waterlevel">?</p>
-        </div>
-    </div>
-    <div class="container">
+
+    <div class="pumpcontainer">
         {% for key in configuration["pump_moisture_dict"] %}
-        <div class="box" id="boxpump_{{key}}">
-            <p class="statuslabel">Pump {{ key }}</p>
+            <p class="pumplabel">Pump {{ key }}</p>
+            <div class="box" id="boxpump_{{key}}">
             <p>State: <span id="pump_{{key}}">?</span></p>
+        </div>        
+        <div class="box" id="boxpump_{{key}}">
             <p>Soil moisture: <span id="moisture_{{key}}">?</span></p>
         </div>        
         <div class="column">
-            <label for="pumpToggle_{{key}}">Pump {{key}}</label>
             <button id="pumpToggle_{{key}}" class="auto">Auto</button>
         </div>
         <div class="column">
-            <label for="pumpOnOffToggle_{{key}}">Pump {{key}} On/Off</label>
             <button class="off" id="pumpOnOffToggle_{{key}}" disabled>Off</button>
         </div>
         {% endfor %}
     </div>
+    
     <div class="container">
         <div class="row">
             <div class="column">
@@ -90,7 +90,9 @@
         </div>
     </div>
 
-    <p><a href="settings">Settings</a></p>
+    <div class="settings">
+        <p><a href="settings">Settings</a></p>
+    </div>
 </body>    
 
 </html>
