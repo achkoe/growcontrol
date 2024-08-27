@@ -60,38 +60,35 @@
         </div>
         {% endfor %}
     </div>
-    
-    <div class="container">
-        <div class="row">
-            <div class="column">
-                <label for="fanToggle">Fan</label>
-                <button id="fanToggle" class="auto">Auto</button>
-            </div>
-            <div class="column">
-                <label for="fanOnOffToggle">Fan On/Off</label>
-                <button class="off" id="fanOnOffToggle" disabled>Off</button>
-            </div>
+        
+    <div class="controlcontainer">
+        <div class="controllabel">Fan</div>
+        <div class="column">
+            <button id="fanToggle" class="auto">Auto</button>
         </div>
-        </div>
-    <div class="container">
-        <div class="row">
-            <div class="column">
-                <label for="lightToggle">Light</label>
-                <button id="lightToggle" class="auto">Auto</button>
-            </div>
-            <div class="column">
-                <label for="light1Toggle">Light 1</label>
-                <button class="off" id="light1Toggle" disabled>Off</button>
-            </div>
-            <div class="column">
-                <label for="light2Toggle">Light 2</label>
-                <button class="off" id="light2Toggle" disabled>Off</button>
-            </div>
+        <div class="column">
+            <button class="off" id="fanOnOffToggle" disabled>Off</button>
         </div>
     </div>
-
+    
+    <div class="controlcontainer">
+        <div class="controllabel">Light</div>
+        <div class="column">
+            <button id="lightToggle" class="auto">Auto</button>
+        </div>
+        <div class="controllabel">Light 1</div>
+        <div class="column">
+            <button class="off" id="light1Toggle" disabled>Off</button>
+        </div>
+        <div class="controllabel">Light 2</div>
+        <div class="column">
+            <button class="off" id="light2Toggle" disabled>Off</button>
+        </div>
+    </div>
+    
     <div class="settings">
         <p><a href="settings">Settings</a></p>
+        
     </div>
 </body>    
 

@@ -1,6 +1,9 @@
 h1 {
     font-size: 120%;
     text-align: center;
+    background-color: #ccc;
+    border: 2px solid #ccc;
+    border-radius: 5px;
 }
 
 body {
@@ -67,12 +70,26 @@ label {
     justify-content: space-around; 
     background-color: darkslategrey;
     border-radius: 10px;
-    /* justify-content: space-between; */
 }
 
 .pumplabel {
     color: white;
     font-size: 120%;
+}
+
+.controlcontainer {
+    display: flex;
+    justify-content: flex-start; 
+    background-color: darkslategrey;
+    border-radius: 10px;
+    align-items: center;
+}
+
+.controllabel {
+    color: white;
+    font-size: 120%;
+    margin-right: 1em;
+    margin-left: 1em;
 }
 
 
