@@ -8,5 +8,7 @@ pump_moisture_dict = {
 
 # GPIO for water low sensor, 1: water is low, 0: water is available
 port_waterlow = 18
+port_watermedium = 23
+port_waterhigh = 24
 
 log_format = "%(module)s:%(levelname)s:%(asctime)s:%(message)s"

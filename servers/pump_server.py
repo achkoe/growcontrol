@@ -48,7 +48,7 @@ class Bridge:
     def _execute(self):
         waterlevel = int(self.sensor_proxy.waterlevel())
         # waterlevel 1 means out of water
-        if waterlevel > 0:
+        if waterlevel == 0:
             # permit the pump to fall dry
             self.pump_on = False
             GPIO.output(self.pump_gpio, GPIO.LOW)
@@ -90,7 +90,8 @@ class Bridge:
         return IDENTITY
 
     def get(self):
-        state = "MANUAL" if self.pump_mode_manual is True else ["WAIT", "RUN"][self.state]
+        state = "MANUAL" if self.pump_mode_manual is True else [
+            "WAIT", "RUN"][self.state]
         return "{} ({})".format(state, "ON" if self.pump_on else "OFF")
 
     def set(self, mode, pump_state):

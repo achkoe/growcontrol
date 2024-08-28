@@ -107,6 +107,10 @@ label {
     background-color: #f44336;
 }
 
+.warn {
+    background-color: rgb(255, 166, 0);
+}
+
 .statuslabel {
     color: black;
 }

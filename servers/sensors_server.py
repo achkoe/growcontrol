@@ -13,7 +13,7 @@ from bme280 import BME280
 import ADS1x15
 from base import load_settings
 import configuration
-
+from configuration import port_waterlow, port_watermedium, port_waterhigh
 
 load_dotenv()
 
@@ -33,6 +33,7 @@ GPIO.setmode(GPIO.BCM)
 class Bridge():
     def __init__(self):
         GPIO.setup(configuration.port_waterlow, GPIO.IN)
+        GPIO.setup([port_waterlow, port_watermedium, port_waterhigh], GPIO.IN)
 
         # initialize BME280 sensor for temperature and humidity
         bus = smbus2.SMBus(1)
@@ -60,7 +61,21 @@ class Bridge():
         else:
             self._temperature = self.bme280.get_temperature()
             self._humidity = self.bme280.get_humidity()
-            self._waterlevel = GPIO.input(configuration.port_waterlow)
+            waterlevels = [GPIO.input(pin) for pin in (
+                port_waterlow, port_watermedium, port_waterhigh)]
+            # [1, 1, 1] -> water level is below low marker
+            # [0, 1, 1] -> water is between low and medium marker
+            # [0, 0, 1] -> water is between medium and high marker
+            # [0, 0, 0] -> water is between above high marker
+            # LOGGER.critical(waterlevels)
+            if waterlevels[0] == 1:
+                self._waterlevel = 0
+            elif waterlevels[1] == 1:
+                self._waterlevel = 1
+            elif waterlevels[2] == 1:
+                self._waterlevel = 2
+            else:
+                self._waterlevel = 3
             LOGGER.info(
                 f"T={self._temperature:4.1f}°C, H={self._humidity:5.1f}%, WL={self._waterlevel}")
 

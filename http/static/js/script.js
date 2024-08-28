@@ -25,13 +25,23 @@ function callServerEveryTwoSeconds() {
                 });
 
                 e = document.getElementById("waterlevel");
-                e.innerText = data["waterlevel"] > 0 ? "LOW" : "OK";
-                e = document.getElementById("boxwaterlevel");
-                if (data.waterlevel > 0) {
-                    e.classList.add("alert");
-                } else {
-                    e.classList.remove("alert");
+                if (data["waterlevel"] == 0) {
+                    e.innerText = "CRITICAL";
+                } else if (data["waterlevel"] == 1) {
+                    e.innerText = "LOW";
+                } else if (data["waterlevel"] == 2) {
+                    e.innerText = "MEDIUM";
+                } else if (data["waterlevel"] == 3) {
+                    e.innerText = "FULL";
                 }
+                e = document.getElementById("boxwaterlevel");
+                e.classList.remove("alert");
+                e.classList.remove("warn");
+                if (data.waterlevel == 0) {
+                    e.classList.add("alert");
+                } else if (data.waterlevel == 1) {
+                    e.classList.add("warn");
+                } 
 
                 e = document.getElementById("boxtemperature");
                 if ((data.temperature > data.temperature_high_critical_level) | (data.temperature < data.temperature_low_critical_level)){
