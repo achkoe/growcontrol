@@ -19,6 +19,8 @@ light_proxy = xmlrpc.client.ServerProxy(
     f"http://localhost:{configuration.light_server_port}")
 pump_proxies = dict((key, xmlrpc.client.ServerProxy(
     f"http://localhost:{configuration.pump_moisture_dict[key]['pump']}")) for key in configuration.pump_moisture_dict)
+logdata_proxy = xmlrpc.client.ServerProxy(
+    f"http://localhost:{configuration.logdata_server_port}")
 
 
 settings = load_settings()
@@ -99,3 +101,10 @@ def toggle_pump():
     pump_proxy = pump_proxies[int(pump["index"])]
     reply = pump_proxy.set(pump["mode"], pump["pumpOnOff"])
     return {"status": reply}
+
+
+@app.route("/log", methods=("GET", ))
+def logdata():
+    data = logdata_proxy.get()
+    print(data)
+    return render_template('index.html', configuration=configuration)
