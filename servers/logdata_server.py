@@ -25,6 +25,8 @@ MAX_LENGTH = 10
 class Bridge():
     def __init__(self):
         self.settings = load_settings()
+        self.fan_proxy = xmlrpc.client.ServerProxy(
+            f"http://localhost:{configuration.fan_server_port}")
         self.sensors_proxy = xmlrpc.client.ServerProxy(
             f"http://localhost:{configuration.sensors_server_port}")
         self.pump_proxy_dict = copy.deepcopy(configuration.pump_moisture_dict)
@@ -44,20 +46,22 @@ class Bridge():
             # take atmost one sample in 60 seconds
             temperature = float(self.sensors_proxy.temperature())
             humidity = float(self.sensors_proxy.humidity())
+            fan = 1 if self.fan_proxy.get() == "ON" else 0
             if True or (abs(humidity - self.previous_humidity) >= 1) or (abs(temperature - self.previous_temperature >= 0.5)):
                 self.temperature_humidity_queue.append(
-                    (currenttime, temperature, humidity))
+                    (currenttime, temperature, humidity, fan))
                 # ic(self.temperature_humidity_queue)
                 self.previous_humidity = humidity
                 self.previous_temperature = temperature
             self.previous_time = currenttime
 
         for key in self.pump_proxy_dict:
+            pump = 1 if self.pump_proxy_dict[key]["proxy"].get() == "ON" else 0
             moisture = self.sensors_proxy.moisture(
                 self.pump_proxy_dict[key]["channel"])
-            if abs(self.pump_proxy_dict[key]["previous_moisture"] - moisture) >= 1:
+            if (len(self.pump_proxy_dict[key]["moisture"]) < 2) or abs(self.pump_proxy_dict[key]["previous_moisture"] - moisture) >= 1:
                 self.pump_proxy_dict[key]["moisture"].append(
-                    (currenttime, moisture))
+                    (currenttime, moisture, pump))
                 self.pump_proxy_dict[key]["previous_moisture"] = moisture
 
     def identity(self):
@@ -65,8 +69,8 @@ class Bridge():
 
     def get(self):
         # returns two items:
-        # 1st is list with tuples (time, temparature, humidity)
-        # 2nd is dict with keys <pump> and tuples (time, moisture)
+        # 1st is list with tuples (time, temparature, humidity, fan)
+        # 2nd is dict with keys <pump> and tuples (time, moisture, pump)
         return list(self.temperature_humidity_queue), dict([(str(key), list(self.pump_proxy_dict[key]["moisture"])) for key in self.pump_proxy_dict])
 
     def set(self):

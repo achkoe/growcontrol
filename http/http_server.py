@@ -106,10 +106,10 @@ def toggle_pump():
 
 @app.route("/log", methods=("GET", ))
 def log():
-    return render_template('logdata.html')
+    return render_template('logdata.html', configuration=configuration)
 
 
-@app.route("/logdata")
+@ app.route("/logdata")
 def logdata():
     time_temperature_humidity_list, moisture_dict = logdata_proxy.get()
     # for item in time_temperature_humidity_list:
