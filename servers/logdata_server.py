@@ -40,11 +40,11 @@ class Bridge():
 
     def _execute(self):
         currenttime = time.time()
-        if currenttime - self.previous_time > 60:
+        if currenttime - self.previous_time > 60 / 60:
             # take atmost one sample in 60 seconds
             temperature = float(self.sensors_proxy.temperature())
             humidity = float(self.sensors_proxy.humidity())
-            if (abs(humidity - self.previous_humidity) >= 1) or (abs(temperature - self.previous_temperature >= 0.5)) or True:
+            if True or (abs(humidity - self.previous_humidity) >= 1) or (abs(temperature - self.previous_temperature >= 0.5)):
                 self.temperature_humidity_queue.append(
                     (currenttime, temperature, humidity))
                 # ic(self.temperature_humidity_queue)
@@ -64,6 +64,9 @@ class Bridge():
         return IDENTITY
 
     def get(self):
+        # returns two items:
+        # 1st is list with tuples (time, temparature, humidity)
+        # 2nd is dict with keys <pump> and tuples (time, moisture)
         return list(self.temperature_humidity_queue), dict([(str(key), list(self.pump_proxy_dict[key]["moisture"])) for key in self.pump_proxy_dict])
 
     def set(self):
