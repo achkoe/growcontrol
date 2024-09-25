@@ -34,35 +34,36 @@ class Bridge():
             self.pump_proxy_dict[key]["proxy"] = xmlrpc.client.ServerProxy(
                 f"http://localhost:{value['pump']}")
             self.pump_proxy_dict[key]["moisture"] = deque(maxlen=MAX_LENGTH)
-            self.pump_proxy_dict[key]["previous_moisture"] = -1
+            self.pump_proxy_dict[key]["pump"] = -1
         self.temperature_humidity_queue = deque(maxlen=MAX_LENGTH)
         self.previous_time = -1
-        self.previous_humidity = -1
-        self.previous_temperature = -100
+        self.previous_fan = -1
 
     def _execute(self):
+        interval = 1
         currenttime = time.time()
-        if currenttime - self.previous_time > 60 / 60:
+        fan = 1 if self.fan_proxy.get() == "ON" else 0
+        temperature = float(self.sensors_proxy.temperature())
+        humidity = float(self.sensors_proxy.humidity())
+
+        if (fan != self.previous_fan) or (currenttime - self.previous_time > interval):
             # take atmost one sample in 60 seconds
-            temperature = float(self.sensors_proxy.temperature())
-            humidity = float(self.sensors_proxy.humidity())
-            fan = 1 if self.fan_proxy.get() == "ON" else 0
-            if True or (abs(humidity - self.previous_humidity) >= 1) or (abs(temperature - self.previous_temperature >= 0.5)):
-                self.temperature_humidity_queue.append(
-                    (currenttime, temperature, humidity, fan))
-                # ic(self.temperature_humidity_queue)
-                self.previous_humidity = humidity
-                self.previous_temperature = temperature
-            self.previous_time = currenttime
+            self.temperature_humidity_queue.append(
+                (currenttime, temperature, humidity, fan))
+            # ic(self.temperature_humidity_queue)
+            self.previous_fan = fan
 
         for key in self.pump_proxy_dict:
             pump = 1 if self.pump_proxy_dict[key]["proxy"].get() == "ON" else 0
-            moisture = self.sensors_proxy.moisture(
-                self.pump_proxy_dict[key]["channel"])
-            if (len(self.pump_proxy_dict[key]["moisture"]) < 2) or abs(self.pump_proxy_dict[key]["previous_moisture"] - moisture) >= 1:
+            if (pump != self.pump_proxy_dict[key]["pump"]) or (currenttime - self.previous_time > interval):
+                moisture = self.sensors_proxy.moisture(
+                    self.pump_proxy_dict[key]["channel"])
                 self.pump_proxy_dict[key]["moisture"].append(
                     (currenttime, moisture, pump))
-                self.pump_proxy_dict[key]["previous_moisture"] = moisture
+                self.pump_proxy_dict[key]["pump"] = pump
+
+        if (currenttime - self.previous_time > interval):
+            self.previous_time = currenttime
 
     def identity(self):
         return IDENTITY

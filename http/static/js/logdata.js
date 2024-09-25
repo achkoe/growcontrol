@@ -1,7 +1,7 @@
 const tthoptions = {
-    title: "Grow Control Data Graph",
-    width: 600,
-    height: 300,
+    title: null,
+    width: 1200,
+    height: 480,
     series: [
       {},
       {
@@ -43,9 +43,9 @@ const tthoptions = {
       ]
 };
 const moistureoptions = {
-    title: "Grow Control Moisture",
-    width: 600,
-    height: 300,
+    title: null,
+    width: 1200,
+    height: 480,
     series: [
       {},
       {
@@ -126,10 +126,9 @@ function callLogDataUpdate() {
                     tthplot.setData(plotdata);
                 }
                 
-                text = "";
-                plotdata = [[], [], []];
                 for (let [key, value] of Object.entries(data["m"])) {
-                    text += "" + key + "\n";
+                    text = "";
+                    plotdata = [[], [], []];
                     for (let tuple of value) {
                         text += "" + tuple[0] + "  " + tuple[1] + "  " + tuple[2] + "\n";
                         plotdata[0].push(tuple[0]);
@@ -138,11 +137,10 @@ function callLogDataUpdate() {
                     }
                     if (plotdata[0].length >= 2) {
                         moistureplot[key].setData(plotdata);
-                        ///moistureplot[key].opts["title"] = "" + key;
                     }
+                    e = document.getElementById("moisturepanel_" + key);
+                    e.innerText = text;
                 }
-                e = document.getElementById("moisturepanel");
-                e.innerText = text;
             })
             .catch(error => {
                 console.error('There has been a problem with your fetch operation:', error);
