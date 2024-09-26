@@ -20,6 +20,7 @@ LOGGER = logging.getLogger()
 LOGGER.setLevel(LOGLEVEL)
 
 MAX_LENGTH = 10
+MAX_LENGTH = 2 * 24 * 60
 
 
 class Bridge():
@@ -40,7 +41,7 @@ class Bridge():
         self.previous_fan = -1
 
     def _execute(self):
-        interval = 1
+        interval = 60
         currenttime = time.time()
         fan = 1 if self.fan_proxy.get() == "ON" else 0
         temperature = float(self.sensors_proxy.temperature())

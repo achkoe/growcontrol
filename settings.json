@@ -69,7 +69,7 @@
         "max": 100
     },
     "humidity_high_level": {
-        "value": "62",
+        "value": "70",
         "title": "Humidity High Level",
         "type": "number",
         "min": 0,

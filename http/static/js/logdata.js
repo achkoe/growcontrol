@@ -34,12 +34,16 @@ const tthoptions = {
           scale: "left", // left y-axis
           label: "Temperature/°C",
           side: 3,  // position: left
+          grid: { show: false,}
         },
         {
           scale: "right", // right y-axis
           label: "Humidity/%",
           side: 1,  // position: right
+          grid: {
+            show: false,
         }
+      }
       ]
 };
 const moistureoptions = {
@@ -85,11 +89,11 @@ var tthplot;
 var moistureplot = {};
 
 window.onload = function() {
-    tthplot = new uPlot(tthoptions, initialData, document.getElementById("tthgraph"));
+    tthplot = new uPlot(tthoptions, [], document.getElementById("tthgraph"));
     for (index = 1; index < 10; index++) {
         let e = document.getElementById("moisturegraph_" + index);
         if (e === null) break;
-        moistureplot[index] = new uPlot(moistureoptions, initialData, e);
+        moistureplot[index] = new uPlot(moistureoptions, [], e);
     }
     // Start the process
     callLogDataUpdate();
