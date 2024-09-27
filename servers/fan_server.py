@@ -2,22 +2,28 @@
 """Server to deliver fan status and control the fan."""
 
 import logging
+import os
 import time
 import xmlrpc.client
+from dotenv import load_dotenv
 from xmlrpc.server import SimpleXMLRPCServer
 from xmlrpc.server import SimpleXMLRPCRequestHandler
+import RPi.GPIO as GPIO
 from base import load_settings
 import configuration
 
+load_dotenv()
 
 IDENTITY = "fan_server.py v0.0.1"
 logging.basicConfig(format=configuration.log_format, level=logging.DEBUG)
-LOGLEVEL = logging.CRITICAL
+LOGLEVEL = int(os.getenv("FAN_SERVER_LOGLEVEL", logging.CRITICAL))
 LOGGER = logging.getLogger()
 LOGGER.setLevel(LOGLEVEL)
 
 WAIT, RUN, DOWN = 0, 1, 2
 START_AT_MINUTE = 5
+
+GPIO.setmode(GPIO.BCM)
 
 
 class Bridge():
@@ -30,13 +36,15 @@ class Bridge():
         self.fan_mode_manual = False
         self.fan_on = False
         self.state = WAIT
+        self.port_fan = configuration.port_fan
+        GPIO.setup(configuration.port_fan, GPIO.OUT)
 
     def _execute(self):
         LOGGER.info(f"state={self.state}")
         temperature = float(self.sensors_proxy.temperature())
         humidity = float(self.sensors_proxy.humidity())
 
-        def ts(time_struct): return time_struct.tm_sec
+        def ts(time_struct): return time_struct.tm_min
 
         if self.fan_mode_manual is False:
             if temperature > float(self.settings["temperature_high_level"]) or humidity > float(self.settings["humidity_high_level"]):
@@ -67,6 +75,7 @@ class Bridge():
                         LOGGER.info(f"4:state: RUN -> WAIT")
         else:
             self.fan_status = self.fan_on
+        GPIO.output(self.port_fan, GPIO.HIGH if self.fan_on else GPIO.LOW)
 
     def identity(self):
         return IDENTITY

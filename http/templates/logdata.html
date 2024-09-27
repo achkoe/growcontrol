@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grow Control Data Log</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/uPlot.min.css') }}">
+    <script src="{{ url_for('static', filename='js/uPlot.iife.min.js') }}"></script>  
+    <style>
+        #tthgraph {
+            background-color: #eee;
+        }
+        .moisturegraph {
+            background-color: #eee;
+        }
+    </style>
+</head>
+<body>
+    <script src="{{ url_for('static', filename='js/logdata.js') }}"></script>
+    <button type="button" class="back" onclick="window.location.href='/'">Back</button>
+
+    <h2>Temperature/Humidity/Fan</h2>
+    <div id="tthgraph"></div>
+    {% for key in configuration["pump_moisture_dict"] %}
+    <h2>Moisture/Pump {{key}}</h2>
+    <div id="moisturegraph_{{key}}" class="moisturegraph"></div>
+    {% endfor %}
+    <!-- 
+        <h2>Temperature/Humidity/Fan</h2>
+        <div><pre id="tthpanel"></pre></div>
+        {% for key in configuration["pump_moisture_dict"] %}
+        <h2>Moisture/Pump {{key}}</h2>
+        <div><pre id="moisturepanel_{{key}}"></pre></div>
+        {% endfor %}
+    -->
+</body>
+</html>

@@ -3,6 +3,7 @@
 import xmlrpc.client
 import time
 from flask import Flask, render_template, request
+from icecream import ic
 import configuration
 import logging
 from servers.base import load_settings, save_settings
@@ -19,6 +20,8 @@ light_proxy = xmlrpc.client.ServerProxy(
     f"http://localhost:{configuration.light_server_port}")
 pump_proxies = dict((key, xmlrpc.client.ServerProxy(
     f"http://localhost:{configuration.pump_moisture_dict[key]['pump']}")) for key in configuration.pump_moisture_dict)
+logdata_proxy = xmlrpc.client.ServerProxy(
+    f"http://localhost:{configuration.logdata_server_port}")
 
 
 settings = load_settings()
@@ -99,3 +102,28 @@ def toggle_pump():
     pump_proxy = pump_proxies[int(pump["index"])]
     reply = pump_proxy.set(pump["mode"], pump["pumpOnOff"])
     return {"status": reply}
+
+
+@app.route("/log", methods=("GET", ))
+def log():
+    return render_template('logdata.html', configuration=configuration)
+
+
+@ app.route("/logdata")
+def logdata():
+    try:
+        time_temperature_humidity_list, moisture_dict = logdata_proxy.get()
+        return dict(tth=time_temperature_humidity_list, m=moisture_dict)
+    except Exception:
+        print("logdata issue")
+        return dict(tth=[], m={})
+
+    # for item in time_temperature_humidity_list:
+    #     item[0] = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(item[0]))
+    # ic(time_temperature_humidity_list)
+    # for key, value in moisture_dict.items():
+    #     for item in value:
+    #         item[0] = time.strftime(
+    #             '%Y-%m-%d %H:%M:%S', time.localtime(item[0]))
+    # ic(moisture_dict)
+    # ic(time_temperature_humidity_list)
