@@ -111,7 +111,13 @@ def log():
 
 @ app.route("/logdata")
 def logdata():
-    time_temperature_humidity_list, moisture_dict = logdata_proxy.get()
+    try:
+        time_temperature_humidity_list, moisture_dict = logdata_proxy.get()
+        return dict(tth=time_temperature_humidity_list, m=moisture_dict)
+    except Exception:
+        print("logdata issue")
+        return dict(tth=[], m={})
+
     # for item in time_temperature_humidity_list:
     #     item[0] = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(item[0]))
     # ic(time_temperature_humidity_list)
@@ -121,4 +127,3 @@ def logdata():
     #             '%Y-%m-%d %H:%M:%S', time.localtime(item[0]))
     # ic(moisture_dict)
     # ic(time_temperature_humidity_list)
-    return dict(tth=time_temperature_humidity_list, m=moisture_dict)

@@ -1,6 +1,6 @@
 const tthoptions = {
     title: null,
-    width: 1200,
+    width: 1110,
     height: 480,
     series: [
       {},
@@ -48,7 +48,7 @@ const tthoptions = {
 };
 const moistureoptions = {
     title: null,
-    width: 1200,
+    width: 1110,
     height: 480,
     series: [
       {},
@@ -97,7 +97,6 @@ window.onload = function() {
     }
     // Start the process
     callLogDataUpdate();
-    console.log(moistureplot);
 }
 
 function callLogDataUpdate() {
@@ -114,27 +113,27 @@ function callLogDataUpdate() {
             })
             .then(data => {
                 // console.log('data:', data["m"]);
-                var text = "";
+                //! var text = "";
                 var plotdata = [[], [], [], []];
                 for (let tuple of data["tth"]) {
-                    text += "" + tuple[0] + "  " + tuple[1] + "  " + tuple[2] + "  " + tuple[3] + "\n";
+                    //! text += "" + tuple[0] + "  " + tuple[1] + "  " + tuple[2] + "  " + tuple[3] + "\n";
                     plotdata[0].push(tuple[0]);
                     plotdata[1].push(tuple[1]);
                     plotdata[2].push(tuple[2]);
                     plotdata[3].push(tuple[3]);
                 }
-                var e = document.getElementById("tthpanel");
-                e.innerText = text;
+                //! var e = document.getElementById("tthpanel");
+                //! e.innerText = text;
                 
                 if (data["tth"].length >= 2) {
                     tthplot.setData(plotdata);
                 }
                 
                 for (let [key, value] of Object.entries(data["m"])) {
-                    text = "";
+                    //! text = "";
                     plotdata = [[], [], []];
                     for (let tuple of value) {
-                        text += "" + tuple[0] + "  " + tuple[1] + "  " + tuple[2] + "\n";
+                        //! text += "" + tuple[0] + "  " + tuple[1] + "  " + tuple[2] + "\n";
                         plotdata[0].push(tuple[0]);
                         plotdata[1].push(tuple[1]);
                         plotdata[2].push(tuple[2]);
@@ -142,8 +141,8 @@ function callLogDataUpdate() {
                     if (plotdata[0].length >= 2) {
                         moistureplot[key].setData(plotdata);
                     }
-                    e = document.getElementById("moisturepanel_" + key);
-                    e.innerText = text;
+                    //! e = document.getElementById("moisturepanel_" + key);
+                    //! e.innerText = text;
                 }
             })
             .catch(error => {
@@ -154,7 +153,7 @@ function callLogDataUpdate() {
     // Call the function immediately
     makeHttpRequest();
 
-    // Set the interval to call the function every 2 seconds (2000 milliseconds)
-    setInterval(makeHttpRequest, 2000);
+    // Set the interval to call the function every 20 seconds (20000 milliseconds)
+    setInterval(makeHttpRequest, 20000);
 }
 
