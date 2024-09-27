@@ -1,21 +1,21 @@
 {
     "light_1_on_time": {
-        "value": "07:19:00",
+        "value": "08:00",
         "title": "Light 1 On Time",
         "type": "time"
     },
     "light_1_off_time": {
-        "value": "07:20",
+        "value": "17:00",
         "title": "Light 1 Off Time",
         "type": "time"
     },
     "light_2_on_time": {
-        "value": "07:00",
+        "value": "09:00",
         "title": "Light 2 On Time",
         "type": "time"
     },
     "light_2_off_time": {
-        "value": "17:00",
+        "value": "18:00",
         "title": "Light 2 Off Time",
         "type": "time"
     },
@@ -104,28 +104,28 @@
         "max": 60
     },
     "light_1_on_time_i": {
-        "value": 26340,
+        "value": 28800,
         "title": null,
         "type": "number",
         "min": 0,
         "max": 100
     },
     "light_1_off_time_i": {
-        "value": 26400,
+        "value": 61200,
         "title": null,
         "type": "number",
         "min": 0,
         "max": 100
     },
     "light_2_on_time_i": {
-        "value": 25200,
+        "value": 32400,
         "title": null,
         "type": "number",
         "min": 0,
         "max": 100
     },
     "light_2_off_time_i": {
-        "value": 61200,
+        "value": 64800,
         "title": null,
         "type": "number",
         "min": 0,

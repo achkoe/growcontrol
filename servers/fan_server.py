@@ -8,6 +8,7 @@ import xmlrpc.client
 from dotenv import load_dotenv
 from xmlrpc.server import SimpleXMLRPCServer
 from xmlrpc.server import SimpleXMLRPCRequestHandler
+import RPi.GPIO as GPIO
 from base import load_settings
 import configuration
 
@@ -22,6 +23,8 @@ LOGGER.setLevel(LOGLEVEL)
 WAIT, RUN, DOWN = 0, 1, 2
 START_AT_MINUTE = 5
 
+GPIO.setmode(GPIO.BCM)
+
 
 class Bridge():
     def __init__(self):
@@ -33,6 +36,8 @@ class Bridge():
         self.fan_mode_manual = False
         self.fan_on = False
         self.state = WAIT
+        self.port_fan = configuration.port_fan
+        GPIO.setup(configuration.port_fan, GPIO.OUT)
 
     def _execute(self):
         LOGGER.info(f"state={self.state}")
@@ -70,6 +75,7 @@ class Bridge():
                         LOGGER.info(f"4:state: RUN -> WAIT")
         else:
             self.fan_status = self.fan_on
+        GPIO.output(self.port_fan, GPIO.HIGH if self.fan_on else GPIO.LOW)
 
     def identity(self):
         return IDENTITY
