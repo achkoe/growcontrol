@@ -97,7 +97,7 @@
         "max": 100
     },
     "fan_minutes_in_hour": {
-        "value": "15",
+        "value": "45",
         "title": "Fan Minutes in Hour",
         "type": "number",
         "min": 0,

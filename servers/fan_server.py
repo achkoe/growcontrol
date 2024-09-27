@@ -75,7 +75,7 @@ class Bridge():
                         LOGGER.info(f"4:state: RUN -> WAIT")
         else:
             self.fan_status = self.fan_on
-        GPIO.output(self.port_fan, GPIO.HIGH if self.fan_on else GPIO.LOW)
+        GPIO.output(self.port_fan, GPIO.HIGH if self.fan_status else GPIO.LOW)
 
     def identity(self):
         return IDENTITY
