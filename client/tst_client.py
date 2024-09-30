@@ -3,10 +3,12 @@
 import xmlrpc.client
 import configuration
 
-sensors_proxy = xmlrpc.client.ServerProxy(f"http://localhost:{configuration.sensors_server_port}")
-fan_proxy = xmlrpc.client.ServerProxy(f"http://localhost:{configuration.fan_server_port}")
-light_proxy = xmlrpc.client.ServerProxy(f"http://localhost:{configuration.light_server_port}")
-moisture_proxy = xmlrpc.client.ServerProxy(f"http://localhost:{configuration.moisture_server_port_dict[1]['moisture']}")
+sensors_proxy = xmlrpc.client.ServerProxy(
+    f"http://localhost:{configuration.sensors_server_port}")
+fan_proxy = xmlrpc.client.ServerProxy(
+    f"http://localhost:{configuration.fan_server_port}")
+light_proxy = xmlrpc.client.ServerProxy(
+    f"http://localhost:{configuration.light_server_port}")
 
 help = """
 Valid commands:
@@ -18,41 +20,45 @@ f - get fan status
 a - fan auto
 o - fan on
 l - get light status
+r - reload
 """
 print(help)
 
 while True:
-   command = input("Command: ")
-   if command == "q":
-      break
-   elif command == "f":
-     reply = fan_proxy.get()
-   elif command == "a":
-     reply = fan_proxy.auto()
-   elif command == "o":
-     reply = fan_proxy.on()
-   elif command == "l":
-     reply = light_proxy.get()
-   elif command == "t":
-     reply = sensors_proxy.temperature()
-   elif command == "h":
-     reply = sensors_proxy.humidity()
-   elif command == "T":
-      arg = input("set temperature to:")
-      reply = sensors_proxy.settemperature(float(arg))
-   elif command == "H":
-      arg = input("set humidity to:")
-      reply = sensors_proxy.sethumidity(float(arg))
-   elif command == "m":
-     reply = moisture_proxy.moisture()
-   elif command == "M":
-      arg = input("set moisture to:")
-      reply = moisture_proxy.setmoisture(int(arg))
-   elif command == "w":
-     reply = sensors_proxy.waterlevel()
-   elif command == "W":
-      arg = input("set waterlevel to:")
-      reply = sensors_proxy.setwaterlevel(int(arg))
-   
-   print(reply)
+    command = input("Command: ")
+    if command == "q":
+        break
+    elif command == "f":
+        reply = fan_proxy.get()
+    elif command == "a":
+        reply = fan_proxy.auto()
+    elif command == "o":
+        reply = fan_proxy.on()
+    elif command == "l":
+        reply = light_proxy.get()
+    elif command == "t":
+        reply = sensors_proxy.temperature()
+    elif command == "h":
+        reply = sensors_proxy.humidity()
+    elif command == "T":
+        arg = input("set temperature to:")
+        reply = sensors_proxy.settemperature(float(arg))
+    elif command == "H":
+        arg = input("set humidity to:")
+        reply = sensors_proxy.sethumidity(float(arg))
+    elif command == "m":
+        reply = sensors_proxy.moisture(0)
+    elif command == "M":
+        arg = input("set moisture to:")
+        reply = sensors_proxy.setmoisture(int(arg))
+    elif command == "w":
+        reply = sensors_proxy.waterlevel()
+    elif command == "W":
+        arg = input("set waterlevel to:")
+        reply = sensors_proxy.setwaterlevel(int(arg))
+    elif command == "r":
+        reply = sensors_proxy.reload()
+        reply = fan_proxy.reload()
+        reply = light_proxy.reload()
 
+    print(reply)

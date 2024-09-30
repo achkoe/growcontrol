@@ -1,8 +1,9 @@
 import pathlib
 import json
+import logging
 from xmlrpc.server import SimpleXMLRPCServer
 from xmlrpc.server import SimpleXMLRPCRequestHandler
-from icecream import ic
+from dotenv import dotenv_values
 
 # Restrict to a particular path.
 
@@ -48,3 +49,8 @@ def save_settings(settings):
     with pathlib.Path(__file__).parent.parent.joinpath("settings.json").open("w") as fh:
         json.dump(raw_settings, fh, indent=4)
     return settings
+
+
+def get_loglevel(key):
+    return int(dotenv_values(pathlib.Path(__file__).parent.joinpath(".env")).get(
+        key, logging.CRITICAL))

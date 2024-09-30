@@ -3,25 +3,26 @@
 
 import logging
 import os
+import pathlib
 import time
 import xmlrpc.client
-from dotenv import load_dotenv
+from dotenv import dotenv_values
 from xmlrpc.server import SimpleXMLRPCServer
 from xmlrpc.server import SimpleXMLRPCRequestHandler
 import RPi.GPIO as GPIO
-from base import load_settings
+from base import load_settings, get_loglevel
 import configuration
 
-load_dotenv()
 
 IDENTITY = "fan_server.py v0.0.1"
 logging.basicConfig(format=configuration.log_format, level=logging.DEBUG)
-LOGLEVEL = int(os.getenv("FAN_SERVER_LOGLEVEL", logging.CRITICAL))
 LOGGER = logging.getLogger()
-LOGGER.setLevel(LOGLEVEL)
+LOGGER.setLevel(get_loglevel("FAN_SERVER_LOGLEVEL"))
+
 
 WAIT, RUN, DOWN = 0, 1, 2
 START_AT_MINUTE = 5
+
 
 GPIO.setmode(GPIO.BCM)
 
@@ -91,6 +92,7 @@ class Bridge():
 
     def reload(self):
         self.settings = load_settings()
+        LOGGER.setLevel(get_loglevel("FAN_SERVER_LOGLEVEL"))
         return "OK"
 
 
