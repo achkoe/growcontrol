@@ -4,18 +4,18 @@
 
 import logging
 import os
+import pathlib
 from xmlrpc.server import SimpleXMLRPCServer
 from xmlrpc.server import SimpleXMLRPCRequestHandler
-from dotenv import load_dotenv
+from dotenv import dotenv_values
 import RPi.GPIO as GPIO
 import smbus2
 from bme280 import BME280
 import ADS1x15
-from base import load_settings
+from base import load_settings, get_loglevel
 import configuration
 from configuration import port_waterlow, port_watermedium, port_waterhigh
 
-load_dotenv()
 
 # set to True to use mocked values
 USE_MOCK_VALUES = os.getenv("USE_MOCK_VALUES", False)
@@ -23,9 +23,8 @@ USE_MOCK_VALUES = os.getenv("USE_MOCK_VALUES", False)
 
 IDENTITY = "sensors_server.py v0.0.1"
 logging.basicConfig(format=configuration.log_format, level=logging.DEBUG)
-LOGLEVEL = int(os.getenv("SENSOR_SERVER_LOGLEVEL", logging.CRITICAL))
 LOGGER = logging.getLogger()
-LOGGER.setLevel(LOGLEVEL)
+LOGGER.setLevel(get_loglevel("SENSOR_SERVER_LOGLEVEL"))
 
 GPIO.setmode(GPIO.BCM)
 
@@ -118,6 +117,7 @@ class Bridge():
 
     def reload(self):
         self.settings = load_settings()
+        LOGGER.setLevel(get_loglevel("SENSOR_SERVER_LOGLEVEL"))
         return "OK"
 
 

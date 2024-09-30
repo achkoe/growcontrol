@@ -6,23 +6,17 @@ import argparse
 import time
 import os
 import xmlrpc.client
-from dotenv import load_dotenv
 from xmlrpc.server import SimpleXMLRPCServer
 from xmlrpc.server import SimpleXMLRPCRequestHandler
 import RPi.GPIO as GPIO
-
-from base import load_settings
+from base import load_settings, get_loglevel
 import configuration
-
-
-load_dotenv()
 
 
 IDENTITY = "pump_server.py v0.0.1"
 logging.basicConfig(format=configuration.log_format, level=logging.DEBUG)
-LOGLEVEL = int(os.getenv("PUMP_SERVER_LOGLEVEL", logging.CRITICAL))
 LOGGER = logging.getLogger()
-LOGGER.setLevel(LOGLEVEL)
+LOGGER.setLevel(get_loglevel("PUMP_SERVER_LOGLEVEL"))
 
 
 WAIT, RUN, MANUAL = 0, 1, 2
@@ -102,6 +96,7 @@ class Bridge:
 
     def reload(self):
         self.settings = load_settings()
+        LOGGER.setLevel(get_loglevel("PUMP_SERVER_LOGLEVEL"))
         return "OK"
 
 

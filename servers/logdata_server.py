@@ -3,21 +3,20 @@
 
 import logging
 import copy
+import os
 import xmlrpc.client
 from xmlrpc.server import SimpleXMLRPCServer
 from xmlrpc.server import SimpleXMLRPCRequestHandler
 from collections import deque
 import time
-from icecream import ic
-from base import load_settings
+from base import load_settings, get_loglevel
 import configuration
 
 
 IDENTITY = "logdata_server.py v0.0.1"
 logging.basicConfig(format=configuration.log_format, level=logging.DEBUG)
-LOGLEVEL = logging.CRITICAL
 LOGGER = logging.getLogger()
-LOGGER.setLevel(LOGLEVEL)
+LOGGER.setLevel(get_loglevel("LOGDATA_SERVER_LOGLEVEL"))
 
 MAX_LENGTH = 10
 MAX_LENGTH = 2 * 24 * 60
@@ -80,6 +79,7 @@ class Bridge():
 
     def reload(self):
         self.settings = load_settings()
+        LOGGER.setLevel(get_loglevel("LOGDATA_SERVER_LOGLEVEL"))
         return "OK"
 
 

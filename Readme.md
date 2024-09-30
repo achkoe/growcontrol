@@ -21,3 +21,7 @@ UNDER DEVELOPMENT
 pip3 install smbus2
 pip3 install pimoroni-bme280==0.0.2
 ```
+
+## Hardware
+
+![Schema](hardware/schema.drawio.png "Schema")

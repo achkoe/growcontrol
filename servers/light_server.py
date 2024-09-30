@@ -3,18 +3,18 @@
 
 import logging
 import time
+import os
 from xmlrpc.server import SimpleXMLRPCServer
 from xmlrpc.server import SimpleXMLRPCRequestHandler
 import RPi.GPIO as GPIO
-from base import load_settings
+from base import load_settings, get_loglevel
 import configuration
 
 
 IDENTITY = "light_server.py v0.0.1"
 logging.basicConfig(format=configuration.log_format, level=logging.DEBUG)
-LOGLEVEL = logging.CRITICAL
 LOGGER = logging.getLogger()
-LOGGER.setLevel(LOGLEVEL)
+LOGGER.setLevel(get_loglevel("LIGHT_SERVER_LOGLEVEL"))
 
 GPIO.setmode(GPIO.BCM)
 
@@ -67,6 +67,7 @@ class Bridge():
 
     def reload(self):
         self.settings = load_settings()
+        LOGGER.setLevel(get_loglevel("LIGHT_SERVER_LOGLEVEL"))
         return "OK"
 
 
