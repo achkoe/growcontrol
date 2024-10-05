@@ -54,7 +54,7 @@ class Bridge():
             self.previous_fan = fan
 
         for key in self.pump_proxy_dict:
-            pump = 1 if self.pump_proxy_dict[key]["proxy"].get() == "ON" else 0
+            pump = 1 if self.pump_proxy_dict[key]["proxy"].get().split(" ")[-1] == "(ON)" else 0
             if (pump != self.pump_proxy_dict[key]["pump"]) or (currenttime - self.previous_time > interval):
                 moisture = self.sensors_proxy.moisture(
                     self.pump_proxy_dict[key]["channel"])

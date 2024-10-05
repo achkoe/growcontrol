@@ -9,6 +9,12 @@ port_watermedium = 23
 port_waterhigh = 24
 # GPIO for pump 1
 port_pump1 = 15
+# GPIO for pump 2 (not yet available)
+port_pump2 = 10
+# GPIO for pump 3 (not yet available)
+port_pump3 = 9
+# GPIO for heater (not yet implemented)
+port_heater = 25
 # GPIO for fan
 port_fan = 17
 # GPIO for light1 and light 2
