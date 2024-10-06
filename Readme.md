@@ -22,6 +22,13 @@ pip3 install smbus2
 pip3 install pimoroni-bme280==0.0.2
 ```
 
+## Screeshots of Web GUI
+
+![Main page](doc/gui1.png "Main screen")
+
+![Log page](doc/gui2.png "Log screen")
+
+
 ## Software module communication
 
 ![Communication](doc/communication.drawio.png "Communication")
@@ -29,7 +36,11 @@ pip3 install pimoroni-bme280==0.0.2
 
 ## Hardware
 
+### Schema
+
 ![Schema](hardware/schema.drawio.png "Schema")
+
+### BOM
 
 * ADC: Analog-Digital Converter ADS1115
 * BME280
@@ -37,3 +48,7 @@ pip3 install pimoroni-bme280==0.0.2
 * Water Level Sensor build with CD40106
 * Relay Card 16 Channel
 * Driver for Relay Card is an ULN2003
+
+### Water level sensor
+
+![Water level sensor](doc/water_level_sensor.jpg "Water level sensor")
