@@ -43,8 +43,8 @@
     </div>
     <br/>
 
+    {% for key in configuration["pump_moisture_dict"] %}
     <div class="pumpcontainer">
-        {% for key in configuration["pump_moisture_dict"] %}
             <p class="pumplabel">Pump {{ key }}</p>
             <div class="box" id="boxpump_{{key}}">
             <p>State: <span id="pump_{{key}}">?</span></p>
@@ -58,8 +58,8 @@
         <div class="column">
             <button class="off" id="pumpOnOffToggle_{{key}}" disabled>Off</button>
         </div>
-        {% endfor %}
     </div>
+    {% endfor %}
         
     <div class="controlcontainer">
         <div class="controllabel">Fan</div>

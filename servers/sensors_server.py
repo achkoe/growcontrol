@@ -11,7 +11,11 @@ from dotenv import dotenv_values
 import RPi.GPIO as GPIO
 import smbus2
 from bme280 import BME280
-import ADS1x15
+import board
+import busio
+import adafruit_ads1x15.ads1015 as ADS
+from adafruit_ads1x15.analog_in import AnalogIn
+
 from base import load_settings, get_loglevel
 import configuration
 from configuration import port_waterlow, port_watermedium, port_waterhigh
@@ -38,6 +42,10 @@ class Bridge():
         bus = smbus2.SMBus(1)
         self.bme280 = BME280(i2c_dev=bus)
 
+        # Create the I2C bus
+        i2c = busio.I2C(board.SCL, board.SDA)
+        # Create the ADC object using the I2C bus
+        self.ads = ADS.ADS1015(i2c)
         # settings for moisture
         # max value ~17390: dry
         # min value ~7470: wet
@@ -45,10 +53,8 @@ class Bridge():
         self._max = 17000
         self._slope = (100.0 - 0.0) / (self._min - self._max)
         self._offset = - self._slope * self._max
-        self.adc = ADS1x15.ADS1115(1, 0x48)
-        self.adc.setGain(self.adc.PGA_4_096V)
-        self.adc.setMode(self.adc.MODE_CONTINUOUS)
-
+        # dummy read moisture to clear false readings at startup
+        [self.moisture(channel) for channel in [0, 1, 2, 3]]
         self.settings = load_settings()
         self._execute()
 
@@ -107,12 +113,13 @@ class Bridge():
 
     def moisture(self, channel):
         """Return moisture between 0 ... 100"""
-        self.adc.requestADC(channel)
-        rval = self.adc.getValue()
+        adc = AnalogIn(self.ads, channel)
+        rval = adc.value
         LOGGER.debug(f"moisture:getValue() -> {rval}")
         rval = min(self._max, rval)      # set upper limit
         rval = max(self._min, rval)      # set lower limit
         rval = self._slope * rval + self._offset
+        LOGGER.info(f"moisture:{channel} -> {rval}")
         return rval
 
     def reload(self):

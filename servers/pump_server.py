@@ -25,7 +25,7 @@ GPIO.setmode(GPIO.BCM)
 
 
 class Bridge:
-    def __init__(self, moisture_channel: int, pump_gpio: int):
+    def __init__(self, moisture_channel: int, pump_gpio: int, shot_time: int, wait_between: int):
         self.settings = load_settings()
         self.sensor_proxy = xmlrpc.client.ServerProxy(
             f"http://localhost:{configuration.sensors_server_port}")
@@ -35,8 +35,8 @@ class Bridge:
         self.pump_mode_manual = False
         self.pump_on = False
         self.state = WAIT
-        self.wait_between = 60  # wait seconds between two pump shots
-        self.shot_time = 3      # time to for one single pump in seconds
+        self.wait_between = wait_between  # wait seconds between two pump shots
+        self.shot_time = shot_time      # time to for one single pump in seconds
         self.last_time = -1
 
     def _execute(self):
@@ -129,7 +129,9 @@ if __name__ == "__main__":
         server.register_instance(
             Bridge(
                 configuration.pump_moisture_dict[args.number]["channel"],
-                configuration.pump_moisture_dict[args.number]["gpio"]
+                configuration.pump_moisture_dict[args.number]["gpio"],
+                configuration.pump_moisture_dict[args.number]["shot_time"],
+                configuration.pump_moisture_dict[args.number]["wait_between"]
             )
         )
         server.serve_forever()
