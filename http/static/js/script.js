@@ -60,7 +60,7 @@ function callServerEveryTwoSeconds() {
                 for (index = 1; index < 10; index++) {
                     e = document.getElementById("pump_" + index);
                     if (e === null) break;
-                    e.innerText = data["pump"][index];
+                    e.innerText = data["pump"][index]["state"] + "\n(" + data["pump"][index]["on"] + ")";
                     e = document.getElementById("moisture_" + index);
                     e.innerText = data["moisture"][index].toFixed(1);
                     e = document.getElementById("boxpump_" + index)

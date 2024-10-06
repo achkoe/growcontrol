@@ -41,7 +41,7 @@ def udpate():
     waterlevel = sensors_proxy.waterlevel()
     fan = fan_proxy.get()
     light = light_proxy.get()
-    pump = dict((key, pump_proxies[key].get()) for key in pump_proxies)
+    pump = dict((key, dict(on=pump_proxies[key].get(), state=pump_proxies[key].get_state())) for key in pump_proxies)
     moisture = dict((key, sensors_proxy.moisture(configuration.pump_moisture_dict[key]["channel"]))
                     for key in configuration.pump_moisture_dict)
     reply = {
@@ -98,7 +98,6 @@ def toggle_light():
 @ app.route("/togglePump", methods=("POST", ))
 def toggle_pump():
     pump = request.get_json()
-    print(pump)
     pump_proxy = pump_proxies[int(pump["index"])]
     reply = pump_proxy.set(pump["mode"], pump["pumpOnOff"])
     return {"status": reply}

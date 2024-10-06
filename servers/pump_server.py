@@ -84,9 +84,10 @@ class Bridge:
         return IDENTITY
 
     def get(self):
-        state = "MANUAL" if self.pump_mode_manual is True else [
-            "WAIT", "RUN"][self.state]
-        return "{} ({})".format(state, "ON" if self.pump_on else "OFF")
+        return "ON" if self.pump_on else "OFF"
+    
+    def get_state(self):
+        return "MANUAL" if self.pump_mode_manual is True else ["WAIT", "RUN"][self.state]
 
     def set(self, mode, pump_state):
         print(f"Brigde-set {mode} {pump_state}")
