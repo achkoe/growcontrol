@@ -68,19 +68,23 @@ class Bridge():
             self._humidity = self.bme280.get_humidity()
             waterlevels = [GPIO.input(pin) for pin in (
                 port_waterlow, port_watermedium, port_waterhigh)]
+            # LOGGER.critical(waterlevels)
             # [1, 1, 1] -> water level is below low marker
             # [0, 1, 1] -> water is between low and medium marker
             # [0, 0, 1] -> water is between medium and high marker
             # [0, 0, 0] -> water is between above high marker
             # LOGGER.critical(waterlevels)
-            if waterlevels[0] == 1:
-                self._waterlevel = 0
-            elif waterlevels[1] == 1:
-                self._waterlevel = 1
-            elif waterlevels[2] == 1:
-                self._waterlevel = 2
+            if waterlevels == [0, 0, 0]:
+                self._waterlevel = 0        # critical
+            elif waterlevels == [1, 0, 0]:
+                self._waterlevel = 1        # low
+            elif waterlevels == [1, 1, 0]:
+                self._waterlevel = 2        # medium
+            elif waterlevels == [1, 1, 1]:  
+                self._waterlevel = 3        # full
             else:
-                self._waterlevel = 3
+                # this should be impossible, therefore set to critical
+                self._waterlevel = 0
             LOGGER.info(
                 f"T={self._temperature:4.1f}°C, H={self._humidity:5.1f}%, WL={self._waterlevel}")
 
