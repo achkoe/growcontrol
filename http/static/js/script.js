@@ -15,10 +15,33 @@ function callServerEveryTwoSeconds() {
                 // console.log('Success:', data);
                 // console.log('data:', data);
                 var e;
-                ["fan", "light_1", "light_2", "time"].forEach(function(field) {
+                ["fan", "fan_mode", "light_1", "light_2", "time"].forEach(function(field) {
                     e = document.getElementById(field);
                     e.innerText = data[field];
                 });
+                
+                e = document.getElementById("fan_mode");
+                if (data["fan_mode"] == "Manual") {
+                    fan_mode.classList.remove('auto');
+                    fan_mode.classList.add('manual');
+                    fanOnOffToggle.disabled = false;
+                } else {
+                    fan_mode.classList.remove('manual');
+                    fan_mode.classList.add('auto');
+                    fanOnOffToggle.disabled = true;        
+                }
+                
+                e = document.getElementById("fanOnOffToggle");
+                if (data["fan"] == "ON") {
+                    fanOnOffToggle.textContent = 'On';
+                    fanOnOffToggle.classList.remove('off');
+                    fanOnOffToggle.classList.add('on');
+                } else {
+                    fanOnOffToggle.textContent = 'Off';
+                    fanOnOffToggle.classList.remove('on');
+                    fanOnOffToggle.classList.add('off');
+                }
+
                 ["humidity", "temperature"].forEach(function(field) {
                     e = document.getElementById(field);
                     e.innerText = data[field].toFixed(1);
@@ -88,7 +111,7 @@ callServerEveryTwoSeconds();
 
 
 document.addEventListener("DOMContentLoaded", function() {
-    const fanToggle = document.getElementById('fanToggle');
+    const fan_mode = document.getElementById('fan_mode');
     const fanOnOffToggle = document.getElementById('fanOnOffToggle');
     const lightToggle = document.getElementById('lightToggle');
     const light1Toggle = document.getElementById('light1Toggle');
@@ -113,7 +136,7 @@ document.addEventListener("DOMContentLoaded", function() {
     
     function updateFanState() {
         const state = {
-            fan: fanToggle.textContent === 'Manual' ? 'Manual' : 'Auto',
+            fan: fan_mode.textContent === 'Manual' ? 'Manual' : 'Auto',
             fanOnOff: fanOnOffToggle.textContent === 'On' ? 'On' : 'Off'
         };
         sendState('/toggleFan', state);
@@ -128,16 +151,16 @@ document.addEventListener("DOMContentLoaded", function() {
         sendState('/toggleLight', state);
     }
 
-    fanToggle.addEventListener('click', function() {
-        if (fanToggle.textContent === 'Auto') {
-            fanToggle.textContent = 'Manual';
-            fanToggle.classList.remove('auto');
-            fanToggle.classList.add('manual');
+    fan_mode.addEventListener('click', function() {
+        if (fan_mode.textContent === 'Auto') {
+            fan_mode.textContent = 'Manual';
+            fan_mode.classList.remove('auto');
+            fan_mode.classList.add('manual');
             fanOnOffToggle.disabled = false;
         } else {
-            fanToggle.textContent = 'Auto';
-            fanToggle.classList.remove('manual');
-            fanToggle.classList.add('auto');
+            fan_mode.textContent = 'Auto';
+            fan_mode.classList.remove('manual');
+            fan_mode.classList.add('auto');
             fanOnOffToggle.disabled = true;
             fanOnOffToggle.textContent = 'Off';  // Reset the Fan On/Off button to Off
             fanOnOffToggle.classList.remove('on');

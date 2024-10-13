@@ -40,6 +40,7 @@ def udpate():
     temperature = sensors_proxy.temperature()
     waterlevel = sensors_proxy.waterlevel()
     fan = fan_proxy.get()
+    fan_mode = fan_proxy.get_mode()
     light = light_proxy.get()
     pump = dict((key, dict(on=pump_proxies[key].get(), state=pump_proxies[key].get_state())) for key in pump_proxies)
     moisture = dict((key, sensors_proxy.moisture(configuration.pump_moisture_dict[key]["channel"]))
@@ -48,6 +49,7 @@ def udpate():
         "humidity": humidity,
         "temperature": temperature,
         "fan": fan,
+        "fan_mode": fan_mode,
         "time": time.strftime("%X"),
         "pump": pump,
         "moisture": moisture,
