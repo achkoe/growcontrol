@@ -57,6 +57,9 @@ class Bridge():
             "light_1": "ON" if self.light_1_on else "OFF",
             "light_2": "ON" if self.light_2_on else "OFF"
         }
+        
+    def get_mode(self):
+        return "Manual" if self.light_mode_manual else "Auto"
 
     def set(self, mode, light1, light2):
         print(f"Bridge-set {mode}, {light1}, {light2}")
