@@ -2,10 +2,11 @@
 
 import xmlrpc.client
 import time
+import logging
 from flask import Flask, render_template, request
 from icecream import ic
 import configuration
-import logging
+from version import VERSION                                                                                                                                                                                                                                                         
 from servers.base import load_settings, save_settings
 
 
@@ -31,7 +32,7 @@ app = Flask(__name__)
 
 @ app.route("/")
 def index():
-    return render_template('index.html', configuration=configuration)
+    return render_template('index.html', configuration=configuration, version=f"v{VERSION}")
 
 
 @ app.route("/update")
@@ -74,7 +75,7 @@ def editsettings():
         light_proxy.reload()
         for key, pump_proxy in pump_proxies.items():
             pump_proxy.reload()
-    return render_template("settings.html", settings=load_settings(raw=True))
+    return render_template("settings.html", settings=load_settings(raw=True), version=f"v{VERSION}")
 
 
 @ app.route("/toggleFan", methods=("POST", ))
@@ -109,7 +110,7 @@ def toggle_pump():
 
 @app.route("/log", methods=("GET", ))
 def log():
-    return render_template('logdata.html', configuration=configuration)
+    return render_template('logdata.html', configuration=configuration, version=f"v{VERSION}")
 
 
 @ app.route("/logdata")

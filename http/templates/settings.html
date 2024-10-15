@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grow Control Settings</title>
+    <title>Grow Control Settings  {{version}}</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -75,7 +75,7 @@
 </head>
 <body>
     <div class="form-container">
-        <h2>Grow Control Settings</h2>
+        <h2>Grow Control Settings {{version}}</h2>
         <form method="POST">
             {% for item in settings %}
             {% if settings[item]["title"] %}
