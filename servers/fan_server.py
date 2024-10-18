@@ -41,7 +41,7 @@ class Bridge():
         GPIO.setup(configuration.port_fan, GPIO.OUT)
 
     def _execute(self):
-        LOGGER.info(f"state={self.state}")
+        LOGGER.debug(f"state={self.state}")
         temperature = float(self.sensors_proxy.temperature())
         humidity = float(self.sensors_proxy.humidity())
 
@@ -61,8 +61,8 @@ class Bridge():
                 time_struct = time.localtime()
                 # LOGGER.critical(f"state -> {self.state}, tm_min -> {time_struct.tm_sec}, START_AT_MINUTE -> {START_AT_MINUTE}")
                 if self.state == WAIT:
-                    if ts(time_struct) == START_AT_MINUTE:
-                        # start fan every hour + START_AT_MINUTE minutes
+                    if ts(time_struct) >= START_AT_MINUTE and ts(time_struct) <= START_AT_MINUTE + int(self.settings["fan_minutes_in_hour"]):
+                        # start fan if minutes is between START_AT_MINUTE and START_AT_MINUTE + fan_minutes_in_hour 
                         LOGGER.info(f"3: state WAIT -> RUN")
                         self.fan_is_on = True
                         self.state = RUN
@@ -92,7 +92,7 @@ class Bridge():
         self.fan_mode_manual = mode == "Manual"
         self.fan_on = fan_state == "On"
         if self.fan_mode_manual is False:
-            if self.state in ["RUN", "DOWN"]:
+            if self.state in [RUN, DOWN]:
                 self.fan_is_on = True
         return "OK"
 
