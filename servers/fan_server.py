@@ -61,7 +61,7 @@ class Bridge():
                 time_struct = time.localtime()
                 # LOGGER.critical(f"state -> {self.state}, tm_min -> {time_struct.tm_sec}, START_AT_MINUTE -> {START_AT_MINUTE}")
                 if self.state == WAIT:
-                    if ts(time_struct) >= START_AT_MINUTE and ts(time_struct) <= START_AT_MINUTE + int(self.settings["fan_minutes_in_hour"]):
+                    if ts(time_struct) >= START_AT_MINUTE and ts(time_struct) < START_AT_MINUTE + int(self.settings["fan_minutes_in_hour"]):
                         # start fan if minutes is between START_AT_MINUTE and START_AT_MINUTE + fan_minutes_in_hour 
                         LOGGER.info(f"3: state WAIT -> RUN")
                         self.fan_is_on = True
