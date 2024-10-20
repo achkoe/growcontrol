@@ -22,8 +22,8 @@ port_pump3 = 9
 # Time for a single shot / wait time between 2 shots of pump 3
 shot_time_pump3 = 3
 wait_between_pump3 = 60
-# GPIO for heater (not yet implemented)
-port_heater = 25
+# GPIO for exhaust air fan
+port_fan_exhaust_air = 25
 # GPIO for fan
 port_fan = 17
 # GPIO for light1 and light 2

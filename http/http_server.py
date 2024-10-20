@@ -3,6 +3,7 @@
 import xmlrpc.client
 import time
 import logging
+import pathlib
 from flask import Flask, render_template, request
 from icecream import ic
 import configuration
@@ -42,6 +43,7 @@ def udpate():
     waterlevel = sensors_proxy.waterlevel()
     fan = fan_proxy.get()
     fan_mode = fan_proxy.get_mode()
+    fan_exhaust_air = fan_proxy.get_fan_exhaust_air()
     light = light_proxy.get()
     light_mode = light_proxy.get_mode()
     pump = dict((key, dict(on=pump_proxies[key].get(), state=pump_proxies[key].get_state())) for key in pump_proxies)
@@ -56,7 +58,8 @@ def udpate():
         "time": time.strftime("%X"),
         "pump": pump,
         "moisture": moisture,
-        "waterlevel": waterlevel
+        "waterlevel": waterlevel,
+        "fan_exhaust_air": fan_exhaust_air,
     }
     reply.update(light)
     reply.update(settings)
@@ -85,6 +88,16 @@ def toggle_fan():
     fan_mode = request.get_json()["fan"]  # either 'Manual' or 'Auto'
     fan_state = request.get_json()["fanOnOff"]
     reply = fan_proxy.set(fan_mode, fan_state)
+    print(f"reply -> {reply}")
+    return {"status": reply}
+
+
+@ app.route("/toggleFanExhaustAir", methods=("POST", ))
+def toggle_fan_exhaust_air():
+    print(request.get_json())
+    # {'fan': 'Manual', 'fanOnOff': 'Off'}
+    fan_state = request.get_json()["fanExhaustAirOnOff"]
+    reply = fan_proxy.set_fan_exhaust_air(fan_state)
     print(f"reply -> {reply}")
     return {"status": reply}
 
@@ -122,12 +135,11 @@ def logdata():
         print("logdata issue")
         return dict(tth=[], m={})
 
-    # for item in time_temperature_humidity_list:
-    #     item[0] = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(item[0]))
-    # ic(time_temperature_humidity_list)
-    # for key, value in moisture_dict.items():
-    #     for item in value:
-    #         item[0] = time.strftime(
-    #             '%Y-%m-%d %H:%M:%S', time.localtime(item[0]))
-    # ic(moisture_dict)
-    # ic(time_temperature_humidity_list)
+@app.route("/watchdog", methods=("GET", ))
+def watchdog():
+    try:
+        with pathlib.Path(__file__).parent.parent.joinpath("watchdog.log").open("r") as fh:
+            watchdog = fh.read()
+    except Exception as watchdog:
+        pass
+    return render_template('watchdog.html', watchdog=watchdog, version=f"v{VERSION}")

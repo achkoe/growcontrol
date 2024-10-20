@@ -39,7 +39,7 @@ function callServerEveryTwoSeconds() {
                     }
                 });
                 
-                [["fanOnOffToggle", "fan"], ["light1Toggle", "light_1"], ["light2Toggle", "light_2"]].forEach(function(fields) {
+                [["fanOnOffToggle", "fan"], ["light1Toggle", "light_1"], ["light2Toggle", "light_2"], ["fanExhaustAirOnOff", "fan_exhaust_air"]].forEach(function(fields) {
                     e = document.getElementById(fields[0]);
                     if (data[fields[1]] == "ON") {
                         e.textContent = 'On';
@@ -123,6 +123,7 @@ callServerEveryTwoSeconds();
 document.addEventListener("DOMContentLoaded", function() {
     const fan_mode = document.getElementById('fan_mode');
     const fanOnOffToggle = document.getElementById('fanOnOffToggle');
+    const fanExhaustAirOnOffToggle = document.getElementById('fanExhaustAirOnOff');
     const light_mode = document.getElementById('light_mode');
     const light1Toggle = document.getElementById('light1Toggle');
     const light2Toggle = document.getElementById('light2Toggle');
@@ -150,6 +151,13 @@ document.addEventListener("DOMContentLoaded", function() {
             fanOnOff: fanOnOffToggle.textContent === 'On' ? 'On' : 'Off'
         };
         sendState('/toggleFan', state);
+    }
+
+    function updateFanExhaustAirState() {
+        const state = {
+            fanExhaustAirOnOff: fanExhaustAirOnOffToggle.textContent === 'On' ? 'On' : 'Off'
+        };
+        sendState('/toggleFanExhaustAir', state);
     }
 
     function updateLightState() {
@@ -190,6 +198,19 @@ document.addEventListener("DOMContentLoaded", function() {
             fanOnOffToggle.classList.add('off');
         }
         updateFanState();
+    });
+
+    fanExhaustAirOnOffToggle.addEventListener('click', function() {
+        if (fanExhaustAirOnOffToggle.textContent === 'Off') {
+            fanExhaustAirOnOffToggle.textContent = 'On';
+            fanExhaustAirOnOffToggle.classList.remove('off');
+            fanExhaustAirOnOffToggle.classList.add('on');
+        } else {
+            fanExhaustAirOnOffToggle.textContent = 'Off';
+            fanExhaustAirOnOffToggle.classList.remove('on');
+            fanExhaustAirOnOffToggle.classList.add('off');
+        }
+        updateFanExhaustAirState();
     });
 
     light_mode.addEventListener('click', function() {

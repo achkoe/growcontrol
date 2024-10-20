@@ -67,7 +67,7 @@ def watch():
 if __name__ == "__main__":
     with pathlib.Path.cwd().joinpath(logfilename).open("w") as fh:
         # create log file
-        pass
+        print("All is okay", file=fh)
     start()
     watch()
     

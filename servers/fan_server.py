@@ -39,6 +39,12 @@ class Bridge():
         self.state = WAIT
         self.port_fan = configuration.port_fan
         GPIO.setup(configuration.port_fan, GPIO.OUT)
+        
+        self.fan_exhaust_air_is_on = True
+        self.port_fan_exhaust_air = configuration.port_fan_exhaust_air
+        GPIO.setup(configuration.port_fan_exhaust_air, GPIO.OUT)
+        # switch fan for exhaust air on at start up
+        GPIO.output(self.port_fan_exhaust_air, GPIO.HIGH if self.fan_exhaust_air_is_on else GPIO.LOW)
 
     def _execute(self):
         LOGGER.debug(f"state={self.state}")
@@ -90,12 +96,21 @@ class Bridge():
     def set(self, mode, fan_state):
         print(f"Brigde-set {mode} {fan_state}")
         self.fan_mode_manual = mode == "Manual"
-        self.fan_on = fan_state == "On"
+        self.fan_on = fan_state.upper() == "ON"
         if self.fan_mode_manual is False:
             if self.state in [RUN, DOWN]:
                 self.fan_is_on = True
         return "OK"
+    
+    def get_fan_exhaust_air(self):
+        return "ON" if self.fan_exhaust_air_is_on else "OFF"
 
+    def set_fan_exhaust_air(self, fan_exhaust_air_state):
+        self.fan_exhaust_air_is_on = fan_exhaust_air_state.upper() == "ON"
+        GPIO.output(self.port_fan_exhaust_air, GPIO.HIGH if self.fan_exhaust_air_is_on else GPIO.LOW)
+        LOGGER.info(f"Fan Exhaust Air -> {self.fan_exhaust_air_is_on}")
+        return "OK"
+        
     def reload(self):
         self.settings = load_settings()
         LOGGER.setLevel(get_loglevel("FAN_SERVER_LOGLEVEL"))
