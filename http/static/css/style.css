@@ -137,7 +137,6 @@ label {
 .settings {
     border-top: #368ff4 solid;
     text-align: center;
-
     display: flex;
     justify-content: space-around; 
     align-items: center;
@@ -151,7 +150,7 @@ label {
 /* Basic Button Style */
 .linkbutton {
     display: inline-block;
-    padding: 10px 200px;
+    padding: 10px 60px;
     background-color: #007bff;
     color: white;
     text-align: center;
