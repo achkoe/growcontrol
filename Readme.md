@@ -15,12 +15,23 @@ The software is written in Python and runs on a Raspberry Pi. It performs the fo
 * send notification (e.g. mail) if any issues
 
 
-## Required Python packages
+## Get started
+
+Run the following commands to get started:
 
 ```
-pip3 install smbus2
-pip3 install pimoroni-bme280==0.0.2
+sudo apt update
+sudo apt full-upgrade
+sudo apt-get install python3-venv build-essential python-dev python-smbus git
+# enable I2C
+sudo raspi-config
+git clone https://github.com/achkoe/growcontrol.git
+python3 -m venv ~/venv/vgc
+. ~/venv/vgc/bin/activate
+pip install -r requirements.txt
+cd growcontrol/
 ```
+
 
 ## Screeshots of Web GUI
 
