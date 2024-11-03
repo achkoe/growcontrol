@@ -34,11 +34,23 @@ class Bridge():
         time_struct = time.localtime()
         current_time = time_struct.tm_hour * 60 * 60 + \
             time_struct.tm_min * 60 + time_struct.tm_sec
+
+        light_1_on_time_i = self.settings["light_1_on_time_i"]
+        light_1_off_time_i = self.settings["light_1_off_time_i"]
+        invert_1 = light_1_on_time_i > light_1_off_time_i
+        if invert_1:
+            light_1_on_time_i, light_1_off_time_i = light_1_off_time_i, light_1_on_time_i
+            
+        light_2_on_time_i = self.settings["light_2_on_time_i"]
+        light_2_off_time_i = self.settings["light_2_off_time_i"]
+        invert_2 = light_2_on_time_i > light_2_off_time_i
+        if invert_2:
+            light_2_on_time_i, light_2_off_time_i = light_2_off_time_i, light_2_on_time_i
+        
         if self.light_mode_manual is False:
-            light_1_on = current_time >= self.settings[
-                "light_1_on_time_i"] and current_time <= self.settings["light_1_off_time_i"]
-            light_2_on = current_time >= self.settings[
-                "light_2_on_time_i"] and current_time <= self.settings["light_2_off_time_i"]
+            light_1_on = invert_1 ^ (current_time >= light_1_on_time_i and current_time <= light_1_off_time_i)
+            light_2_on = invert_2 ^ (current_time >= light_2_on_time_i and current_time <= light_2_off_time_i)
+            
             if light_1_on != self.light_1_on or light_2_on != self.light_2_on:
                 self.light_1_on = light_1_on
                 self.light_2_on = light_2_on
