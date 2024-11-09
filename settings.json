@@ -1,22 +1,12 @@
 {
-    "light_1_on_time": {
-        "value": "01:00",
+    "light_on_time": {
+        "value": "14:21",
         "title": "Light 1 On Time",
         "type": "time"
     },
-    "light_1_off_time": {
-        "value": "19:00",
+    "light_off_time": {
+        "value": "14:20",
         "title": "Light 1 Off Time",
-        "type": "time"
-    },
-    "light_2_on_time": {
-        "value": "01:05",
-        "title": "Light 2 On Time",
-        "type": "time"
-    },
-    "light_2_off_time": {
-        "value": "19:05",
-        "title": "Light 2 Off Time",
         "type": "time"
     },
     "moisture_low_level": {
@@ -103,29 +93,15 @@
         "min": 0,
         "max": 60
     },
-    "light_1_on_time_i": {
-        "value": 3600,
+    "light_on_time_i": {
+        "value": 51660,
         "title": null,
         "type": "number",
         "min": 0,
         "max": 100
     },
-    "light_1_off_time_i": {
-        "value": 68400,
-        "title": null,
-        "type": "number",
-        "min": 0,
-        "max": 100
-    },
-    "light_2_on_time_i": {
-        "value": 3900,
-        "title": null,
-        "type": "number",
-        "min": 0,
-        "max": 100
-    },
-    "light_2_off_time_i": {
-        "value": 68700,
+    "light_off_time_i": {
+        "value": 51600,
         "title": null,
         "type": "number",
         "min": 0,

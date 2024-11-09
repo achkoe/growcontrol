@@ -34,7 +34,7 @@ def load_settings(raw=False):
     if raw:
         return raw_settings
     settings = dict((k, raw_settings[k]["value"]) for k in raw_settings)
-    for key in ("light_1_on_time", "light_1_off_time", "light_2_on_time", "light_2_off_time"):
+    for key in ("light_on_time", "light_off_time"):
         settings[f"{key}_i"] = _make_integer_time(settings[key])
     return settings
 
@@ -42,7 +42,7 @@ def load_settings(raw=False):
 def save_settings(settings):
     with pathlib.Path(__file__).parent.parent.joinpath("settings.json").open("r") as fh:
         raw_settings = json.load(fh)
-    for key in ("light_1_on_time", "light_1_off_time", "light_2_on_time", "light_2_off_time"):
+    for key in ("light_on_time", "light_off_time"):
         settings[f"{key}_i"] = _make_integer_time(settings[key])
     for key in settings:
         raw_settings[key]["value"] = settings[key]

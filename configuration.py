@@ -26,9 +26,10 @@ wait_between_pump3 = 60
 port_fan_exhaust_air = 25
 # GPIO for fan
 port_fan = 17
-# GPIO for light1 and light 2
-port_light1 = 22
-port_light2 = 27
+# GPIO for light
+port_light = 22
+
+port_reserved = 27
 
 pump_moisture_dict = {
     1: dict(channel=0, pump=4004, gpio=port_pump1, shot_time=shot_time_pump1, wait_between=wait_between_pump1),

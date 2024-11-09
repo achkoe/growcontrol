@@ -105,11 +105,10 @@ def toggle_fan_exhaust_air():
 @ app.route("/toggleLight", methods=("POST", ))
 def toggle_light():
     print(request.get_json())
-    # 'light': 'Manual', 'light1': 'Off', 'light2': 'Off'}
-    light_mode = request.get_json()["light"]
-    light_1_state = request.get_json()["light1"]
-    light_2_state = request.get_json()["light2"]
-    reply = light_proxy.set(light_mode, light_1_state, light_2_state)
+    # 'light_mode': 'Manual', 'light_state': 'Off'}
+    light_mode = request.get_json()["light_mode"]
+    light_state = request.get_json()["light_state"]
+    reply = light_proxy.set(light_mode, light_state)
     return {"status": reply}
 
 

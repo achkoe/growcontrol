@@ -15,12 +15,12 @@ function callServerEveryTwoSeconds() {
                 // console.log('Success:', data);
                 // console.log('data:', data);
                 var e;
-                ["fan", "fan_mode", "light_1", "light_2", "time", "light_mode"].forEach(function(field) {
+                ["fan", "fan_mode", "light_state", "time", "light_mode"].forEach(function(field) {
                     e = document.getElementById(field);
                     e.innerText = data[field];
                 });
                 
-                [["fan_mode", ["fanOnOffToggle"]], ["light_mode", ["light1Toggle", "light2Toggle"]]].forEach(function(fields) {
+                [["fan_mode", ["fanOnOffToggle"]], ["light_mode", ["lightToggle"]]].forEach(function(fields) {
                     e = document.getElementById(fields[0]);
                     if (data[fields[0]] == "Manual") {
                         e.classList.remove('auto');
@@ -39,7 +39,7 @@ function callServerEveryTwoSeconds() {
                     }
                 });
                 
-                [["fanOnOffToggle", "fan"], ["light1Toggle", "light_1"], ["light2Toggle", "light_2"], ["fanExhaustAirOnOff", "fan_exhaust_air"]].forEach(function(fields) {
+                [["fanOnOffToggle", "fan"], ["lightToggle", "light_state"], ["fanExhaustAirOnOff", "fan_exhaust_air"]].forEach(function(fields) {
                     e = document.getElementById(fields[0]);
                     if (data[fields[1]] == "ON") {
                         e.textContent = 'On';
@@ -125,8 +125,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const fanOnOffToggle = document.getElementById('fanOnOffToggle');
     const fanExhaustAirOnOffToggle = document.getElementById('fanExhaustAirOnOff');
     const light_mode = document.getElementById('light_mode');
-    const light1Toggle = document.getElementById('light1Toggle');
-    const light2Toggle = document.getElementById('light2Toggle');
+    const lightToggle = document.getElementById('lightToggle');
 
     
     function sendState(url, state) {
@@ -162,9 +161,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function updateLightState() {
         const state = {
-            light: light_mode.textContent === 'Manual' ? 'Manual' : 'Auto',
-            light1: light1Toggle.textContent === 'On' ? 'On' : 'Off',
-            light2: light2Toggle.textContent === 'On' ? 'On' : 'Off'
+            light_mode: light_mode.textContent === 'Manual' ? 'Manual' : 'Auto',
+            light_state: lightToggle.textContent === 'On' ? 'On' : 'Off',
         };
         sendState('/toggleLight', state);
     }
@@ -218,50 +216,32 @@ document.addEventListener("DOMContentLoaded", function() {
             light_mode.textContent = 'Manual';
             light_mode.classList.remove('auto');
             light_mode.classList.add('manual');
-            light1Toggle.disabled = false;
-            light2Toggle.disabled = false;
+            lightToggle.disabled = false;
         } else {
             light_mode.textContent = 'Auto';
             light_mode.classList.remove('manual');
             light_mode.classList.add('auto');
-            light1Toggle.disabled = true;
-            light2Toggle.disabled = true;
-            light1Toggle.textContent = 'Off';  // Reset the Light1 button to Off
-            light1Toggle.classList.remove('on');
-            light1Toggle.classList.add('off');
-            light2Toggle.textContent = 'Off';  // Reset the Light2 button to Off
-            light2Toggle.classList.remove('on');
-            light2Toggle.classList.add('off');
+            lightToggle.disabled = true;
+            lightToggle.textContent = 'Off';  // Reset the Light button to Off
+            lightToggle.classList.remove('on');
+            lightToggle.classList.add('off');
         }
         updateLightState();
     });
 
-    light1Toggle.addEventListener('click', function() {
-        if (light1Toggle.textContent === 'Off') {
-            light1Toggle.textContent = 'On';
-            light1Toggle.classList.remove('off');
-            light1Toggle.classList.add('on');
+    lightToggle.addEventListener('click', function() {
+        if (lightToggle.textContent === 'Off') {
+            lightToggle.textContent = 'On';
+            lightToggle.classList.remove('off');
+            lightToggle.classList.add('on');
         } else {
-            light1Toggle.textContent = 'Off';
-            light1Toggle.classList.remove('on');
-            light1Toggle.classList.add('off');
+            lightToggle.textContent = 'Off';
+            lightToggle.classList.remove('on');
+            lightToggle.classList.add('off');
         }
         updateLightState();
     });
     
-    light2Toggle.addEventListener('click', function() {
-        if (light2Toggle.textContent === 'Off') {
-            light2Toggle.textContent = 'On';
-            light2Toggle.classList.remove('off');
-            light2Toggle.classList.add('on');
-        } else {
-            light2Toggle.textContent = 'Off';
-            light2Toggle.classList.remove('on');
-            light2Toggle.classList.add('off');
-        }
-        updateLightState();
-    });
-
     function updatePumpState(id) {
         console.log(id);
         index = id.split("_").pop();
