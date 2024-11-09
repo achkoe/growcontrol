@@ -14,13 +14,15 @@ function callServerEveryTwoSeconds() {
             .then(data => {
                 // console.log('Success:', data);
                 // console.log('data:', data);
+                console.log('heater: ' + data["heater"] + ', heater_mode: ' + data["heater_mode"]);
                 var e;
-                ["fan", "fan_mode", "light_state", "time", "light_mode"].forEach(function(field) {
+                // show the current data for fields
+                ["fan", "fan_mode", "light_state", "time", "light_mode", "heater", "heater_mode"].forEach(function(field) {
                     e = document.getElementById(field);
                     e.innerText = data[field];
                 });
                 
-                [["fan_mode", ["fanOnOffToggle"]], ["light_mode", ["lightToggle"]]].forEach(function(fields) {
+                [["fan_mode", ["fanOnOffToggle"]], ["heater_mode", ["heaterOnOffToggle"]], ["light_mode", ["lightToggle"]]].forEach(function(fields) {
                     e = document.getElementById(fields[0]);
                     if (data[fields[0]] == "Manual") {
                         e.classList.remove('auto');
@@ -39,7 +41,7 @@ function callServerEveryTwoSeconds() {
                     }
                 });
                 
-                [["fanOnOffToggle", "fan"], ["lightToggle", "light_state"], ["fanExhaustAirOnOff", "fan_exhaust_air"]].forEach(function(fields) {
+                [["fanOnOffToggle", "fan"], ["heaterOnOffToggle", "heater"], ["lightToggle", "light_state"], ["fanExhaustAirOnOff", "fan_exhaust_air"]].forEach(function(fields) {
                     e = document.getElementById(fields[0]);
                     if (data[fields[1]] == "ON") {
                         e.textContent = 'On';
@@ -123,6 +125,8 @@ callServerEveryTwoSeconds();
 document.addEventListener("DOMContentLoaded", function() {
     const fan_mode = document.getElementById('fan_mode');
     const fanOnOffToggle = document.getElementById('fanOnOffToggle');
+    const heater_mode = document.getElementById('heater_mode');
+    const heaterOnOffToggle = document.getElementById('heaterOnOffToggle');
     const fanExhaustAirOnOffToggle = document.getElementById('fanExhaustAirOnOff');
     const light_mode = document.getElementById('light_mode');
     const lightToggle = document.getElementById('lightToggle');
@@ -150,6 +154,14 @@ document.addEventListener("DOMContentLoaded", function() {
             fanOnOff: fanOnOffToggle.textContent === 'On' ? 'On' : 'Off'
         };
         sendState('/toggleFan', state);
+    }
+
+    function updateHeaterState() {
+        const state = {
+            heater: heater_mode.textContent === 'Manual' ? 'Manual' : 'Auto',
+            heaterOnOff: heaterOnOffToggle.textContent === 'On' ? 'On' : 'Off'
+        };
+        sendState('/toggleHeater', state);
     }
 
     function updateFanExhaustAirState() {
@@ -196,6 +208,37 @@ document.addEventListener("DOMContentLoaded", function() {
             fanOnOffToggle.classList.add('off');
         }
         updateFanState();
+    });
+
+    heater_mode.addEventListener('click', function() {
+        if (heater_mode.textContent === 'Auto') {
+            heater_mode.textContent = 'Manual';
+            heater_mode.classList.remove('auto');
+            heater_mode.classList.add('manual');
+            heaterOnOffToggle.disabled = false;
+        } else {
+            heater_mode.textContent = 'Auto';
+            heater_mode.classList.remove('manual');
+            heater_mode.classList.add('auto');
+            heaterOnOffToggle.disabled = true;
+            heaterOnOffToggle.textContent = 'Off';  // Reset the heater On/Off button to Off
+            heaterOnOffToggle.classList.remove('on');
+            heaterOnOffToggle.classList.add('off');
+        }
+        updateHeaterState();
+    });
+
+    heaterOnOffToggle.addEventListener('click', function() {
+        if (heaterOnOffToggle.textContent === 'Off') {
+            heaterOnOffToggle.textContent = 'On';
+            heaterOnOffToggle.classList.remove('off');
+            heaterOnOffToggle.classList.add('on');
+        } else {
+            heaterOnOffToggle.textContent = 'Off';
+            heaterOnOffToggle.classList.remove('on');
+            heaterOnOffToggle.classList.add('off');
+        }
+        updateHeaterState();
     });
 
     fanExhaustAirOnOffToggle.addEventListener('click', function() {

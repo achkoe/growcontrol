@@ -31,14 +31,14 @@
         "max": 100
     },
     "temperature_high_level": {
-        "value": "27",
+        "value": "24",
         "title": "Temperature High Level",
         "type": "number",
         "min": 0,
         "max": 100
     },
     "temperature_low_level": {
-        "value": "26",
+        "value": "20",
         "title": "Temperature Low Level",
         "type": "number",
         "min": 0,

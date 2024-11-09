@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Server to deliver fan status and control the fan."""
+"""Server to deliver fan and heater status and control the fan and heater."""
 
 import logging
 import os
@@ -40,6 +40,14 @@ class Bridge():
         self.port_fan = configuration.port_fan
         GPIO.setup(configuration.port_fan, GPIO.OUT)
         
+        # heater
+        self.heater_is_on = False
+        self.heater_mode_manual = False
+        self.heater_on = False
+        self.port_heater = configuration.port_heater
+        GPIO.setup(configuration.port_heater, GPIO.OUT)
+        
+        # exhaust air fan        
         self.fan_exhaust_air_is_on = True
         self.port_fan_exhaust_air = configuration.port_fan_exhaust_air
         GPIO.setup(configuration.port_fan_exhaust_air, GPIO.OUT)
@@ -83,17 +91,30 @@ class Bridge():
         else:
             self.fan_is_on = self.fan_on
         GPIO.output(self.port_fan, GPIO.HIGH if self.fan_is_on else GPIO.LOW)
+        
+        
+        if self.heater_mode_manual is False:
+            if temperature < float(self.settings["temperature_low_level"]):
+                self.heater_is_on = True
+                LOGGER.info(f"heater auto: ON (T={temperature})")
+            elif temperature >= float(self.settings["temperature_high_level"]):
+                self.heater_is_on = False
+                LOGGER.info(f"heater auto: OFF (T={temperature})")
+        else:
+            self.heater_is_on = self.heater_on
+        GPIO.output(self.port_heater, GPIO.HIGH if self.heater_is_on else GPIO.LOW)
+        
 
     def identity(self):
         return IDENTITY
 
-    def get(self):
+    def get_fan(self):
         return "ON" if self.fan_is_on is True else "OFF"
     
-    def get_mode(self):
+    def get_fan_mode(self):
         return "Manual" if self.fan_mode_manual else "Auto"
 
-    def set(self, mode, fan_state):
+    def set_fan(self, mode, fan_state):
         print(f"Brigde-set {mode} {fan_state}")
         self.fan_mode_manual = mode == "Manual"
         self.fan_on = fan_state.upper() == "ON"
@@ -109,6 +130,18 @@ class Bridge():
         self.fan_exhaust_air_is_on = fan_exhaust_air_state.upper() == "ON"
         GPIO.output(self.port_fan_exhaust_air, GPIO.HIGH if self.fan_exhaust_air_is_on else GPIO.LOW)
         LOGGER.info(f"Fan Exhaust Air -> {self.fan_exhaust_air_is_on}")
+        return "OK"
+    
+    def get_heater(self):
+        return "ON" if self.heater_is_on else "OFF"
+    
+    def get_heater_mode(self):
+        return "Manual" if self.heater_mode_manual else "Auto"
+    
+    def set_heater(self, mode, heater_state):
+        print(f"Brigde-set {mode} {heater_state}")
+        self.heater_mode_manual = mode == "Manual"
+        self.heater_on = heater_state.upper() == "ON"
         return "OK"
         
     def reload(self):

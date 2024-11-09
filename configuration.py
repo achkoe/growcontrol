@@ -28,8 +28,8 @@ port_fan_exhaust_air = 25
 port_fan = 17
 # GPIO for light
 port_light = 22
-
-port_reserved = 27
+# GPIO for heater
+port_heater = 27
 
 pump_moisture_dict = {
     1: dict(channel=0, pump=4004, gpio=port_pump1, shot_time=shot_time_pump1, wait_between=wait_between_pump1),
