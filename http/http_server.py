@@ -143,8 +143,8 @@ def log():
 @ app.route("/logdata")
 def logdata():
     try:
-        time_temperature_humidity_list, moisture_dict = logdata_proxy.get()
-        return dict(tth=time_temperature_humidity_list, m=moisture_dict)
+        output_list, moisture_dict = logdata_proxy.get()
+        return dict(tth=output_list, m=moisture_dict)
     except Exception:
         print("logdata issue")
         return dict(tth=[], m={})
