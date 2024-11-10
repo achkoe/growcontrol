@@ -42,7 +42,7 @@ class Bridge():
     def _execute(self):
         interval = 60
         currenttime = time.time()
-        fan = 1 if self.fan_proxy.get() == "ON" else 0
+        fan = 1 if self.fan_proxy.get_fan() == "ON" else 0
         temperature = float(self.sensors_proxy.temperature())
         humidity = float(self.sensors_proxy.humidity())
 

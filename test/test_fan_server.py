@@ -1,104 +1,106 @@
-import sys
-import time
+"""
+For this tests several servers needs to be started before test starts. 
+Here is how to start them:
+
+source ~/venv/vg311/bin/activate
+export PYTHONPATH=/home/achimk/work/growcontrol:/home/achimk/work/growcontrol/mock
+python ../servers/sensors_server.py &
+python ../servers/fan_server.py &
+python mock_server.py &
+"""
 import logging
-import pathlib
-import types
+import time
+import xmlrpc.client
+import pytest
+import test.tst_configuration as tst_configuration
+import configuration
+from servers.base import load_settings
+from servers.fan_server import Bridge, START_AT_MINUTE
 
-sys.path.append(str(pathlib.Path(__file__).parent.parent.joinpath("servers")))
-sys.path.append(str(pathlib.Path(__file__).parent.parent))
-
-from servers.fan_server import Bridge
 
 LOGGER = logging.getLogger()
-WAIT, RUN = 0, 1
-START_AT_MINUTE = 5
-
-class Time():
-    def __init__(self) -> None:
-        self.time_struct = types.SimpleNamespace()
-        self.time_struct.tm_min = 0
-        
-    def localtime(self):
-        return self.time_struct
-      
-time = Time()      
-
-class SensorProxy():
-    def __init__(self):
-        self._humidity = 40
-        self._temperature = 40
-        
-    def temperature(self):
-        return self._temperature
-    
-    def humidity(self):
-        return self._humidity
     
     
-class Dut(Bridge):
-    def __init__(self):
-        super().__init__()
-        self.sensors_proxy = SensorProxy()
-        
-    def _execute(self):
-        LOGGER.info(f"state={self.state}")
-        temperature = float(self.sensors_proxy.temperature())
-        humidity = float(self.sensors_proxy.humidity())
-      
-        if self.fan_mode_manual is False:
-            if temperature > float(self.settings["temperature_high_level"]) or humidity > float(self.settings["humidity_high_level"]):
-                # start fan to reduce temperature or humidity
-                self.fan_status = True
-                self.state = WAIT
-            else:
-                time_struct = time.localtime()
-                if self.state == WAIT:
-                    if time_struct.tm_min == START_AT_MINUTE:   
-                        # start fan every hour + START_AT_MINUTE minutes
-                        LOGGER.info(f"state 0 -> 1")
-                        self.fan_status = True
-                        self.state = RUN
-                    else:
-                        self.fan_status = False
-                else:
-                    if time_struct.tm_min == START_AT_MINUTE + int(self.settings["fan_minutes_in_hour"]):
-                        # stop fan every hour + START_AT_MINUTE minutes + fan_minutes_in_hour
-                        self.fan_status = False
-                        self.state = WAIT
-                        LOGGER.info(f"state 1 -> 0")
-        else:
-            self.fan_status = self.fan_on
-        
+@pytest.fixture
+def mock_proxy():
+    return xmlrpc.client.ServerProxy(f"http://localhost:{tst_configuration.bme280_server_port}")
 
-class Test():
-    def setup_class(self):
-        self.dut = Dut()
-        
-    def test_1(self):
-        self.dut.settings["temperature_high_level"] = 100
-        self.dut.settings["humidity_high_level"] = 100
-        self.dut.settings["fan_minutes_in_hour"] = 5
-        self.dut.fan_mode_manual = False
-        
-        for _ in range(2):
-            time.time_struct.tm_min = 0
-            self.dut._execute()
-            assert self.dut.state == WAIT
-            assert self.dut.fan_status is False
+@pytest.fixture
+def sensors_proxy():
+    return xmlrpc.client.ServerProxy(f"http://localhost:{configuration.sensors_server_port}")
 
-            time.time_struct.tm_min = START_AT_MINUTE
-            self.dut._execute()
-            assert self.dut.state == RUN
-            assert self.dut.fan_status is True
+@pytest.fixture
+def fan_proxy():
+    return xmlrpc.client.ServerProxy(f"http://localhost:{configuration.fan_server_port}")
+    
 
-            time.time_struct.tm_min = START_AT_MINUTE + 1
-            self.dut._execute()
-            assert self.dut.state == RUN
-            assert self.dut.fan_status is True
+def test_heater_auto(mock_proxy, sensors_proxy, fan_proxy):
+    settings = load_settings()
+    LOGGER.info(settings)
+    min_value = float(settings["temperature_low_level"])
+    max_value = float(settings["temperature_high_level"])
+    parameters = [
+        (min_value - 1, "ON"),
+        (min_value + 0, "ON"),
+        (min_value + 1, "ON"),
+        (max_value - 1, "ON"),
+        (max_value + 0, "OFF"),
+        (max_value + 1, "OFF")
+    ]
+    LOGGER.info('fan_proxy.set_heater("Auto", "OFF")')
+    fan_proxy.set_heater("Auto", "OFF")
+    for (value, expected) in parameters:
+        LOGGER.info(f"set temperature {value}")
+        mock_proxy.set_temperature(value)
+        time.sleep(2)
+        obtained = sensors_proxy.temperature()
+        LOGGER.info(f"sensors_proxy.temperature() -> {obtained}")
+        obtained = fan_proxy.get_heater()
+        LOGGER.info(f"fan_proxy.get_heater() -> {obtained}")
+        assert obtained == expected
 
-            time.time_struct.tm_min = START_AT_MINUTE + 5
-            self.dut._execute()
-            assert self.dut.state == WAIT
-            assert self.dut.fan_status is False
-            
-            
+def test_heater_manual(mock_proxy, sensors_proxy, fan_proxy):
+    settings = load_settings()
+    LOGGER.info(settings)
+    min_value = float(settings["temperature_low_level"])
+    for expected in ["OFF", "ON"]:
+        LOGGER.info(f'fan_proxy.set_heater("Manual", {expected!r})')
+        fan_proxy.set_heater("Manual", expected)
+        value = min_value - 1
+        LOGGER.info(f"set temperature {value}")
+        mock_proxy.set_temperature(value)
+        time.sleep(2)
+        obtained = sensors_proxy.temperature()
+        LOGGER.info(f"sensors_proxy.temperature() -> {obtained}")
+        obtained = fan_proxy.get_heater()
+        LOGGER.info(f"fan_proxy.get_heater() -> {obtained}")
+        assert obtained == expected
+
+
+the_time = "2024-11-10T12:00:00"
+
+
+def test_fan(monkeypatch, mock_proxy):
+    def mock_localtime():
+        global the_time
+        r = time.strptime(the_time, "%Y-%m-%dT%H:%M:%S") 
+        return r
+    
+    global the_time
+
+    monkeypatch.setattr(time, "localtime", mock_localtime)
+
+    settings = load_settings()
+    mock_proxy.set_temperature(float(settings["temperature_high_level"]) - 1.0)
+    mock_proxy.set_humidity(float(settings["humidity_high_level"]) - 1.0)
+    fan_minutes_in_hour = int(settings["fan_minutes_in_hour"])
+    
+    bridge = Bridge()
+    bridge.fan_mode_manual = False
+    for offset, expected in [(-1, "OFF"), (0, "ON"), (1, "ON"), (fan_minutes_in_hour - 1, "ON"), (fan_minutes_in_hour - 0, "OFF"), (fan_minutes_in_hour + 1, "OFF"), ]:
+        minute = START_AT_MINUTE + offset
+        the_time = f"2024-11-10T15:{minute:02}:00" 
+        bridge._execute()
+        obtained = bridge.get_fan()
+        LOGGER.info(f"minute {minute} -> {obtained!r}")
+        assert obtained == expected, f"minute {minute} -> obtained {obtained!r}, expected {expected!r}"

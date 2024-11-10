@@ -7,7 +7,7 @@ import os
 from xmlrpc.server import SimpleXMLRPCServer
 from xmlrpc.server import SimpleXMLRPCRequestHandler
 import RPi.GPIO as GPIO
-from base import load_settings, get_loglevel
+from servers.base import load_settings, get_loglevel
 import configuration
 
 
@@ -80,9 +80,10 @@ class RequestHandler(SimpleXMLRPCRequestHandler):
     rpc_paths = ('/RPC2',)
 
 
-LOGGER.critical("LIGHT PROCESS STARTED")
-port = configuration.light_server_port
-with TheServer(('localhost', port), requestHandler=RequestHandler, logRequests=False) as server:
-    server.register_introspection_functions()
-    server.register_instance(Bridge())
-    server.serve_forever()
+if __name__ == "__main__":
+    LOGGER.critical("LIGHT PROCESS STARTED")
+    port = configuration.light_server_port
+    with TheServer(('localhost', port), requestHandler=RequestHandler, logRequests=False) as server:
+        server.register_introspection_functions()
+        server.register_instance(Bridge())
+        server.serve_forever()

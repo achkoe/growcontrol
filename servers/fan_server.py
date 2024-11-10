@@ -10,7 +10,7 @@ from dotenv import dotenv_values
 from xmlrpc.server import SimpleXMLRPCServer
 from xmlrpc.server import SimpleXMLRPCRequestHandler
 import RPi.GPIO as GPIO
-from base import load_settings, get_loglevel
+from servers.base import load_settings, get_loglevel
 import configuration
 
 
