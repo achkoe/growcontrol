@@ -1,11 +1,11 @@
 {
     "light_1_on_time": {
-        "value": "01:00",
+        "value": "21:05",
         "title": "Light 1 On Time",
         "type": "time"
     },
     "light_1_off_time": {
-        "value": "19:00",
+        "value": "15:05",
         "title": "Light 1 Off Time",
         "type": "time"
     },
@@ -20,14 +20,14 @@
         "type": "time"
     },
     "moisture_low_level": {
-        "value": "60",
+        "value": "68",
         "title": "Moisture Low Level",
         "type": "number",
         "min": 0,
         "max": 100
     },
     "moisture_ok_level": {
-        "value": "62",
+        "value": "70",
         "title": "Moisture OK Level",
         "type": "number",
         "min": 0,
@@ -104,14 +104,14 @@
         "max": 60
     },
     "light_1_on_time_i": {
-        "value": 3600,
+        "value": 75900,
         "title": null,
         "type": "number",
         "min": 0,
         "max": 100
     },
     "light_1_off_time_i": {
-        "value": 68400,
+        "value": 54300,
         "title": null,
         "type": "number",
         "min": 0,

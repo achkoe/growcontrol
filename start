@@ -1,9 +1,9 @@
 #! /usr/bin/bash
 
-source /home/pi/venv/vgb/bin/activate
-export PYTHONPATH=/home/pi/projects/growcontrol
+source /home/pi/venv/vgc/bin/activate
+export PYTHONPATH=/home/pi/growcontrol
 
-echo "server | tst | http"
+echo "server | tst | http | watchdog"
 echo "$1"
 
 if [[ "$1" == "server" ]]; then
@@ -23,3 +23,7 @@ fi
 if [[ "$1" == "http" ]]; then
     cd http && flask --app http_server run --debug --host 0.0.0.0
 fi
+
+if [[ "$1" == "watchdog" ]]; then
+    python watchdog.py
+fi 
