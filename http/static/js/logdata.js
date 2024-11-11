@@ -18,11 +18,13 @@ const tthoptions = {
         label: "Fan",
         stroke: "green",
         scale: "third",
+        value: (u, val) => val > 0.5 ? "On" : "Off"
       },
-    {
+      {
         label: "Heater",
         stroke: "violet",
         scale: "fourth",
+        value: (u, val) => val > 1.7 ? "On" : "Off"
       }
     ],
     scales: {
