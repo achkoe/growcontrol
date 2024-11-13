@@ -35,23 +35,26 @@ class Bridge():
                 f"http://localhost:{value['pump']}")
             self.pump_proxy_dict[key]["moisture"] = deque(maxlen=MAX_LENGTH)
             self.pump_proxy_dict[key]["pump"] = -1
-        self.temperature_humidity_queue = deque(maxlen=MAX_LENGTH)
+        self.output_queue = deque(maxlen=MAX_LENGTH)
         self.previous_time = -1
         self.previous_fan = -1
+        self.previous_heater = -1
 
     def _execute(self):
         interval = 60
         currenttime = time.time()
-        fan = 1 if self.fan_proxy.get() == "ON" else 0
+        fan = 1 if self.fan_proxy.get_fan() == "ON" else 0
+        heater = 1 if self.fan_proxy.get_heater() == "ON" else 0
         temperature = float(self.sensors_proxy.temperature())
         humidity = float(self.sensors_proxy.humidity())
 
-        if (fan != self.previous_fan) or (currenttime - self.previous_time > interval):
+        if (fan != self.previous_fan) or (heater != self.previous_heater) or (currenttime - self.previous_time > interval):
             # take atmost one sample in 60 seconds
-            self.temperature_humidity_queue.append(
-                (currenttime, temperature, humidity, fan))
-            # ic(self.temperature_humidity_queue)
+            self.output_queue.append(
+                (currenttime, temperature, humidity, fan, heater))
+            # ic(self.output_queue)
             self.previous_fan = fan
+            self.previous_heater = heater
 
         for key in self.pump_proxy_dict:
             pump = 1 if self.pump_proxy_dict[key]["proxy"].get() == "ON" else 0
@@ -72,7 +75,7 @@ class Bridge():
         # returns two items:
         # 1st is list with tuples (time, temparature, humidity, fan)
         # 2nd is dict with keys <pump> and tuples (time, moisture, pump)
-        return list(self.temperature_humidity_queue), dict([(str(key), list(self.pump_proxy_dict[key]["moisture"])) for key in self.pump_proxy_dict])
+        return list(self.output_queue), dict([(str(key), list(self.pump_proxy_dict[key]["moisture"])) for key in self.pump_proxy_dict])
 
     def set(self):
         return "OK"

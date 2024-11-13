@@ -18,12 +18,20 @@ const tthoptions = {
         label: "Fan",
         stroke: "green",
         scale: "third",
+        value: (u, val) => val > 0.5 ? "On" : "Off"
+      },
+      {
+        label: "Heater",
+        stroke: "violet",
+        scale: "fourth",
+        value: (u, val) => val > 1.7 ? "On" : "Off"
       }
     ],
     scales: {
         left: { range: [10, 40]},
         right: { range: [0, 100]},
         third: { range: [0, 10]},
+        fourth: { range: [0, 10]},
     },
     axes: [
         {
@@ -61,6 +69,7 @@ const moistureoptions = {
         label: "Pump",
         stroke: "green",
         scale: "third",
+        value: (u, val) => val > 0.5 ? "On" : "Off"
       }
     ],
     scales: {
@@ -114,13 +123,15 @@ function callLogDataUpdate() {
             .then(data => {
                 // console.log('data:', data["m"]);
                 //! var text = "";
-                var plotdata = [[], [], [], []];
+                // (currenttime, temperature, humidity, fan, heater)
+                var plotdata = [[], [], [], [], []];
                 for (let tuple of data["tth"]) {
                     //! text += "" + tuple[0] + "  " + tuple[1] + "  " + tuple[2] + "  " + tuple[3] + "\n";
                     plotdata[0].push(tuple[0]);
                     plotdata[1].push(tuple[1]);
                     plotdata[2].push(tuple[2]);
-                    plotdata[3].push(tuple[3]);
+                    plotdata[3].push(tuple[3]); // fan
+                    plotdata[4].push(tuple[4] + 1.2); // heater
                 }
                 //! var e = document.getElementById("tthpanel");
                 //! e.innerText = text;

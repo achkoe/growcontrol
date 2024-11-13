@@ -41,8 +41,10 @@ def udpate():
     humidity = sensors_proxy.humidity()
     temperature = sensors_proxy.temperature()
     waterlevel = sensors_proxy.waterlevel()
-    fan = fan_proxy.get()
-    fan_mode = fan_proxy.get_mode()
+    fan = fan_proxy.get_fan()
+    fan_mode = fan_proxy.get_fan_mode()
+    heater = fan_proxy.get_heater()
+    heater_mode = fan_proxy.get_heater_mode()
     fan_exhaust_air = fan_proxy.get_fan_exhaust_air()
     light = light_proxy.get()
     light_mode = light_proxy.get_mode()
@@ -60,6 +62,8 @@ def udpate():
         "moisture": moisture,
         "waterlevel": waterlevel,
         "fan_exhaust_air": fan_exhaust_air,
+        "heater": heater,
+        "heater_mode": heater_mode
     }
     reply.update(light)
     reply.update(settings)
@@ -87,7 +91,18 @@ def toggle_fan():
     # {'fan': 'Manual', 'fanOnOff': 'Off'}
     fan_mode = request.get_json()["fan"]  # either 'Manual' or 'Auto'
     fan_state = request.get_json()["fanOnOff"]
-    reply = fan_proxy.set(fan_mode, fan_state)
+    reply = fan_proxy.set_fan(fan_mode, fan_state)
+    print(f"reply -> {reply}")
+    return {"status": reply}
+
+
+@ app.route("/toggleHeater", methods=("POST", ))
+def toggle_heater():
+    print("toggleHeater: ", request.get_json())
+    # {'heater': 'Manual', 'heaterOnOff': 'Off'}
+    heater_mode = request.get_json()["heater"]  # either 'Manual' or 'Auto'
+    heater_state = request.get_json()["heaterOnOff"]
+    reply = fan_proxy.set_heater(heater_mode, heater_state)
     print(f"reply -> {reply}")
     return {"status": reply}
 
@@ -105,11 +120,10 @@ def toggle_fan_exhaust_air():
 @ app.route("/toggleLight", methods=("POST", ))
 def toggle_light():
     print(request.get_json())
-    # 'light': 'Manual', 'light1': 'Off', 'light2': 'Off'}
-    light_mode = request.get_json()["light"]
-    light_1_state = request.get_json()["light1"]
-    light_2_state = request.get_json()["light2"]
-    reply = light_proxy.set(light_mode, light_1_state, light_2_state)
+    # 'light_mode': 'Manual', 'light_state': 'Off'}
+    light_mode = request.get_json()["light_mode"]
+    light_state = request.get_json()["light_state"]
+    reply = light_proxy.set(light_mode, light_state)
     return {"status": reply}
 
 
@@ -129,8 +143,8 @@ def log():
 @ app.route("/logdata")
 def logdata():
     try:
-        time_temperature_humidity_list, moisture_dict = logdata_proxy.get()
-        return dict(tth=time_temperature_humidity_list, m=moisture_dict)
+        output_list, moisture_dict = logdata_proxy.get()
+        return dict(tth=output_list, m=moisture_dict)
     except Exception:
         print("logdata issue")
         return dict(tth=[], m={})
