@@ -24,9 +24,7 @@ if [[ "$1" == "http" ]]; then
     cd http && flask --app http_server run --debug --host 0.0.0.0
 fi
 
-echo P1
 if [[ "$1" == "watchdog" ]]; then 
-    echo P2 $1 
     python watchdog.py 
 fi
-echo P3
+

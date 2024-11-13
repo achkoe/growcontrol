@@ -1,23 +1,23 @@
 {
     "light_on_time": {
         "value": "14:21",
-        "title": "Light 1 On Time",
+        "title": "Light On Time",
         "type": "time"
     },
     "light_off_time": {
         "value": "14:20",
-        "title": "Light 1 Off Time",
+        "title": "Light Off Time",
         "type": "time"
     },
     "moisture_low_level": {
-        "value": "60",
+        "value": "68",
         "title": "Moisture Low Level",
         "type": "number",
         "min": 0,
         "max": 100
     },
     "moisture_ok_level": {
-        "value": "62",
+        "value": "70",
         "title": "Moisture OK Level",
         "type": "number",
         "min": 0,
