@@ -69,6 +69,7 @@ const moistureoptions = {
         label: "Pump",
         stroke: "green",
         scale: "third",
+        value: (u, val) => val > 0.5 ? "On" : "Off"
       }
     ],
     scales: {
