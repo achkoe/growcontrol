@@ -11,12 +11,12 @@ port_waterhigh = 24
 port_pump1 = 15
 # Time for a single shot / wait time between 2 shots of pump 1
 shot_time_pump1 = 3
-wait_between_pump1 = 60
+wait_between_pump1 = 15 * 60
 # GPIO for pump 2 (not yet available)
 port_pump2 = 10
 # Time for a single shot / wait time between 2 shots of pump 2
 shot_time_pump2 = 3
-wait_between_pump2 = 15
+wait_between_pump2 = 15 * 60
 # GPIO for pump 3 (not yet available)
 port_pump3 = 9
 # Time for a single shot / wait time between 2 shots of pump 3

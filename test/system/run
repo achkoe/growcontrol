@@ -1,0 +1,18 @@
+#! /usr/bin/bash
+_PATH=../..
+source ~/venv/vg311/bin/activate
+export PYTHONPATH=/home/achimk/work/growcontrol:/home/achimk/work/growcontrol/mock
+python ${_PATH}/servers/sensors_server.py &
+python ${_PATH}/servers/light_server.py &
+sleep 2
+python ${_PATH}/servers/pump_server.py 1 &
+python ${_PATH}/servers/fan_server.py &
+python ${_PATH}/servers/logdata_server.py &
+python ${_PATH}/test/mock_server.py &
+pushd ${_PATH}/http 
+LANG=de_DE.UTF-8 flask --app http_server run --debug --host 0.0.0.0 & 
+popd
+sleep 2
+echo done 
+echo "to kill:"
+echo "pkill python && pkill flask"
