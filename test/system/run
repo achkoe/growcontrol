@@ -10,7 +10,7 @@ python ${_PATH}/servers/fan_server.py &
 python ${_PATH}/servers/logdata_server.py &
 python ${_PATH}/test/mock_server.py &
 pushd ${_PATH}/http 
-LANG=de_DE.UTF-8 flask --app http_server run --debug --host 0.0.0.0 & 
+flask --app http_server run --host 0.0.0.0 & 
 popd
 sleep 2
 echo done 
