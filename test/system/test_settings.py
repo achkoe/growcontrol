@@ -44,47 +44,47 @@ def test_light_server(mock_proxy):
         light_off_time=off_time_str, 
     )
     LOGGER.info(f"settings -> {data}")
-    r = requests.post(f"{BASEURL}/settings", data=data)
-    expected = 200
-    assert r.status_code == expected
+    r = requests.post(f"{BASEURL}/settings", data=data, timeout=5)
+    expected_code = 200
+    assert r.status_code == expected_code
     
     passed = False
-    expected = "ON"
+    expected_response = "ON"
     tstart = time.time()
     while True:
         telapsed = time.time() - tstart
         if telapsed > 65:
             break
-        r = requests.get(f"{BASEURL}/update")
-        assert r.status_code == expected
+        r = requests.get(f"{BASEURL}/update", timeout=5)
+        assert r.status_code == expected_code
         obtained = r.json()["light_state"]
         if int(telapsed) % 5 == 0:
-            LOGGER.info(f"t={telapsed:.2f} -> {obtained}")
-        if obtained == expected:
-            LOGGER.info(f"PASS: t={telapsed:.2f} -> {obtained}")
+            LOGGER.info(f"t={telapsed:.2f} -> {obtained!r}")
+        if obtained == expected_response:
+            LOGGER.info(f"PASS: t={telapsed:.2f} -> {obtained!r}")
             passed = True
             break
         time.sleep(1)
-    assert passed, f"expected {expected!r}, but obtained {obtained!r}"
+    assert passed, f"expected {expected_response!r}, but obtained {obtained!r}"
 
     passed = False
-    expected = "OFF"
+    expected_response = "OFF"
     tstart = time.time()
     while True:
         telapsed = time.time() - tstart
         if telapsed > 65:
             break
-        r = requests.get(f"{BASEURL}/update")
-        assert r.status_code == expected
+        r = requests.get(f"{BASEURL}/update", timeout=5)
+        assert r.status_code == expected_code
         obtained = r.json()["light_state"]
         if int(time.time() - tstart) % 5 == 0:
-            LOGGER.info(f"t={telapsed:.2f} -> {obtained}")
-        if obtained == expected:
-            LOGGER.info(f"PASS: t={telapsed:.2f} -> {obtained}")
+            LOGGER.info(f"t={telapsed:.2f} -> {obtained!r}")
+        if obtained == expected_response:
+            LOGGER.info(f"PASS: t={telapsed:.2f} -> {obtained!r}")
             passed = True
             break
         time.sleep(1)
-    assert passed, f"expected {expected!r}, but obtained {obtained!r}"
+    assert passed, f"expected {expected_response!r}, but obtained {obtained!r}"
         
         
         
