@@ -43,40 +43,48 @@ def test_light_server(mock_proxy):
         light_on_time=on_time_str, 
         light_off_time=off_time_str, 
     )
-    ic(data)
+    LOGGER.info(f"settings -> {data}")
     r = requests.post(f"{BASEURL}/settings", data=data)
     expected = 200
     assert r.status_code == expected
+    
+    passed = False
+    expected = "ON"
+    tstart = time.time()
+    while True:
+        telapsed = time.time() - tstart
+        if telapsed > 65:
+            break
+        r = requests.get(f"{BASEURL}/update")
+        assert r.status_code == expected
+        obtained = r.json()["light_state"]
+        if int(telapsed) % 5 == 0:
+            LOGGER.info(f"t={telapsed:.2f} -> {obtained}")
+        if obtained == expected:
+            LOGGER.info(f"PASS: t={telapsed:.2f} -> {obtained}")
+            passed = True
+            break
+        time.sleep(1)
+    assert passed, f"expected {expected!r}, but obtained {obtained!r}"
 
     passed = False
+    expected = "OFF"
     tstart = time.time()
-    while time.time() - tstart <= 65:
+    while True:
+        telapsed = time.time() - tstart
+        if telapsed > 65:
+            break
         r = requests.get(f"{BASEURL}/update")
         assert r.status_code == expected
         obtained = r.json()["light_state"]
         if int(time.time() - tstart) % 5 == 0:
-            ic(obtained)
-        if obtained == "ON":
-            ic(obtained)
+            LOGGER.info(f"t={telapsed:.2f} -> {obtained}")
+        if obtained == expected:
+            LOGGER.info(f"PASS: t={telapsed:.2f} -> {obtained}")
             passed = True
             break
         time.sleep(1)
-    assert passed
-
-    passed = False
-    tstart = time.time()
-    while time.time() - tstart <= 65:
-        r = requests.get(f"{BASEURL}/update")
-        assert r.status_code == expected
-        obtained = r.json()["light_state"]
-        if int(time.time() - tstart) % 5 == 0:
-            ic(obtained)
-        if obtained == "OFF":
-            ic(obtained)
-            passed = True
-            break
-        time.sleep(1)
-    assert passed
+    assert passed, f"expected {expected!r}, but obtained {obtained!r}"
         
         
         

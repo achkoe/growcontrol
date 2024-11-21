@@ -1,5 +1,5 @@
 #! /usr/bin/bash
-_PATH=../..
+_PATH=..
 source ~/venv/vg311/bin/activate
 export PYTHONPATH=/home/achimk/work/growcontrol:/home/achimk/work/growcontrol/mock
 python ${_PATH}/servers/sensors_server.py &
