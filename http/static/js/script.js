@@ -13,8 +13,8 @@ function callServerEveryTwoSeconds() {
             })
             .then(data => {
                 // console.log('Success:', data);
-                // console.log('data:', data);
-                console.log('heater: ' + data["heater"] + ', heater_mode: ' + data["heater_mode"]);
+                console.log('data.pump:', data["pump"]);
+                // console.log('heater: ' + data["heater"] + ', heater_mode: ' + data["heater_mode"]);
                 var e;
                 // show the current data for fields
                 ["fan", "fan_mode", "light_state", "time", "light_mode", "heater", "heater_mode"].forEach(function(field) {
@@ -96,6 +96,30 @@ function callServerEveryTwoSeconds() {
                     e = document.getElementById("pump_" + index);
                     if (e === null) break;
                     e.innerText = data["pump"][index]["state"] + "\n(" + data["pump"][index]["on"] + ")";
+                    //===============================================================
+                    let p = document.getElementById("pumpOnOffToggle_" + index);
+                    if (data["pump"][index]["on"] == "on") {
+                        p.innerText = "On"
+                        o.classList.remove('off');
+                        p.classList.add('on');
+                    } else {
+                        p.innerText = "Off"
+                        p.classList.add('off');
+                        p.classList.remove('on');
+                    }
+                    e = document.getElementById("pumpToggle_" + index);
+                    if (data["pump"][index]["state"] == "MANUAL") {
+                        e.innerText = "Manual"; 
+                        e.classList.remove('auto');
+                        e.classList.add('manual');
+                        p.disabled = false;
+                    } else {
+                        e.innerText = "Auto";
+                        e.classList.add('auto');
+                        e.classList.remove('manual');
+                        p.disabled = true;
+                    }
+                    //===============================================================
                     e = document.getElementById("moisture_" + index);
                     e.innerText = data["moisture"][index].toFixed(1);
                     e = document.getElementById("boxpump_" + index)
@@ -150,7 +174,7 @@ document.addEventListener("DOMContentLoaded", function() {
     
     function updateFanState() {
         const state = {
-            fan: fan_mode.textContent === 'Manual' ? 'Manual' : 'Auto',
+            fan: fan_mode.textContent === 'Manual' ? 'Manual' : 'Auto' ,
             fanOnOff: fanOnOffToggle.textContent === 'On' ? 'On' : 'Off'
         };
         sendState('/toggleFan', state);
@@ -158,7 +182,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function updateHeaterState() {
         const state = {
-            heater: heater_mode.textContent === 'Manual' ? 'Manual' : 'Auto',
+            heater: heater_mode.textContent === 'Manual' ? 'Manual' : 'Auto' ,
             heaterOnOff: heaterOnOffToggle.textContent === 'On' ? 'On' : 'Off'
         };
         sendState('/toggleHeater', state);
@@ -173,20 +197,20 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function updateLightState() {
         const state = {
-            light_mode: light_mode.textContent === 'Manual' ? 'Manual' : 'Auto',
+            light_mode: light_mode.textContent === 'Manual' ? 'Manual' : 'Auto' ,
             light_state: lightToggle.textContent === 'On' ? 'On' : 'Off',
         };
         sendState('/toggleLight', state);
     }
 
     fan_mode.addEventListener('click', function() {
-        if (fan_mode.textContent === 'Auto') {
+        if (fan_mode.textContent === 'Auto' ) {
             fan_mode.textContent = 'Manual';
             fan_mode.classList.remove('auto');
             fan_mode.classList.add('manual');
             fanOnOffToggle.disabled = false;
         } else {
-            fan_mode.textContent = 'Auto';
+            fan_mode.textContent = 'Auto' ;
             fan_mode.classList.remove('manual');
             fan_mode.classList.add('auto');
             fanOnOffToggle.disabled = true;
@@ -211,13 +235,13 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
     heater_mode.addEventListener('click', function() {
-        if (heater_mode.textContent === 'Auto') {
+        if (heater_mode.textContent === 'Auto' ) {
             heater_mode.textContent = 'Manual';
             heater_mode.classList.remove('auto');
             heater_mode.classList.add('manual');
             heaterOnOffToggle.disabled = false;
         } else {
-            heater_mode.textContent = 'Auto';
+            heater_mode.textContent = 'Auto' ;
             heater_mode.classList.remove('manual');
             heater_mode.classList.add('auto');
             heaterOnOffToggle.disabled = true;
@@ -255,13 +279,13 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
     light_mode.addEventListener('click', function() {
-        if (light_mode.textContent === 'Auto') {
+        if (light_mode.textContent === 'Auto' ) {
             light_mode.textContent = 'Manual';
             light_mode.classList.remove('auto');
             light_mode.classList.add('manual');
             lightToggle.disabled = false;
         } else {
-            light_mode.textContent = 'Auto';
+            light_mode.textContent = 'Auto' ;
             light_mode.classList.remove('manual');
             light_mode.classList.add('auto');
             lightToggle.disabled = true;
@@ -292,7 +316,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const pumpOnOffToggle = document.getElementById("pumpOnOffToggle_" + index);
         const state = {
             index: index,
-            mode: pumpToggle.textContent === 'Manual' ? 'Manual' : 'Auto',
+            mode: pumpToggle.textContent === 'Manual' ? 'Manual' : 'Auto' ,
             pumpOnOff: pumpOnOffToggle.textContent === 'On' ? 'On' : 'Off'
         };
         // console.log(state);
@@ -307,13 +331,13 @@ document.addEventListener("DOMContentLoaded", function() {
         pumpToggle.addEventListener('click', function() {
             var index = this.id.split("_").pop();
             const pumpOnOffToggle = document.getElementById("pumpOnOffToggle_" + index);
-            if (this.textContent === 'Auto') {
+            if (this.textContent === 'Auto' ) {
                 this.textContent = 'Manual';
                 this.classList.remove('auto');
                 this.classList.add('manual');
                 pumpOnOffToggle.disabled = false;
             } else {
-                this.textContent = 'Auto';
+                this.textContent = 'Auto' ;
                 this.classList.remove('manual');
                 this.classList.add('auto');
                 pumpOnOffToggle.disabled = true;
