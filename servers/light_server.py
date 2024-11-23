@@ -52,7 +52,7 @@ class Bridge():
 
     def get(self):
         return {
-            "light_state": "ON" if self.light_on else "OFF",
+            "light": "ON" if self.light_on else "OFF",
         }
         
     def get_mode(self):
