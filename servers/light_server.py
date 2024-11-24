@@ -22,6 +22,7 @@ GPIO.setmode(GPIO.BCM)
 class Bridge():
     def __init__(self):
         self.light_on = True
+        self.previous_light_on = not self.light_on
         self.light_mode_manual = False
         self.settings = load_settings()
         self.port_light = configuration.port_light
@@ -45,7 +46,9 @@ class Bridge():
                 self.light_on = light_on
                 LOGGER.critical(
                     f"light_on -> {self.light_on}")
-        GPIO.output(self.port_light, GPIO.HIGH if self.light_on else GPIO.LOW)
+        if self.light_on != self.previous_light_on:
+            self.previous_light_on = self.light_on
+            GPIO.output(self.port_light, GPIO.HIGH if self.light_on else GPIO.LOW)
         
     def identity(self):
         return IDENTITY

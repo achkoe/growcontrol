@@ -119,11 +119,11 @@ class Bridge():
         """Return moisture between 0 ... 100"""
         adc = AnalogIn(self.ads, channel)
         rval = adc.value
-        LOGGER.critical(f"moisture:getValue() -> {rval}")
+        LOGGER.debug(f"moisture:getValue() -> {rval}")
         rval = min(self._max, rval)      # set upper limit
         rval = max(self._min, rval)      # set lower limit
         rval = self._slope * rval + self._offset
-        LOGGER.critical(f"moisture:{channel} -> {rval}")
+        LOGGER.info(f"moisture:{channel} -> {rval}")
         return rval
 
     def reload(self):

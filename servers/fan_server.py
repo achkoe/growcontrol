@@ -34,6 +34,7 @@ class Bridge():
             f"http://localhost:{configuration.sensors_server_port}")
         # fan status
         self.fan_is_on = False
+        self.previous_fan_is_on = not self.fan_is_on
         self.fan_mode_manual = False
         self.fan_on = False
         self.state = WAIT
@@ -42,6 +43,7 @@ class Bridge():
         
         # heater
         self.heater_is_on = False
+        self.previous_heater_is_on = not self.heater_is_on
         self.heater_mode_manual = False
         self.heater_on = False
         self.port_heater = configuration.port_heater
@@ -90,7 +92,9 @@ class Bridge():
                         LOGGER.info(f"4:state: RUN -> WAIT")
         else:
             self.fan_is_on = self.fan_on
-        GPIO.output(self.port_fan, GPIO.HIGH if self.fan_is_on else GPIO.LOW)
+        if self.fan_is_on != self.previous_fan_is_on:
+            self.previous_fan_is_on = self.fan_is_on
+            GPIO.output(self.port_fan, GPIO.HIGH if self.fan_is_on else GPIO.LOW)
         
         
         if self.heater_mode_manual is False:
@@ -102,7 +106,9 @@ class Bridge():
                 LOGGER.info(f"heater auto: OFF (T={temperature})")
         else:
             self.heater_is_on = self.heater_on
-        GPIO.output(self.port_heater, GPIO.HIGH if self.heater_is_on else GPIO.LOW)
+        if self.heater_is_on != self.previous_heater_is_on:
+            self.previous_heater_is_on = self.heater_is_on
+            GPIO.output(self.port_heater, GPIO.HIGH if self.heater_is_on else GPIO.LOW)
         
 
     def identity(self):

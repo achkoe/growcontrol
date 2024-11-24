@@ -6,8 +6,9 @@ python mock_server.py &
 pytest -s ./test/manual/test.py 
 """
 import logging
-import time
+import pathlib
 import xmlrpc.client
+import re
 import pytest
 import test.tst_configuration as tst_configuration
 import configuration
@@ -31,9 +32,25 @@ def pump_proxy():
 @pytest.fixture
 def fan_proxy():
     return xmlrpc.client.ServerProxy(f"http://localhost:{configuration.fan_server_port}")
+
+
+@pytest.fixture
+def light_proxy():
+    return xmlrpc.client.ServerProxy(f"http://localhost:{configuration.light_server_port}")
+    
     
 def show(e, r):
     LOGGER.log(logging.INFO if e == r else logging.CRITICAL, f"expected {e!r}, received {r!r}")
+    
+    
+def read_last_output():
+    with pathlib.Path(__file__).parent.parent.parent.joinpath("mock", "_output.txt").open("r") as fh:
+        s = fh.readline()
+    mo = re.match(r"^\((?P<pin>\d+)\s*,\s*(?P<state>\d+)\)", s)
+    assert mo is not None, mo
+    pin = int(mo.group("pin"))
+    state = int(mo.group("state"))
+    return pin, state
     
 def test_temperature(mock_proxy):
     LOGGER.info("set temperature to 32")
@@ -42,6 +59,15 @@ def test_temperature(mock_proxy):
     LOGGER.info("set temperature to 22")
     mock_proxy.set_temperature(22)
     input("Verify that 'Temperature' is green")
+
+
+def test_humidity(mock_proxy):
+    LOGGER.info("set humidity to 32")
+    mock_proxy.set_humidity(32)
+    input("Verify that 'Humidity' is red")
+    LOGGER.info("set humidity to 22")
+    mock_proxy.set_humidity(65)
+    input("Verify that 'Humidity' is green")
         
 
 def test_pump_manual_auto(pump_proxy):
@@ -90,3 +116,49 @@ def test_fan(fan_proxy, caplog):
     show(e, r)
     for record in caplog.records:
         assert record.levelname != "CRITICAL"
+        
+        
+def test_light(light_proxy, caplog):
+    ee = light_proxy.get()
+    input("Press button Light/Auto to put the light in mode 'Manual'")
+    r = light_proxy.get()
+    show(ee, r)
+    input("Press button Light/On/Off to toggle the light")
+    e = {"light": "OFF" if r["light"] == "ON" else "OFF"}
+    r = light_proxy.get()
+    show(e, r)
+    
+    pin, state = read_last_output()
+    LOGGER.info(f"pin={pin}, state={state}")
+    e = 1 if r["light"] == "ON" else 0
+    assert pin == configuration.port_light
+    assert state == e
+    
+    input("Press button Light/On/Off to toggle the light")
+    e = {"light": "ON" if r["light"] == "OFF" else "ON"}
+    r = light_proxy.get()
+    show(e, r)
+    
+    pin, state = read_last_output()
+    LOGGER.info(f"pin={pin}, state={state}")
+    e = 1 if r["light"] == "ON" else 0
+    assert pin == configuration.port_light
+    assert state == e
+    
+    input("Press button Light/Auto to put the light in mode 'Auto'")
+    r = light_proxy.get()
+    show(ee, r)
+    for record in caplog.records:
+        assert record.levelname != "CRITICAL"
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
