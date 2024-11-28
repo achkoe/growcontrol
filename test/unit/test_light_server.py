@@ -40,8 +40,8 @@ def test(monkeypatch):
         bridge._execute()
         obtained = bridge.get()
         LOGGER.info(f"{the_time} -> {obtained}")
-        assert list(obtained.keys()) == ["light_state"]
-        assert obtained["light_state"] == expected, f"{the_time}: expected {expected!r}, obtained {obtained!r}"
+        assert list(obtained.keys()) == ["light"]
+        assert obtained["light"] == expected, f"{the_time}: expected {expected!r}, obtained {obtained!r}"
 
         
         

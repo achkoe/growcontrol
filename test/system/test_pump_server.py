@@ -28,7 +28,7 @@ BASEURL = f"http://{ADDRESS}:{PORT}"
     
 @pytest.fixture
 def mock_proxy():
-    return xmlrpc.client.ServerProxy(f"http://localhost:{tst_configuration.bme280_server_port}")
+    return xmlrpc.client.ServerProxy(f"http://localhost:{tst_configuration.mock_server_port}")
 
 
 def test_pump_auto_manual(mock_proxy):

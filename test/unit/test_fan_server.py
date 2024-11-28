@@ -23,7 +23,7 @@ LOGGER = logging.getLogger()
     
 @pytest.fixture
 def mock_proxy():
-    return xmlrpc.client.ServerProxy(f"http://localhost:{tst_configuration.bme280_server_port}")
+    return xmlrpc.client.ServerProxy(f"http://localhost:{tst_configuration.mock_server_port}")
 
 @pytest.fixture
 def sensors_proxy():

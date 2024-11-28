@@ -28,7 +28,7 @@ BASEURL = f"http://{ADDRESS}:{PORT}"
     
 @pytest.fixture
 def mock_proxy():
-    return xmlrpc.client.ServerProxy(f"http://localhost:{tst_configuration.bme280_server_port}")
+    return xmlrpc.client.ServerProxy(f"http://localhost:{tst_configuration.mock_server_port}")
 
 @pytest.mark.parametrize(
     ("ondelta", "offdelta", "expected_response_list"), [
@@ -59,8 +59,8 @@ def test_light_server(ondelta, offdelta, expected_response_list, mock_proxy):
         if telapsed > 65:
             break
         r = requests.get(f"{BASEURL}/update", timeout=5)
-        assert r.status_code == expected_code
-        obtained = r.json()["light_state"]
+        assert r.status_code == expected_code, f"got {r.status_code} at {telapsed}"
+        obtained = r.json()["light"]
         if int(telapsed) % 5 == 0:
             LOGGER.info(f"t={telapsed:.2f} -> {obtained!r}")
         if obtained == expected_response:
@@ -79,7 +79,7 @@ def test_light_server(ondelta, offdelta, expected_response_list, mock_proxy):
             break
         r = requests.get(f"{BASEURL}/update", timeout=5)
         assert r.status_code == expected_code
-        obtained = r.json()["light_state"]
+        obtained = r.json()["light"]
         if int(time.time() - tstart) % 5 == 0:
             LOGGER.info(f"t={telapsed:.2f} -> {obtained!r}")
         if obtained == expected_response:

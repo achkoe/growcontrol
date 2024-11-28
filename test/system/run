@@ -1,5 +1,5 @@
 #! /usr/bin/bash
-_PATH=..
+_PATH=/home/achimk/work/growcontrol
 source ~/venv/vg311/bin/activate
 export PYTHONPATH=/home/achimk/work/growcontrol:/home/achimk/work/growcontrol/mock
 python ${_PATH}/servers/sensors_server.py &
@@ -15,4 +15,4 @@ popd
 sleep 2
 echo done 
 echo "to kill:"
-echo "pkill python && pkill flask"
+echo "$_PATH/test/terminate"

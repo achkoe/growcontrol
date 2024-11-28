@@ -1,11 +1,11 @@
 {
     "light_on_time": {
-        "value": "16:11",
+        "value": "16:50",
         "title": "Light On Time",
         "type": "time"
     },
     "light_off_time": {
-        "value": "16:10",
+        "value": "16:49",
         "title": "Light Off Time",
         "type": "time"
     },
@@ -94,14 +94,14 @@
         "max": 60
     },
     "light_on_time_i": {
-        "value": 58260,
+        "value": 60600,
         "title": null,
         "type": "number",
         "min": 0,
         "max": 100
     },
     "light_off_time_i": {
-        "value": 58200,
+        "value": 60540,
         "title": null,
         "type": "number",
         "min": 0,
