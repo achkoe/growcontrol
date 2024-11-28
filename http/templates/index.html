@@ -38,7 +38,7 @@
         </div>
         <div class="box">
             <p class="statuslabel">Light</p>
-            <p id="light_state"></p>
+            <p id="light"></p>
         </div>
         </div>
     </div>
@@ -54,10 +54,10 @@
             <p>Soil moisture: <span id="moisture_{{key}}">?</span></p>
         </div>        
         <div class="column">
-            <button id="pumpToggle_{{key}}" class="auto">Auto</button>
+            <button id="pump{{key}}_mode" class="auto">Auto</button>
         </div>
         <div class="column">
-            <button class="off" id="pumpOnOffToggle_{{key}}" disabled>Off</button>
+            <button class="off" id="pump{{key}}OnOffToggle" disabled>Off</button>
         </div>
     </div>
     {% endfor %}
@@ -79,7 +79,7 @@
         </div>
         <div class="controllabel">Exhaust Air Fan</div>
         <div class="column">
-            <button class="on" id="fanExhaustAirOnOff">On</button>
+            <button class="on" id="fanExhaustAirOnOffToggle">On</button>
         </div>
     </div>
     
@@ -90,7 +90,7 @@
         </div>
         <div class="controllabel">Light</div>
         <div class="column">
-            <button class="off" id="lightToggle" disabled>Off</button>
+            <button class="off" id="lightOnOffToggle" disabled>Off</button>
         </div>
     </div>
     

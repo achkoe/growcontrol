@@ -61,7 +61,7 @@ def udpate():
         "pump": pump,
         "moisture": moisture,
         "waterlevel": waterlevel,
-        "fan_exhaust_air": fan_exhaust_air,
+        "fanExhaustAir": fan_exhaust_air,
         "heater": heater,
         "heater_mode": heater_mode
     }
@@ -89,7 +89,7 @@ def editsettings():
 def toggle_fan():
     print(request.get_json())
     # {'fan': 'Manual', 'fanOnOff': 'Off'}
-    fan_mode = request.get_json()["fan"]  # either 'Manual' or 'Auto'
+    fan_mode = request.get_json()["fan_mode"]  # either 'Manual' or 'Auto'
     fan_state = request.get_json()["fanOnOff"]
     reply = fan_proxy.set_fan(fan_mode, fan_state)
     print(f"reply -> {reply}")
@@ -100,7 +100,7 @@ def toggle_fan():
 def toggle_heater():
     print("toggleHeater: ", request.get_json())
     # {'heater': 'Manual', 'heaterOnOff': 'Off'}
-    heater_mode = request.get_json()["heater"]  # either 'Manual' or 'Auto'
+    heater_mode = request.get_json()["heater_mode"]  # either 'Manual' or 'Auto'
     heater_state = request.get_json()["heaterOnOff"]
     reply = fan_proxy.set_heater(heater_mode, heater_state)
     print(f"reply -> {reply}")
@@ -122,16 +122,19 @@ def toggle_light():
     print(request.get_json())
     # 'light_mode': 'Manual', 'light_state': 'Off'}
     light_mode = request.get_json()["light_mode"]
-    light_state = request.get_json()["light_state"]
+    light_state = request.get_json()["lightOnOff"]
     reply = light_proxy.set(light_mode, light_state)
     return {"status": reply}
 
 
-@ app.route("/togglePump", methods=("POST", ))
+@ app.route("/togglePump1", methods=("POST", ))
+@ app.route("/togglePump2", methods=("POST", ))
+@ app.route("/togglePump3", methods=("POST", ))
 def toggle_pump():
+    index = int(request.full_path[-2])
     pump = request.get_json()
-    pump_proxy = pump_proxies[int(pump["index"])]
-    reply = pump_proxy.set(pump["mode"], pump["pumpOnOff"])
+    pump_proxy = pump_proxies[index]
+    reply = pump_proxy.set(pump[f"pump{index}_mode"], pump[f"pump{index}OnOff"])
     return {"status": reply}
 
 
