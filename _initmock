@@ -1,0 +1,25 @@
+#! /usr/bin/bash
+source ~/venv/vg311/bin/activate
+export PYTHONPATH=/home/achimk/work/growcontrol:/home/achimk/work/growcontrol/mock
+
+echo "server | tst | http"
+echo "$1"
+
+if [[ "$1" == "server" ]]; then
+    python servers/sensors_server.py &
+    python servers/light_server.py &
+    sleep 2
+    python servers/fan_server.py &
+    python servers/pump_server.py 1 &
+    # python servers/pump_server.py 2 &
+    python servers/logdata_server.py &
+fi
+
+if [[ "$1" == "tst" ]]; then
+    python client/tst_client.py
+fi 
+
+if [[ "$1" == "http" ]]; then
+    cd http && LANG=de_DE.UTF-8 flask --app http_server run --debug --host 0.0.0.0
+    cd ..
+fi

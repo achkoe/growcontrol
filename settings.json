@@ -17,15 +17,8 @@
         "max": 100
     },
     "moisture_ok_level": {
-        "value": "70",
+        "value": "77",
         "title": "Moisture OK Level",
-        "type": "number",
-        "min": 0,
-        "max": 100
-    },
-    "moisture_low_critical_level": {
-        "value": "10",
-        "title": "Moisture Low Critical Level",
         "type": "number",
         "min": 0,
         "max": 100

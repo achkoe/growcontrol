@@ -82,7 +82,9 @@ def editsettings():
         light_proxy.reload()
         for key, pump_proxy in pump_proxies.items():
             pump_proxy.reload()
-    return render_template("settings.html", settings=load_settings(raw=True), version=f"v{VERSION}")
+        return render_template('index.html', configuration=configuration, version=f"v{VERSION}")
+    else:
+        return render_template("settings.html", settings=load_settings(raw=True), version=f"v{VERSION}")
 
 
 @ app.route("/toggleFan", methods=("POST", ))
