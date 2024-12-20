@@ -105,27 +105,13 @@ class ConnectedButton extends Button {
 }
 
 
-class PumpButton extends ConnectedButton {
+class PumpButton extends Button {
     updateFromServer(data) {
-        console.log("updateFromServer ", this.btnName);
-        let index = Number(this.btnName.slice(-1));
-        let name = this.btnName.slice(0, -1)
-        //console.log(name);
-        console.log(data[name][index]);
-        //console.log(this.btnName);
-        //console.log(objStatus);
-        this.btnState.textContent = data[name][index]["on"] == "ON" ? "Off" : "On";  // think reverse because we are calling _toggle_on_off
+        let index = this.btnName.substr(-1);
+        console.log("updateFromServer ", this.btnName, data["pump"][index]["on"]);
+        this.btnState.textContent = data["pump"][index]["on"] == "ON" ? "Off" : "On";  // think reverse because we are calling _toggle_on_off
         this._toggle_on_off();
-        this.btnControl.textContent = data[name][index]["state"] == "MANUAL" ? "Auto" : "Manual";
-        this._toggle_auto_manual();
-        objStatus[this.btnName].innerText = (data[name][index]["on"] == "ON" ? "On" : "Off") + "\n" + data[name][index]["state"];
     }
-
-    toggle_auto_manual() {
-        this.state[this.btnName + "OnOff"] = "Off";
-        super.toggle_auto_manual()
-    }
-    
 }
 
 
@@ -137,11 +123,12 @@ document.addEventListener("DOMContentLoaded", function() {
     objControls.cLight = new ConnectedButton("light");
     
     for (let index = 1; index < 10; index++) {
-        pumpToggle = document.getElementById("pump" + index + "_mode");
+        var pumpToggle = document.getElementById("boxpump_" + index);
         if (pumpToggle == null) break;
         index_high = index;
         objControls.oPump[index] = new PumpButton("pump" + index);
-        objStatus["boxpump_" + index] = document.getElementById("boxpump_" + index)
+        objStatus["boxmoisture_" + index] = document.getElementById("boxmoisture_" + index)
+        objStatus["boxpump_" + index] = document.getElementById("pump_" + index);
         objStatus["pump" + index] = document.getElementById("pump_" + index)
         objStatus["moisture_" + index] = document.getElementById("moisture_" + index)
     }
@@ -206,9 +193,9 @@ function receiceStatusFromServer() {
                 for (let index = 1; index <= index_high; index++) {
                     objStatus["moisture_" + index].innerText = data["moisture"][index].toFixed(1);
                     if (data["moisture"][index] <= data["moisture_low_level"]) {
-                        objStatus["boxpump_" + index].classList.add("alert");
+                        objStatus["boxmoisture_" + index].classList.add("alert");
                     } else {
-                        objStatus["boxpump_" + index].classList.remove("alert");
+                        objStatus["boxmoisture_" + index].classList.remove("alert");
                     }
                 }
 
@@ -216,6 +203,8 @@ function receiceStatusFromServer() {
                 for (const [key, value] of Object.entries(objControls)) {
                     if (key == "oPump") {
                         for (const [key_, value_] of Object.entries(value)) {
+                            objStatus["boxpump_" + key_].innerText = data["pump"][key_]["state"];
+                            // console.log(data);
                             value_.updateFromServer(data);
                         }
                     } else {

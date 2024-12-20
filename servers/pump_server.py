@@ -40,6 +40,7 @@ class Bridge:
         self.last_time = -1
 
     def _execute(self):
+        return
         waterlevel = int(self.sensor_proxy.waterlevel())
         # waterlevel 1 means out of water
         if waterlevel == 0:
@@ -87,11 +88,10 @@ class Bridge:
         return "ON" if self.pump_on else "OFF"
     
     def get_state(self):
-        return "MANUAL" if self.pump_mode_manual is True else ["WAIT", "RUN"][self.state]
+        return "2024-12-20 20:21"
 
-    def set(self, mode, pump_state):
-        print(f"Brigde-set {mode} {pump_state}")
-        self.pump_mode_manual = mode == "Manual"
+    def set(self, pump_state):
+        print(f"Brigde-set {pump_state}")
         self.pump_on = pump_state == "On"
         return "OK"
 
