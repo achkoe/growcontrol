@@ -9,7 +9,7 @@ import xmlrpc.client
 from xmlrpc.server import SimpleXMLRPCServer
 from xmlrpc.server import SimpleXMLRPCRequestHandler
 import RPi.GPIO as GPIO
-from base import load_settings, get_loglevel
+from servers.base import load_settings, get_loglevel
 import configuration
 
 
@@ -45,7 +45,7 @@ class Bridge:
 
     def _execute(self):
         waterlevel = int(self.sensor_proxy.waterlevel())
-        # waterlevel 1 means out of water
+        # waterlevel 0 means out of water
         if waterlevel == 0:
             # permit the pump to fall dry
             self.pump_state = OFF

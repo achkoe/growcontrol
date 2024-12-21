@@ -44,8 +44,12 @@ def test_waterlevel():
     bridge.sensor_proxy.waterlevel_value = 1
     bridge.sensor_proxy.moisture_value = 0
     bridge.last_time = None
-    bridge._execute()
-    assert bridge.pump_state is True
+    bridge.pump_on_time = 3
+    for e in (True, True, True, False):
+        bridge._execute()
+        LOGGER.info(f"time={time.time()}, start_time={bridge.start_time}, pump_state={bridge.pump_state}: sleep 1 second")
+        assert bridge.pump_state is e
+        time.sleep(1)
     
     
 def _test(monkeypatch):
