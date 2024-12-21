@@ -10,15 +10,15 @@ port_waterhigh = 24
 
 # GPIO for pump 1
 port_pump1 = 15
-# Time for a single shot / wait time between 2 shots of pump 1
-pump1_milliliter_per_second = 50
+# Milliliter per seconds for pump 1
+pump1_milliliter_per_second = 25
 # GPIO for pump 2 (not yet available)
 port_pump2 = 10
-# Time for a single shot / wait time between 2 shots of pump 2
+# Milliliter per seconds for pump 2
 pump2_milliliter_per_second = 50
 # GPIO for pump 3 (not yet available)
 port_pump3 = 9
-# Time for a single shot / wait time between 2 shots of pump 3
+# Milliliter per seconds for pump 3
 pump3_milliliter_per_second = 50
 # GPIO for exhaust air fan
 port_fan_exhaust_air = 25

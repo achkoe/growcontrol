@@ -19,7 +19,7 @@ LOGGER = logging.getLogger()
 LOGGER.setLevel(get_loglevel("PUMP_SERVER_LOGLEVEL"))
 
 
-WAIT, RUN, MANUAL = 0, 1, 2
+OFF, ON = False, True
 
 GPIO.setmode(GPIO.BCM)
 
@@ -35,71 +35,67 @@ class Bridge:
         self.moisture_channel = moisture_channel
         self.pump_gpio = pump_gpio
         GPIO.setup(pump_gpio, GPIO.OUT)
-        self.pump_mode_manual = False
-        self.pump_on = False
-        self.state = WAIT
+        self.pump_state = OFF
+        self.pump_request_on = False
         self.milliliter_per_second = milliliter_per_second
-        self.last_time = -1
+        self.pump_on_time = self.settings["pump_amount"] / self.milliliter_per_second
+        LOGGER.info(f"pump on time -> {self.pump_on_time}")
+        self.last_time = None
+        self.start_time = None
 
     def _execute(self):
-        return
         waterlevel = int(self.sensor_proxy.waterlevel())
         # waterlevel 1 means out of water
         if waterlevel == 0:
             # permit the pump to fall dry
-            self.pump_on = False
+            self.pump_state = OFF
             GPIO.output(self.pump_gpio, GPIO.LOW)
-            LOGGER.info("pump OFF")
+            LOGGER.info(f"waterlevel is {waterlevel} -> pump {self.pump_state}")
             return
-        if self.pump_mode_manual is True:
-            GPIO.output(self.pump_gpio,
-                        GPIO.HIGH if self.pump_on else GPIO.LOW)
-            LOGGER.info("pump {}".format("ON" if self.pump_on else "OFF"))
-            return
-        moisture = float(self.sensor_proxy.moisture(self.moisture_channel))
-        if self.state == WAIT:
-            if moisture < float(self.settings["moisture_low_level"]):
-                LOGGER.info(
-                    f"state: WAIT -> RUN (moisture={moisture}, moisture_low_level={float(self.settings['moisture_low_level'])})")
-                self.state = RUN
-        if self.state == RUN:
-            if moisture >= float(self.settings["moisture_ok_level"]):
-                self.pump_on = False
-                GPIO.output(self.pump_gpio, GPIO.LOW)
-                LOGGER.info("state: RUN -> WAIT")
-                self.state = WAIT
-                return
-            t = time.time()
-            if self.pump_on:
-                if t - self.last_time >= self.shot_time:
-                    LOGGER.info("pump OFF")
-                    self.pump_on = False
-                    GPIO.output(self.pump_gpio, GPIO.LOW)
-                    self.last_time = t
+        
+        if self.pump_state == OFF:
+            if self.pump_request_on is True:
+                # request to turn pump on, without any conditions
+                self.pump_state = ON
+                self.start_time = time.time()
+                LOGGER.info(f"pump_request_on is {self.pump_request_on} -> pump {self.pump_state}")
+                self.pump_request_on = False
+                self.last_time = time.time()
             else:
-                if t - self.last_time >= self.wait_between:
-                    LOGGER.info("pump ON")
-                    self.pump_on = True
-                    GPIO.output(self.pump_gpio, GPIO.HIGH)
-                    self.last_time = t
-
+                current_time = time.time()
+                if (self.last_time is None) or (current_time - self.last_time > self.settings["pump_check_interval"] * 60 * 60):
+                # if (self.last_time is None) or (current_time - self.last_time > self.settings["pump_check_interval"]):
+                    self.last_time = current_time
+                    moisture = float(self.sensor_proxy.moisture(self.moisture_channel))
+                    if moisture < float(self.settings["moisture_low_level"]):
+                        self.pump_state = ON
+                        self.start_time = time.time()
+                        LOGGER.info(f"moisture is {moisture} -> pump {self.pump_state}")
+        if self.pump_state == ON:
+            if time.time() - self.start_time >= self.pump_on_time:
+                self.pump_state = OFF
+                LOGGER.info(f"pump {self.pump_state}")
+        
+        GPIO.output(self.pump_gpio, GPIO.HIGH if self.pump_state is True else GPIO.LOW)
+                
     def identity(self):
         return IDENTITY
 
     def get(self):
-        return "ON" if self.pump_on else "OFF"
+        return "ON" if self.pump_state is ON else "OFF"
     
     def get_state(self):
-        return "2024-12-20 20:21"
+        return "-" if self.last_time is None else time.strftime("%Y-%m-%d, %H:%M:%S", time.localtime(self.last_time))
 
     def set(self, pump_state):
         print(f"Brigde-set {pump_state}")
-        self.pump_on = pump_state == "On"
+        self.pump_request_on = pump_state == "On"
         return "OK"
 
     def reload(self):
         self.settings = load_settings()
         LOGGER.setLevel(get_loglevel("PUMP_SERVER_LOGLEVEL"))
+        self.pump_on_time = self.settings["pump_amount"] / self.milliliter_per_second
         return "OK"
 
 
