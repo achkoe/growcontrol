@@ -72,8 +72,10 @@ class Bridge:
                         self.start_time = time.time()
                         LOGGER.info(f"moisture is {moisture} -> pump {self.pump_state}")
         if self.pump_state == ON:
-            if time.time() - self.start_time >= self.pump_on_time:
+            current_time = time.time()
+            if current_time - self.start_time >= self.pump_on_time:
                 self.pump_state = OFF
+                self.last_time = current_time
                 LOGGER.info(f"pump {self.pump_state}")
         
         GPIO.output(self.pump_gpio, GPIO.HIGH if self.pump_state is True else GPIO.LOW)

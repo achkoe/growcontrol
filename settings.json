@@ -23,7 +23,7 @@
         "min": 50,
         "max": 5000
     },
-    "pump_check_interval" : {
+    "pump_check_interval": {
         "value": 16,
         "title": "Moisture check interval (h)",
         "min": 1,
