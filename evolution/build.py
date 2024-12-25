@@ -94,7 +94,7 @@ if __name__ == "__main__":
     figurelist = list()
     for index, name in enumerate(odict):
         value = odict[name]
-        figurelist.append(FIGURETEMPLATE.format(image=name, date="{} (Week {})".format(value["date"], value["label"] // 7 + 1), label=value["label"], ))
+        figurelist.append(FIGURETEMPLATE.format(image=name, date="{} (Week {})".format(value["date"], value["label"] // 7 + 0), label=value["label"], ))
         if index % 3 == 2:
             figurelist.append("<br/>")
 

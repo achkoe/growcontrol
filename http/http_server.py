@@ -136,7 +136,7 @@ def toggle_pump():
     index = int(request.full_path[-2])
     pump = request.get_json()
     pump_proxy = pump_proxies[index]
-    reply = pump_proxy.set(pump[f"pump{index}_mode"], pump[f"pump{index}OnOff"])
+    reply = pump_proxy.set(pump[f"pump{index}OnOff"])
     return {"status": reply}
 
 

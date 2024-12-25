@@ -7,21 +7,19 @@ logdata_server_port = 4003
 port_waterlow = 18
 port_watermedium = 23
 port_waterhigh = 24
+
 # GPIO for pump 1
 port_pump1 = 15
-# Time for a single shot / wait time between 2 shots of pump 1
-shot_time_pump1 = 3
-wait_between_pump1 = 15 * 60
+# Milliliter per seconds for pump 1
+pump1_milliliter_per_second = 25
 # GPIO for pump 2 (not yet available)
 port_pump2 = 10
-# Time for a single shot / wait time between 2 shots of pump 2
-shot_time_pump2 = 3
-wait_between_pump2 = 15 * 60
+# Milliliter per seconds for pump 2
+pump2_milliliter_per_second = 50
 # GPIO for pump 3 (not yet available)
 port_pump3 = 9
-# Time for a single shot / wait time between 2 shots of pump 3
-shot_time_pump3 = 3
-wait_between_pump3 = 60
+# Milliliter per seconds for pump 3
+pump3_milliliter_per_second = 50
 # GPIO for exhaust air fan
 port_fan_exhaust_air = 25
 # GPIO for fan
@@ -32,8 +30,8 @@ port_light = 22
 port_heater = 27
 
 pump_moisture_dict = {
-    1: dict(channel=0, pump=4004, gpio=port_pump1, shot_time=shot_time_pump1, wait_between=wait_between_pump1),
-    # 2: dict(channel=1, pump=4005, gpio=port_pump2, shot_time=shot_time_pump2, wait_between=wait_between_pump2)
+    1: dict(channel=0, pump=4004, gpio=port_pump1, milliliter_per_second=pump1_milliliter_per_second),
+ #   2: dict(channel=1, pump=4005, gpio=port_pump2, milliliter_per_second=pump2_milliliter_per_second),
 }
 
 log_format = "%(module)s:%(levelname)s:%(asctime)s:%(message)s"

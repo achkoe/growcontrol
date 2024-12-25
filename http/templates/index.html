@@ -48,16 +48,13 @@
     <div class="pumpcontainer">
             <p class="pumplabel">Pump {{ key }}</p>
             <div class="box" id="boxpump_{{key}}">
-            <p>State: <span id="pump_{{key}}">?</span></p>
+            <p>State:<br/> <span id="pump_{{key}}"><br/></span></p>
         </div>        
-        <div class="box" id="boxpump_{{key}}">
+        <div class="box" id="boxmoisture_{{key}}">
             <p>Soil moisture: <span id="moisture_{{key}}">?</span></p>
         </div>        
         <div class="column">
-            <button id="pump{{key}}_mode" class="auto">Auto</button>
-        </div>
-        <div class="column">
-            <button class="off" id="pump{{key}}OnOffToggle" disabled>Off</button>
+            <button class="off" id="pump{{key}}OnOffToggle">Off</button>
         </div>
     </div>
     {% endfor %}
