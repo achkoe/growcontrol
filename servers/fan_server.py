@@ -54,7 +54,7 @@ class Bridge():
         self.port_fan_exhaust_air = configuration.port_fan_exhaust_air
         GPIO.setup(configuration.port_fan_exhaust_air, GPIO.OUT)
         # switch fan for exhaust air on at start up
-        GPIO.output(self.port_fan_exhaust_air, GPIO.HIGH if self.fan_exhaust_air_is_on else GPIO.LOW)
+        GPIO.output(self.port_fan_exhaust_air, GPIO.LOW if self.fan_exhaust_air_is_on else GPIO.HIGH)
 
     def _execute(self):
         LOGGER.debug(f"state={self.state}")
@@ -83,7 +83,7 @@ class Bridge():
             self.fan_is_on = self.fan_on
         if self.fan_is_on != self.previous_fan_is_on:
             self.previous_fan_is_on = self.fan_is_on
-            GPIO.output(self.port_fan, GPIO.HIGH if self.fan_is_on else GPIO.LOW)
+            GPIO.output(self.port_fan, GPIO.LOW if self.fan_is_on else GPIO.HIGH)
         
         
         if self.heater_mode_manual is False:
@@ -97,7 +97,7 @@ class Bridge():
             self.heater_is_on = self.heater_on
         if self.heater_is_on != self.previous_heater_is_on:
             self.previous_heater_is_on = self.heater_is_on
-            GPIO.output(self.port_heater, GPIO.HIGH if self.heater_is_on else GPIO.LOW)
+            GPIO.output(self.port_heater, GPIO.LOW if self.heater_is_on else GPIO.HIGH)
         
 
     def identity(self):
@@ -123,7 +123,7 @@ class Bridge():
 
     def set_fan_exhaust_air(self, fan_exhaust_air_state):
         self.fan_exhaust_air_is_on = fan_exhaust_air_state.upper() == "ON"
-        GPIO.output(self.port_fan_exhaust_air, GPIO.HIGH if self.fan_exhaust_air_is_on else GPIO.LOW)
+        GPIO.output(self.port_fan_exhaust_air, GPIO.LOW if self.fan_exhaust_air_is_on else GPIO.HIGH)
         LOGGER.info(f"Fan Exhaust Air -> {self.fan_exhaust_air_is_on}")
         return "OK"
     

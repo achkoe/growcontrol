@@ -49,7 +49,7 @@ class Bridge:
         if waterlevel == 0:
             # permit the pump to fall dry
             self.pump_state = OFF
-            GPIO.output(self.pump_gpio, GPIO.LOW)
+            GPIO.output(self.pump_gpio, GPIO.HIGH)
             LOGGER.info(f"waterlevel is {waterlevel} -> pump {self.pump_state}")
             return
         
@@ -78,7 +78,7 @@ class Bridge:
                 self.last_time = current_time
                 LOGGER.info(f"pump {self.pump_state}")
         
-        GPIO.output(self.pump_gpio, GPIO.HIGH if self.pump_state is True else GPIO.LOW)
+        GPIO.output(self.pump_gpio, GPIO.LOW if self.pump_state is True else GPIO.HIGH)
                 
     def identity(self):
         return IDENTITY
