@@ -20,7 +20,7 @@ logfilename = "watchdog.log"
 logqueue = deque(maxlen=16)
 
 def start():
-    for key in [1, 2, 3, 4, 5]:
+    for key in [1, 2, 3, 4, 5, 6]:
         process = processes[key]
         print(" ".join(process["args"]))
         processes[key]["p"] = subprocess.Popen(process["args"], cwd=pathlib.Path(__file__).parent.joinpath(process["folder"]))

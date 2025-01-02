@@ -48,7 +48,7 @@ class Bridge():
                     f"light_on -> {self.light_on}")
         if self.light_on != self.previous_light_on:
             self.previous_light_on = self.light_on
-            GPIO.output(self.port_light, GPIO.LOW if self.light_on else GPIO.HIGH)
+            GPIO.output(self.port_light, GPIO.HIGH if self.light_on else GPIO.LOW)
         
     def identity(self):
         return IDENTITY

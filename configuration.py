@@ -41,8 +41,8 @@ log_format = "%(module)s:%(levelname)s:%(asctime)s:%(message)s"
 
 # FAN is ON if port 10 is LOW
 # FAN EXHAUST AIR is ON if port 25 is LOW
-# PUMP 1 is ON if port 17 is LOW
-# PUMP 2 is ON if port 9 is LOW
-# LIGHT is ON if port 15 is LOW
-# HEATER is ON if port 22 is LOW
-# RESERVED is ON if port 27 is LOW
+# PUMP 1 is ON if port 17 is HIGH
+# PUMP 2 is ON if port 9 is HIGH
+# LIGHT is ON if port 15 is HIGH
+# HEATER is ON if port 22 is HIGH
+# RESERVED is ON if port 27 is HIGH
