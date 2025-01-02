@@ -3,6 +3,7 @@ objControls.fanExhaustAir = null;
 objControls.cFan = null;
 objControls.cHeater = null;
 objControls.cLight = null;
+objControls.cHumidifier = null;
 objControls.oPump = {};
 
 objStatus = {};
@@ -95,6 +96,10 @@ class ConnectedButton extends Button {
     }
     
     updateFromServer(data) {
+        if (this.btnName == "humidifier") {
+            console.error("NOT IMPLEMENTED");
+            return;
+        }
         //console.log("updateFromServer ", this.btnName, data[this.btnName]);
         this.btnState.textContent = data[this.btnName] == "ON" ? "Off" : "On";  // think reverse because we are calling _toggle_on_off
         this._toggle_on_off();
@@ -121,7 +126,8 @@ document.addEventListener("DOMContentLoaded", function() {
     objControls.cFan = new ConnectedButton("fan"); 
     objControls.cHeater = new ConnectedButton("heater"); 
     objControls.cLight = new ConnectedButton("light");
-    
+    objControls.cHumidifier = new ConnectedButton("humidifier")
+
     for (let index = 1; index < 10; index++) {
         var pumpToggle = document.getElementById("boxpump_" + index);
         if (pumpToggle == null) break;
@@ -201,6 +207,10 @@ function receiceStatusFromServer() {
 
                 // update controls
                 for (const [key, value] of Object.entries(objControls)) {
+                    if (key == "humidifier") {
+                        console.error("NOT IMPLEMENTED");
+                        continue;
+                    }
                     if (key == "oPump") {
                         for (const [key_, value_] of Object.entries(value)) {
                             objStatus["boxpump_" + key_].innerText = data["pump"][key_]["state"];
