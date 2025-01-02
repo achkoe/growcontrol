@@ -33,7 +33,7 @@ port_reserved = 27
 
 pump_moisture_dict = {
     1: dict(channel=0, pump=4004, gpio=port_pump1, milliliter_per_second=pump1_milliliter_per_second),
- #   2: dict(channel=1, pump=4005, gpio=port_pump2, milliliter_per_second=pump2_milliliter_per_second),
+    2: dict(channel=1, pump=4005, gpio=port_pump2, milliliter_per_second=pump2_milliliter_per_second),
 }
 
 log_format = "%(module)s:%(levelname)s:%(asctime)s:%(message)s"

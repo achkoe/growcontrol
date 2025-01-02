@@ -12,7 +12,8 @@ processes = {
     2: dict(name="light_server", folder=".", args=['python', 'servers/light_server.py'], t=0), 
     3: dict(name="fan_server", folder=".", args=['python', 'servers/fan_server.py'], t=2), 
     4: dict(name="pump_server_1", folder=".", args=['python', 'servers/pump_server.py', '1'], t=0), 
-    5: dict(name="logdata_server", folder=".", args=['python', 'servers/logdata_server.py'], t=2), 
+    5: dict(name="pump_server_2", folder=".", args=['python', 'servers/pump_server.py', '2'], t=0), 
+    6: dict(name="logdata_server", folder=".", args=['python', 'servers/logdata_server.py'], t=2), 
 }
 
 logfilename = "watchdog.log"
@@ -67,7 +68,7 @@ def watch():
 if __name__ == "__main__":
     with pathlib.Path.cwd().joinpath(logfilename).open("w") as fh:
         # create log file
-        print("All is okay", file=fh)
+        print("Everything okay", file=fh)
     start()
     watch()
     
