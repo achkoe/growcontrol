@@ -38,7 +38,7 @@ class Bridge:
         self.pump_state = OFF
         self.pump_request_on = False
         self.milliliter_per_second = milliliter_per_second
-        self.pump_on_time = self.settings["pump_amount"] / self.milliliter_per_second
+        self.pump_on_time = float(self.settings["pump_amount"]) / float(self.milliliter_per_second)
         LOGGER.info(f"pump on time -> {self.pump_on_time}")
         self.last_time = None
         self.start_time = None
@@ -49,7 +49,7 @@ class Bridge:
         if waterlevel == 0:
             # permit the pump to fall dry
             self.pump_state = OFF
-            GPIO.output(self.pump_gpio, GPIO.HIGH)
+            GPIO.output(self.pump_gpio, GPIO.LOW)
             LOGGER.info(f"waterlevel is {waterlevel} -> pump {self.pump_state}")
             return
         
@@ -63,7 +63,7 @@ class Bridge:
                 self.last_time = time.time()
             else:
                 current_time = time.time()
-                if (self.last_time is None) or (current_time - self.last_time > self.settings["pump_check_interval"] * 60 * 60):
+                if (self.last_time is None) or (current_time - self.last_time > float(self.settings["pump_check_interval"]) * 60 * 60):
                 # if (self.last_time is None) or (current_time - self.last_time > self.settings["pump_check_interval"]):
                     self.last_time = current_time
                     moisture = float(self.sensor_proxy.moisture(self.moisture_channel))
@@ -78,7 +78,7 @@ class Bridge:
                 self.last_time = current_time
                 LOGGER.info(f"pump {self.pump_state}")
         
-        GPIO.output(self.pump_gpio, GPIO.LOW if self.pump_state is True else GPIO.HIGH)
+        GPIO.output(self.pump_gpio, GPIO.HIGH if self.pump_state is True else GPIO.LOW)
                 
     def identity(self):
         return IDENTITY
@@ -97,7 +97,7 @@ class Bridge:
     def reload(self):
         self.settings = load_settings()
         LOGGER.setLevel(get_loglevel("PUMP_SERVER_LOGLEVEL"))
-        self.pump_on_time = self.settings["pump_amount"] / self.milliliter_per_second
+        self.pump_on_time = float(self.settings["pump_amount"]) / float(self.milliliter_per_second)
         return "OK"
 
 

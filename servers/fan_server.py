@@ -97,7 +97,7 @@ class Bridge():
             self.heater_is_on = self.heater_on
         if self.heater_is_on != self.previous_heater_is_on:
             self.previous_heater_is_on = self.heater_is_on
-            GPIO.output(self.port_heater, GPIO.LOW if self.heater_is_on else GPIO.HIGH)
+            GPIO.output(self.port_heater, GPIO.HIGH if self.heater_is_on else GPIO.LOW)
         
 
     def identity(self):

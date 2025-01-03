@@ -28,12 +28,12 @@ port_fan = 10
 port_light = 15 
 # GPIO for heater
 port_heater = 22
-# GPIO reserved
-port_reserved = 27
+# GPIO humidifier
+port_humidifier = 27
 
 pump_moisture_dict = {
     1: dict(channel=0, pump=4004, gpio=port_pump1, milliliter_per_second=pump1_milliliter_per_second),
- #   2: dict(channel=1, pump=4005, gpio=port_pump2, milliliter_per_second=pump2_milliliter_per_second),
+    2: dict(channel=1, pump=4005, gpio=port_pump2, milliliter_per_second=pump2_milliliter_per_second),
 }
 
 log_format = "%(module)s:%(levelname)s:%(asctime)s:%(message)s"
@@ -41,8 +41,8 @@ log_format = "%(module)s:%(levelname)s:%(asctime)s:%(message)s"
 
 # FAN is ON if port 10 is LOW
 # FAN EXHAUST AIR is ON if port 25 is LOW
-# PUMP 1 is ON if port 17 is LOW
-# PUMP 2 is ON if port 9 is LOW
-# LIGHT is ON if port 15 is LOW
-# HEATER is ON if port 22 is LOW
-# RESERVED is ON if port 27 is LOW
+# PUMP 1 is ON if port 17 is HIGH
+# PUMP 2 is ON if port 9 is HIGH
+# LIGHT is ON if port 15 is HIGH
+# HEATER is ON if port 22 is HIGH
+# RESERVED is ON if port 27 is HIGH
