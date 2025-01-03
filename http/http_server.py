@@ -41,6 +41,8 @@ def udpate():
     humidity = sensors_proxy.humidity()
     temperature = sensors_proxy.temperature()
     waterlevel = sensors_proxy.waterlevel()
+    humidifier = "ON"
+    humidifier_mode = "Auto"
     fan = fan_proxy.get_fan()
     fan_mode = fan_proxy.get_fan_mode()
     heater = fan_proxy.get_heater()
@@ -63,7 +65,9 @@ def udpate():
         "waterlevel": waterlevel,
         "fanExhaustAir": fan_exhaust_air,
         "heater": heater,
-        "heater_mode": heater_mode
+        "heater_mode": heater_mode,
+        "humidifier": humidifier,
+        "humidifier_mode": humidifier_mode
     }
     reply.update(light)
     reply.update(settings)

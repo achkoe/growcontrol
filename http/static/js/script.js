@@ -96,11 +96,8 @@ class ConnectedButton extends Button {
     }
     
     updateFromServer(data) {
-        if (this.btnName == "humidifier") {
-            console.error("NOT IMPLEMENTED");
-            return;
-        }
-        //console.log("updateFromServer ", this.btnName, data[this.btnName]);
+        //console.log(data);
+        // console.log("updateFromServer ", this.btnName, data[this.btnName]);
         this.btnState.textContent = data[this.btnName] == "ON" ? "Off" : "On";  // think reverse because we are calling _toggle_on_off
         this._toggle_on_off();
         this.btnControl.textContent = data[this.btnName + "_mode"] == "Auto" ? "Manual" : "Auto";
@@ -139,12 +136,11 @@ document.addEventListener("DOMContentLoaded", function() {
         objStatus["moisture_" + index] = document.getElementById("moisture_" + index)
     }
     
-    ["humidity", "temperature", "waterlevel", "boxwaterlevel", "boxtemperature", "boxhumidity", "time", "fan", "heater", "light"].forEach(function(field) {
+    ["humidity", "temperature", "waterlevel", "boxwaterlevel", "boxtemperature", "boxhumidity", "time", "fan", "heater", "light", "humidifier"].forEach(function(field) {
         objStatus[field] = document.getElementById(field);
     });
     // console.log(objStatus);
     receiceStatusFromServer();
-
 });
 
 
@@ -207,10 +203,6 @@ function receiceStatusFromServer() {
 
                 // update controls
                 for (const [key, value] of Object.entries(objControls)) {
-                    if (key == "humidifier") {
-                        console.error("NOT IMPLEMENTED");
-                        continue;
-                    }
                     if (key == "oPump") {
                         for (const [key_, value_] of Object.entries(value)) {
                             objStatus["boxpump_" + key_].innerText = data["pump"][key_]["state"];
