@@ -55,11 +55,23 @@ class Bridge():
         GPIO.setup(configuration.port_fan_exhaust_air, GPIO.OUT)
         # switch fan for exhaust air on at start up
         GPIO.output(self.port_fan_exhaust_air, GPIO.LOW if self.fan_exhaust_air_is_on else GPIO.HIGH)
+        
+        # humidifier should go on if humidity is below humidity_low_level or if requested
+        # but maximum of humidifier_minutes_in_hour
+        self.humidifier_is_on = False
+        self.humidifier_on = False
+        self.humidifier_last_time = None
+        self.humidifier_start_time = None
+        self.humidifier_mode_manual = False
+        self.port_humidifier = configuration.port_humidifier
+        GPIO.setup(configuration.port_humidifier, GPIO.OUT)
+
 
     def _execute(self):
         LOGGER.debug(f"state={self.state}")
         temperature = float(self.sensors_proxy.temperature())
-
+        humidity = float(self.sensors_proxy.humidity())
+        
         def ts(time_struct): return time_struct.tm_min
 
         if self.fan_mode_manual is False:
@@ -139,6 +151,18 @@ class Bridge():
         self.heater_on = heater_state.upper() == "ON"
         return "OK"
         
+    def get_humidifier(self):
+        return "ON" if self.humidifier_is_on else "OFF"
+    
+    def get_humidifier_mode(self):
+        return "Manual" if self.humidifier_mode_manual else "Auto"
+    
+    def set_humidifier(self, mode, humidifier_state):
+        print(f"Brigde-set {mode} {humidifier_state}")
+        self.humidifier_mode_manual = mode == "Manual"
+        self.humidifier_on = humidifier_state.upper() == "ON"
+        return "OK"
+    
     def reload(self):
         self.settings = load_settings()
         LOGGER.setLevel(get_loglevel("FAN_SERVER_LOGLEVEL"))

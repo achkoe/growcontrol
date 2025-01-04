@@ -41,8 +41,8 @@ def udpate():
     humidity = sensors_proxy.humidity()
     temperature = sensors_proxy.temperature()
     waterlevel = sensors_proxy.waterlevel()
-    humidifier = "ON"
-    humidifier_mode = "Auto"
+    humidifier = fan_proxy.get_humidifier()
+    humidifier_mode = fan_proxy.get_humidifier_mode()
     fan = fan_proxy.get_fan()
     fan_mode = fan_proxy.get_fan_mode()
     heater = fan_proxy.get_heater()
@@ -113,6 +113,17 @@ def toggle_heater():
     return {"status": reply}
 
 
+@ app.route("/toggleHumidifier", methods=("POST", ))
+def toggle_humidifier():
+    print("toggleHumidifier: ", request.get_json())
+    # {'humidifier': 'Manual', 'humidifierOnOff': 'Off'}
+    humidifier_mode = request.get_json()["humidifier_mode"]  # either 'Manual' or 'Auto'
+    humidifier_state = request.get_json()["humidifierOnOff"]
+    reply = fan_proxy.set_humidifier(humidifier_mode, humidifier_state)
+    print(f"reply -> {reply}")
+    return {"status": reply}
+
+
 @ app.route("/toggleFanExhaustAir", methods=("POST", ))
 def toggle_fan_exhaust_air():
     print(request.get_json())
@@ -157,6 +168,7 @@ def logdata():
     except Exception:
         print("logdata issue")
         return dict(tth=[], m={})
+    
 
 @app.route("/watchdog", methods=("GET", ))
 def watchdog():

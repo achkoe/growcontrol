@@ -85,6 +85,13 @@
         "min": 0,
         "max": 100
     },
+    "humidifier_minutes_in_hour": {
+        "value": "10",
+        "title": "Humidifier Minutes in Hour",
+        "type": "number",
+        "min": 0,
+        "max": 60
+    },
     "fan_minutes_in_hour": {
         "value": "45",
         "title": "Fan Minutes in Hour",
