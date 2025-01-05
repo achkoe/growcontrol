@@ -113,6 +113,7 @@ class Bridge():
             self.heater_is_on = self.heater_on
         if self.heater_is_on != self.previous_heater_is_on:
             self.previous_heater_is_on = self.heater_is_on
+            LOGGER.critical(f"heater_is_on -> {self.heater_is_on}")
             GPIO.output(self.port_heater, GPIO.HIGH if self.heater_is_on else GPIO.LOW)
             
         # humidifier
