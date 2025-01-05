@@ -28,8 +28,8 @@ port_fan = 10
 port_light = 15 
 # GPIO for heater
 port_heater = 22
-# GPIO reserved
-port_reserved = 27
+# GPIO humidifier
+port_humidifier = 27
 
 pump_moisture_dict = {
     1: dict(channel=0, pump=4004, gpio=port_pump1, milliliter_per_second=pump1_milliliter_per_second),

@@ -3,6 +3,7 @@ objControls.fanExhaustAir = null;
 objControls.cFan = null;
 objControls.cHeater = null;
 objControls.cLight = null;
+objControls.cHumidifier = null;
 objControls.oPump = {};
 
 objStatus = {};
@@ -95,7 +96,8 @@ class ConnectedButton extends Button {
     }
     
     updateFromServer(data) {
-        //console.log("updateFromServer ", this.btnName, data[this.btnName]);
+        //console.log(data);
+        // console.log("updateFromServer ", this.btnName, data[this.btnName]);
         this.btnState.textContent = data[this.btnName] == "ON" ? "Off" : "On";  // think reverse because we are calling _toggle_on_off
         this._toggle_on_off();
         this.btnControl.textContent = data[this.btnName + "_mode"] == "Auto" ? "Manual" : "Auto";
@@ -121,7 +123,8 @@ document.addEventListener("DOMContentLoaded", function() {
     objControls.cFan = new ConnectedButton("fan"); 
     objControls.cHeater = new ConnectedButton("heater"); 
     objControls.cLight = new ConnectedButton("light");
-    
+    objControls.cHumidifier = new ConnectedButton("humidifier")
+
     for (let index = 1; index < 10; index++) {
         var pumpToggle = document.getElementById("boxpump_" + index);
         if (pumpToggle == null) break;
@@ -133,12 +136,11 @@ document.addEventListener("DOMContentLoaded", function() {
         objStatus["moisture_" + index] = document.getElementById("moisture_" + index)
     }
     
-    ["humidity", "temperature", "waterlevel", "boxwaterlevel", "boxtemperature", "boxhumidity", "time", "fan", "heater", "light"].forEach(function(field) {
+    ["humidity", "temperature", "waterlevel", "boxwaterlevel", "boxtemperature", "boxhumidity", "time", "fan", "heater", "light", "humidifier"].forEach(function(field) {
         objStatus[field] = document.getElementById(field);
     });
     // console.log(objStatus);
     receiceStatusFromServer();
-
 });
 
 

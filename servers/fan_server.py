@@ -5,6 +5,7 @@ import logging
 import os
 import pathlib
 import time
+import datetime
 import xmlrpc.client
 from dotenv import dotenv_values
 from xmlrpc.server import SimpleXMLRPCServer
@@ -55,13 +56,28 @@ class Bridge():
         GPIO.setup(configuration.port_fan_exhaust_air, GPIO.OUT)
         # switch fan for exhaust air on at start up
         GPIO.output(self.port_fan_exhaust_air, GPIO.LOW if self.fan_exhaust_air_is_on else GPIO.HIGH)
+        
+        # humidifier should go on if humidity is below humidity_low_level or if requested
+        # but maximum of humidifier_minutes_in_hour
+        self.humidifier_is_on = False
+        self.humidifier_on = False
+        self.previous_humidifier_is_on = not self.humidifier_is_on
+        self.humidifier_time_on = None
+        self.humidifier_last_time = None
+        self.humidifier_start_time = None
+        self.humidifier_mode_manual = False
+        self.port_humidifier = configuration.port_humidifier
+        GPIO.setup(configuration.port_humidifier, GPIO.OUT)
+
 
     def _execute(self):
         LOGGER.debug(f"state={self.state}")
         temperature = float(self.sensors_proxy.temperature())
-
+        humidity = float(self.sensors_proxy.humidity())
+        
         def ts(time_struct): return time_struct.tm_min
 
+        # fan
         if self.fan_mode_manual is False:
             time_struct = time.localtime()
             # LOGGER.critical(f"state -> {self.state}, tm_min -> {time_struct.tm_sec}, START_AT_MINUTE -> {START_AT_MINUTE}")
@@ -85,7 +101,7 @@ class Bridge():
             self.previous_fan_is_on = self.fan_is_on
             GPIO.output(self.port_fan, GPIO.LOW if self.fan_is_on else GPIO.HIGH)
         
-        
+        # heater
         if self.heater_mode_manual is False:
             if temperature < float(self.settings["temperature_low_level"]):
                 self.heater_is_on = True
@@ -97,8 +113,37 @@ class Bridge():
             self.heater_is_on = self.heater_on
         if self.heater_is_on != self.previous_heater_is_on:
             self.previous_heater_is_on = self.heater_is_on
+            LOGGER.critical(f"heater_is_on -> {self.heater_is_on}")
             GPIO.output(self.port_heater, GPIO.HIGH if self.heater_is_on else GPIO.LOW)
-        
+            
+        # humidifier
+        if self.humidifier_mode_manual is False:
+            now = datetime.datetime.now()
+            humidity = 0
+            if (humidity < float(self.settings["humidity_low_level"])) and (self.humidifier_start_time is None or (now - self.humidifier_start_time).total_seconds() >= 60 * 60):
+                LOGGER.info("humidifier -> ON")
+                self.humidifier_start_time = now
+                self.humidifier_last_time = now
+                self.humidifier_time_on = float(self.settings["humidifier_minutes_in_hour"])
+                self.humidifier_is_on = True
+                GPIO.output(self.port_humidifier, GPIO.HIGH)
+                
+            if self.humidifier_is_on and ((now - self.humidifier_last_time).total_seconds() >= 60):
+                # decrement self.humidifier_time_on every minute
+                self.humidifier_last_time = now
+                self.humidifier_time_on = self.humidifier_time_on - 1
+                LOGGER.info(f"humidifier_time_on -> {self.humidifier_time_on}")
+                if self.humidifier_time_on <= 0:
+                    LOGGER.info("humidifier -> OFF")
+                    self.humidifier_is_on = False
+                    GPIO.output(self.port_humidifier, GPIO.LOW)
+        else:
+            self.humidifier_is_on = self.humidifier_on
+            self.humidifier_start_time = None
+        if self.humidifier_is_on != self.previous_humidifier_is_on:
+            self.previous_humidifier_is_on = self.humidifier_is_on
+            LOGGER.info(f"humidifier_is_on -> {self.humidifier_is_on}")
+            GPIO.output(self.port_humidifier, GPIO.HIGH if self.humidifier_is_on else GPIO.LOW)        
 
     def identity(self):
         return IDENTITY
@@ -139,6 +184,18 @@ class Bridge():
         self.heater_on = heater_state.upper() == "ON"
         return "OK"
         
+    def get_humidifier(self):
+        return "ON" if self.humidifier_is_on else "OFF"
+    
+    def get_humidifier_mode(self):
+        return "Manual" if self.humidifier_mode_manual else "Auto"
+    
+    def set_humidifier(self, mode, humidifier_state):
+        print(f"Brigde-set {mode} {humidifier_state}")
+        self.humidifier_mode_manual = mode == "Manual"
+        self.humidifier_on = humidifier_state.upper() == "ON"
+        return "OK"
+    
     def reload(self):
         self.settings = load_settings()
         LOGGER.setLevel(get_loglevel("FAN_SERVER_LOGLEVEL"))
