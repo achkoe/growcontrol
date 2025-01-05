@@ -5,6 +5,7 @@ import logging
 import os
 import pathlib
 import time
+import datetime
 import xmlrpc.client
 from dotenv import dotenv_values
 from xmlrpc.server import SimpleXMLRPCServer
@@ -60,6 +61,8 @@ class Bridge():
         # but maximum of humidifier_minutes_in_hour
         self.humidifier_is_on = False
         self.humidifier_on = False
+        self.previous_humidifier_is_on = not self.humidifier_is_on
+        self.humidifier_time_on = None
         self.humidifier_last_time = None
         self.humidifier_start_time = None
         self.humidifier_mode_manual = False
@@ -74,6 +77,7 @@ class Bridge():
         
         def ts(time_struct): return time_struct.tm_min
 
+        # fan
         if self.fan_mode_manual is False:
             time_struct = time.localtime()
             # LOGGER.critical(f"state -> {self.state}, tm_min -> {time_struct.tm_sec}, START_AT_MINUTE -> {START_AT_MINUTE}")
@@ -97,7 +101,7 @@ class Bridge():
             self.previous_fan_is_on = self.fan_is_on
             GPIO.output(self.port_fan, GPIO.LOW if self.fan_is_on else GPIO.HIGH)
         
-        
+        # heater
         if self.heater_mode_manual is False:
             if temperature < float(self.settings["temperature_low_level"]):
                 self.heater_is_on = True
@@ -110,7 +114,35 @@ class Bridge():
         if self.heater_is_on != self.previous_heater_is_on:
             self.previous_heater_is_on = self.heater_is_on
             GPIO.output(self.port_heater, GPIO.HIGH if self.heater_is_on else GPIO.LOW)
-        
+            
+        # humidifier
+        if self.humidifier_mode_manual is False:
+            now = datetime.datetime.now()
+            humidity = 0
+            if (humidity < float(self.settings["humidity_low_level"])) and (self.humidifier_start_time is None or (now - self.humidifier_start_time).total_seconds() >= 60 * 60):
+                LOGGER.warning("humidifier -> ON")
+                self.humidifier_start_time = now
+                self.humidifier_last_time = now
+                self.humidifier_time_on = float(self.settings["humidifier_minutes_in_hour"])
+                self.humidifier_is_on = True
+                GPIO.output(self.port_humidifier, GPIO.HIGH)
+                
+            if self.humidifier_is_on and ((now - self.humidifier_last_time).total_seconds() >= 60):
+                # decrement self.humidifier_time_on every minute
+                self.humidifier_last_time = now
+                self.humidifier_time_on = self.humidifier_time_on - 1
+                LOGGER.warning(f"humidifier_time_on -> {self.humidifier_time_on}")
+                if self.humidifier_time_on <= 0:
+                    LOGGER.warning("humidifier -> OFF")
+                    self.humidifier_is_on = False
+                    GPIO.output(self.port_humidifier, GPIO.LOW)
+        else:
+            self.humidifier_is_on = self.humidifier_on
+            self.humidifier_start_time = None
+        if self.humidifier_is_on != self.previous_humidifier_is_on:
+            self.previous_humidifier_is_on = self.humidifier_is_on
+            LOGGER.warning(f"humidifier_is_on -> {self.humidifier_is_on}")
+            GPIO.output(self.port_humidifier, GPIO.HIGH if self.humidifier_is_on else GPIO.LOW)        
 
     def identity(self):
         return IDENTITY
