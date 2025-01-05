@@ -17,14 +17,14 @@
         "max": 100
     },
     "pump_amount": {
-        "value": 200,
+        "value": "200",
         "title": "Pump water amount (ml)",
         "type": "number",
         "min": 50,
         "max": 5000
     },
     "pump_check_interval": {
-        "value": 16,
+        "value": "16",
         "title": "Moisture check interval (h)",
         "min": 1,
         "max": 72
@@ -37,7 +37,7 @@
         "max": 100
     },
     "temperature_low_level": {
-        "value": "20",
+        "value": "21",
         "title": "Temperature Low Level",
         "type": "number",
         "min": 0,
