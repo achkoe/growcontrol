@@ -121,7 +121,7 @@ class Bridge():
             now = datetime.datetime.now()
             humidity = 0
             if (humidity < float(self.settings["humidity_low_level"])) and (self.humidifier_start_time is None or (now - self.humidifier_start_time).total_seconds() >= 60 * 60):
-                LOGGER.warning("humidifier -> ON")
+                LOGGER.info("humidifier -> ON")
                 self.humidifier_start_time = now
                 self.humidifier_last_time = now
                 self.humidifier_time_on = float(self.settings["humidifier_minutes_in_hour"])
@@ -132,9 +132,9 @@ class Bridge():
                 # decrement self.humidifier_time_on every minute
                 self.humidifier_last_time = now
                 self.humidifier_time_on = self.humidifier_time_on - 1
-                LOGGER.warning(f"humidifier_time_on -> {self.humidifier_time_on}")
+                LOGGER.info(f"humidifier_time_on -> {self.humidifier_time_on}")
                 if self.humidifier_time_on <= 0:
-                    LOGGER.warning("humidifier -> OFF")
+                    LOGGER.info("humidifier -> OFF")
                     self.humidifier_is_on = False
                     GPIO.output(self.port_humidifier, GPIO.LOW)
         else:
@@ -142,7 +142,7 @@ class Bridge():
             self.humidifier_start_time = None
         if self.humidifier_is_on != self.previous_humidifier_is_on:
             self.previous_humidifier_is_on = self.humidifier_is_on
-            LOGGER.warning(f"humidifier_is_on -> {self.humidifier_is_on}")
+            LOGGER.info(f"humidifier_is_on -> {self.humidifier_is_on}")
             GPIO.output(self.port_humidifier, GPIO.HIGH if self.humidifier_is_on else GPIO.LOW)        
 
     def identity(self):
