@@ -7,9 +7,12 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("time", type=int)
     args = parser.parse_args()
-    
-    GPIO.setup(configuration.port_pump1, GPIO.OUT)
-    GPIO.output(configuration.port_pump1, GPIO.HIGH)
+
+    port = configuration.port_fan
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(port, GPIO.OUT)
+    GPIO.output(port, GPIO.LOW)
     time.sleep(args.time)
-    GPIO.output(configuration.port_pump1, GPIO.LOW)
-    
+    GPIO.output(port, GPIO.HIGH)
+
+# 400ml pro Pumpe in 30 Sekunden
