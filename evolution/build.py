@@ -1,8 +1,11 @@
+from tkinter.filedialog import Directory
 import webbrowser
 import pathlib
 import subprocess
 import datetime
 import json
+import argparse
+import os
 
 
 TEMPLATE = """
@@ -33,8 +36,12 @@ FIGURETEMPLATE = """
 """
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("directory", choices=["01", "02"])
+    args = parser.parse_args()
+    os.chdir(pathlib.Path(__file__).parent.joinpath(args.directory))
     # read all IMG*.jpg in folder images
-    infilelist = sorted(pathlib.Path(__file__).parent.joinpath("images").glob("IMG*.jpg"), reverse=True)
+    infilelist = sorted(pathlib.Path.cwd().joinpath("images").glob("IMG*.jpg"), reverse=True)
     outfiledict = dict()
     for infilename in infilelist:
         # extract date and time from image name
@@ -101,6 +108,6 @@ if __name__ == "__main__":
     # generate html code
     with open("evolution.html", "w") as fh:
          print(TEMPLATE.format(figures="\n".join(figurelist)), file=fh)
-    print(f"written file {fh.name}")
+    print(f"written file {str(pathlib.Path.cwd().joinpath(fh.name))}")
 
-    webbrowser.open("evolution.html")
+    webbrowser.open(str(pathlib.Path.cwd().joinpath("evolution.html")))
