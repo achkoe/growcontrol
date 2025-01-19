@@ -39,22 +39,25 @@ class Bridge():
         self.previous_time = -1
         self.previous_fan = -1
         self.previous_heater = -1
+        self.previous_humidifier = -1
 
     def _execute(self):
         interval = 60
         currenttime = time.time()
         fan = 1 if self.fan_proxy.get_fan() == "ON" else 0
         heater = 1 if self.fan_proxy.get_heater() == "ON" else 0
+        humidifier = 1 if self.fan_proxy.get_humidifier() == "ON" else 0
         temperature = float(self.sensors_proxy.temperature())
         humidity = float(self.sensors_proxy.humidity())
 
-        if (fan != self.previous_fan) or (heater != self.previous_heater) or (currenttime - self.previous_time > interval):
+        if (fan != self.previous_fan) or (heater != self.previous_heater) or (humidifier != self.previous_humidifier) or (currenttime - self.previous_time > interval):
             # take atmost one sample in 60 seconds
             self.output_queue.append(
-                (currenttime, temperature, humidity, fan, heater))
+                (currenttime, temperature, humidity, fan, heater, humidifier))
             # ic(self.output_queue)
             self.previous_fan = fan
             self.previous_heater = heater
+            self.previous_humidifier = humidifier
 
         for key in self.pump_proxy_dict:
             pump = 1 if self.pump_proxy_dict[key]["proxy"].get() == "ON" else 0
@@ -73,7 +76,7 @@ class Bridge():
 
     def get(self):
         # returns two items:
-        # 1st is list with tuples (time, temparature, humidity, fan)
+        # 1st is list with tuples (time, temperature, humidity, fan, heater, humidifier)
         # 2nd is dict with keys <pump> and tuples (time, moisture, pump)
         return list(self.output_queue), dict([(str(key), list(self.pump_proxy_dict[key]["moisture"])) for key in self.pump_proxy_dict])
 

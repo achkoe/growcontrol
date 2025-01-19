@@ -1,0 +1,2 @@
+pkill --signal SIGKILL flask
+pkill python

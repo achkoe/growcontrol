@@ -1,0 +1,19 @@
+#! /usr/bin/bash
+# this script should be sourced
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+_PATH=$SCRIPT_DIR/../..
+export PYTHONPATH=${_PATH}:${_PATH}/mock
+python ${_PATH}/servers/sensors_server.py &
+python ${_PATH}/servers/light_server.py &
+sleep 2
+python ${_PATH}/servers/pump_server.py 1 &
+python ${_PATH}/servers/fan_server.py &
+python ${_PATH}/servers/logdata_server.py &
+python ${_PATH}/test/mock_server.py &
+pushd ${_PATH}/http 
+flask --app http_server run --host 0.0.0.0 & 
+popd
+sleep 2
+echo done 
+echo "to kill:"
+echo "$_PATH/test/terminate"

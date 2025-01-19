@@ -1,11 +1,11 @@
 {
     "light_on_time": {
-        "value": "14:21",
+        "value": "16:50",
         "title": "Light On Time",
         "type": "time"
     },
     "light_off_time": {
-        "value": "14:20",
+        "value": "16:49",
         "title": "Light Off Time",
         "type": "time"
     },
@@ -16,19 +16,18 @@
         "min": 0,
         "max": 100
     },
-    "moisture_ok_level": {
-        "value": "70",
-        "title": "Moisture OK Level",
+    "pump_amount": {
+        "value": "200",
+        "title": "Pump water amount (ml)",
         "type": "number",
-        "min": 0,
-        "max": 100
+        "min": 50,
+        "max": 5000
     },
-    "moisture_low_critical_level": {
-        "value": "10",
-        "title": "Moisture Low Critical Level",
-        "type": "number",
-        "min": 0,
-        "max": 100
+    "pump_check_interval": {
+        "value": "16",
+        "title": "Moisture check interval (h)",
+        "min": 1,
+        "max": 72
     },
     "temperature_high_level": {
         "value": "24",
@@ -38,7 +37,7 @@
         "max": 100
     },
     "temperature_low_level": {
-        "value": "20",
+        "value": "21",
         "title": "Temperature Low Level",
         "type": "number",
         "min": 0,
@@ -86,6 +85,13 @@
         "min": 0,
         "max": 100
     },
+    "humidifier_minutes_in_hour": {
+        "value": "10",
+        "title": "Humidifier Minutes in Hour",
+        "type": "number",
+        "min": 0,
+        "max": 60
+    },
     "fan_minutes_in_hour": {
         "value": "45",
         "title": "Fan Minutes in Hour",
@@ -94,14 +100,14 @@
         "max": 60
     },
     "light_on_time_i": {
-        "value": 51660,
+        "value": 60600,
         "title": null,
         "type": "number",
         "min": 0,
         "max": 100
     },
     "light_off_time_i": {
-        "value": 51600,
+        "value": 60540,
         "title": null,
         "type": "number",
         "min": 0,

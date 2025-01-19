@@ -1,7 +1,151 @@
+objControls = {};
+objControls.fanExhaustAir = null;
+objControls.cFan = null;
+objControls.cHeater = null;
+objControls.cLight = null;
+objControls.cHumidifier = null;
+objControls.oPump = {};
 
-function callServerEveryTwoSeconds() {
+objStatus = {};
+index_high = null;
+
+
+function sendState(url, state) {
+    console.log("sendState ", url, state);
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(state),
+    }).then(response => {
+        if (!response.ok) {
+            console.error('Error sending state to server');
+        }
+    }).catch(error => {
+        console.error('Error sending state to server:', error);
+    });
+}
+
+class Button {
+    constructor(btnName) {
+        this.btnName = btnName;
+        this.updateStatusUrl = "/toggle" + btnName[0].toUpperCase() + btnName.slice(1);
+        this.state = {};
+        this.state[this.btnName + "OnOff"] = "Off";
+        this.btnState = document.getElementById(btnName + "OnOffToggle")
+        this.btnState.addEventListener("click", this.toggle_on_off.bind(this));
+    }
+    
+    _toggle_on_off() {
+        if (this.btnState.textContent == 'Off') {
+            this.btnState.textContent = 'On';
+            this.btnState.classList.remove('off');
+            this.btnState.classList.add('on');
+            this.state[this.btnName + "OnOff"] = "On";
+        } else {
+            this.btnState.textContent = 'Off';
+            this.btnState.classList.remove('on');
+            this.btnState.classList.add('off');
+            this.state[this.btnName + "OnOff"] = "Off";
+        }
+    }
+    toggle_on_off() {
+        this._toggle_on_off();
+        this.sendStatusToServer();
+    }
+    
+    sendStatusToServer() {
+        sendState(this.updateStatusUrl, this.state);
+    }
+    
+    updateFromServer(data) {
+        // console.log("updateFromServer ", this.btnName, data[this.btnName]);
+        this.btnState.textContent = data[this.btnName] == "ON" ? "Off" : "On";  // think reverse because we are calling _toggle_on_off
+        this._toggle_on_off();
+    }
+}
+
+class ConnectedButton extends Button {
+    constructor(btnName) {
+        super(btnName);
+        this.btnControl = document.getElementById(btnName + "_mode");
+        this.state[this.btnName + "_mode"] = "Auto";
+        this.btnControl.addEventListener("click", this.toggle_auto_manual.bind(this));
+    }
+    
+    _toggle_auto_manual() {
+        if (this.btnControl.textContent === 'Auto' ) {
+            this.btnControl.textContent = 'Manual';
+            this.btnControl.classList.remove('auto');
+            this.btnControl.classList.add('manual');
+            this.btnState.disabled = false;
+            this.state[this.btnName + "_mode"] = "Manual";
+        } else {
+            this.btnControl.textContent = 'Auto' ;
+            this.btnControl.classList.remove('manual');
+            this.btnControl.classList.add('auto');
+            this.btnState.disabled = true;
+            this.state[this.btnName + "_mode"] = "Auto";
+        }
+    }
+    
+    toggle_auto_manual() {
+        this._toggle_auto_manual();
+        this.sendStatusToServer();
+    }
+    
+    updateFromServer(data) {
+        //console.log(data);
+        // console.log("updateFromServer ", this.btnName, data[this.btnName]);
+        this.btnState.textContent = data[this.btnName] == "ON" ? "Off" : "On";  // think reverse because we are calling _toggle_on_off
+        this._toggle_on_off();
+        this.btnControl.textContent = data[this.btnName + "_mode"] == "Auto" ? "Manual" : "Auto";
+        this._toggle_auto_manual();
+        objStatus[this.btnName].innerText = data[this.btnName] == "ON" ? "On" : "Off";
+    }
+}
+
+
+class PumpButton extends Button {
+    updateFromServer(data) {
+        let index = this.btnName.substr(-1);
+        console.log("updateFromServer ", this.btnName, data["pump"][index]["on"]);
+        this.btnState.textContent = data["pump"][index]["on"] == "ON" ? "Off" : "On";  // think reverse because we are calling _toggle_on_off
+        this._toggle_on_off();
+    }
+}
+
+
+document.addEventListener("DOMContentLoaded", function() {
+    
+    objControls.fanExhaustAir = new Button("fanExhaustAir");
+    objControls.cFan = new ConnectedButton("fan"); 
+    objControls.cHeater = new ConnectedButton("heater"); 
+    objControls.cLight = new ConnectedButton("light");
+    objControls.cHumidifier = new ConnectedButton("humidifier")
+
+    for (let index = 1; index < 10; index++) {
+        var pumpToggle = document.getElementById("boxpump_" + index);
+        if (pumpToggle == null) break;
+        index_high = index;
+        objControls.oPump[index] = new PumpButton("pump" + index);
+        objStatus["boxmoisture_" + index] = document.getElementById("boxmoisture_" + index)
+        objStatus["boxpump_" + index] = document.getElementById("pump_" + index);
+        objStatus["pump" + index] = document.getElementById("pump_" + index)
+        objStatus["moisture_" + index] = document.getElementById("moisture_" + index)
+    }
+    
+    ["humidity", "temperature", "waterlevel", "boxwaterlevel", "boxtemperature", "boxhumidity", "time", "fan", "heater", "light", "humidifier"].forEach(function(field) {
+        objStatus[field] = document.getElementById(field);
+    });
+    // console.log(objStatus);
+    receiceStatusFromServer();
+});
+
+
+function receiceStatusFromServer() {
     const urlUpdate = `/update`;
-
 
     function makeHttpRequest() {
         fetch(urlUpdate)
@@ -12,99 +156,63 @@ function callServerEveryTwoSeconds() {
                 return response.json();  // Change to response.json() if expecting JSON
             })
             .then(data => {
-                // console.log('Success:', data);
-                // console.log('data:', data);
-                console.log('heater: ' + data["heater"] + ', heater_mode: ' + data["heater_mode"]);
-                var e;
-                // show the current data for fields
-                ["fan", "fan_mode", "light_state", "time", "light_mode", "heater", "heater_mode"].forEach(function(field) {
-                    e = document.getElementById(field);
-                    e.innerText = data[field];
-                });
-                
-                [["fan_mode", ["fanOnOffToggle"]], ["heater_mode", ["heaterOnOffToggle"]], ["light_mode", ["lightToggle"]]].forEach(function(fields) {
-                    e = document.getElementById(fields[0]);
-                    if (data[fields[0]] == "Manual") {
-                        e.classList.remove('auto');
-                        e.classList.add('manual');
-                        fields[1].forEach(function(field) {
-                            e = document.getElementById(field);
-                            e.disabled = false;
-                        });
-                    } else {
-                        e.classList.remove('manual');
-                        e.classList.add('auto');
-                        fields[1].forEach(function(field) {
-                            e = document.getElementById(field);
-                            e.disabled = true;
-                        });
-                    }
-                });
-                
-                [["fanOnOffToggle", "fan"], ["heaterOnOffToggle", "heater"], ["lightToggle", "light_state"], ["fanExhaustAirOnOff", "fan_exhaust_air"]].forEach(function(fields) {
-                    e = document.getElementById(fields[0]);
-                    if (data[fields[1]] == "ON") {
-                        e.textContent = 'On';
-                        e.classList.remove('off');
-                        e.classList.add('on');
-                    } else {
-                        e.textContent = 'Off';
-                        e.classList.remove('on');
-                        e.classList.add('off');
-                    }
-                });    
+                //console.log('data:', data);
+                // update status
+                objStatus.temperature.innerText = data["temperature"].toFixed(1);
+                objStatus.humidity.innerText = data["humidity"].toFixed(1);
+                objStatus.time.innerText = data["time"];
 
-                ["humidity", "temperature"].forEach(function(field) {
-                    e = document.getElementById(field);
-                    e.innerText = data[field].toFixed(1);
-                });
-
-                e = document.getElementById("waterlevel");
                 if (data["waterlevel"] == 0) {
-                    e.innerText = "CRITICAL";
+                    objStatus.waterlevel.innerText = "CRITICAL";
                 } else if (data["waterlevel"] == 1) {
-                    e.innerText = "LOW";
+                    objStatus.waterlevel.innerText = "LOW";
                 } else if (data["waterlevel"] == 2) {
-                    e.innerText = "MEDIUM";
+                    objStatus.waterlevel.innerText = "MEDIUM";
                 } else if (data["waterlevel"] == 3) {
-                    e.innerText = "FULL";
+                    objStatus.waterlevel.innerText = "FULL";
                 }
-                e = document.getElementById("boxwaterlevel");
-                e.classList.remove("alert");
-                e.classList.remove("warn");
+
+                objStatus.boxwaterlevel.classList.remove("alert");
+                objStatus.boxwaterlevel.classList.remove("warn");
                 if (data.waterlevel == 0) {
-                    e.classList.add("alert");
+                    objStatus.boxwaterlevel.classList.add("alert");
                 } else if (data.waterlevel == 1) {
-                    e.classList.add("warn");
+                    objStatus.boxwaterlevel.classList.add("warn");
                 } 
 
-                e = document.getElementById("boxtemperature");
                 if ((data.temperature > data.temperature_high_critical_level) | (data.temperature < data.temperature_low_critical_level)){
-                    e.classList.add("alert");
-                    console.log("alert");
+                    objStatus.boxtemperature.classList.add("alert");
                 } else {
-                    e.classList.remove("alert");
+                    objStatus.boxtemperature.classList.remove("alert");
                 }
-                e = document.getElementById("boxhumidity");
+
                 if ((data.humidity > data.humidity_high_critical_level) | (data.humidity < data.humidity_low_critical_level)){
-                    e.classList.add("alert");
-                    console.log("alert");
+                    objStatus.boxhumidity.classList.add("alert");
                 } else {
-                    e.classList.remove("alert");
+                    objStatus.boxhumidity.classList.remove("alert");
                 }
-                for (index = 1; index < 10; index++) {
-                    e = document.getElementById("pump_" + index);
-                    if (e === null) break;
-                    e.innerText = data["pump"][index]["state"] + "\n(" + data["pump"][index]["on"] + ")";
-                    e = document.getElementById("moisture_" + index);
-                    e.innerText = data["moisture"][index].toFixed(1);
-                    e = document.getElementById("boxpump_" + index)
+
+                for (let index = 1; index <= index_high; index++) {
+                    objStatus["moisture_" + index].innerText = data["moisture"][index].toFixed(1);
                     if (data["moisture"][index] <= data["moisture_low_level"]) {
-                        e.classList.add("alert");
+                        objStatus["boxmoisture_" + index].classList.add("alert");
                     } else {
-                        e.classList.remove("alert");
+                        objStatus["boxmoisture_" + index].classList.remove("alert");
                     }
                 }
+
+                // update controls
+                for (const [key, value] of Object.entries(objControls)) {
+                    if (key == "oPump") {
+                        for (const [key_, value_] of Object.entries(value)) {
+                            objStatus["boxpump_" + key_].innerText = data["pump"][key_]["state"];
+                            // console.log(data);
+                            value_.updateFromServer(data);
+                        }
+                    } else {
+                        value.updateFromServer(data);
+                    }
+                }            
             })
             .catch(error => {
                 console.error('There has been a problem with your fetch operation:', error);
@@ -116,226 +224,5 @@ function callServerEveryTwoSeconds() {
 
     // Set the interval to call the function every 2 seconds (2000 milliseconds)
     setInterval(makeHttpRequest, 2000);
+
 }
-
-// Start the process
-callServerEveryTwoSeconds();
-
-
-document.addEventListener("DOMContentLoaded", function() {
-    const fan_mode = document.getElementById('fan_mode');
-    const fanOnOffToggle = document.getElementById('fanOnOffToggle');
-    const heater_mode = document.getElementById('heater_mode');
-    const heaterOnOffToggle = document.getElementById('heaterOnOffToggle');
-    const fanExhaustAirOnOffToggle = document.getElementById('fanExhaustAirOnOff');
-    const light_mode = document.getElementById('light_mode');
-    const lightToggle = document.getElementById('lightToggle');
-
-    
-    function sendState(url, state) {
-        fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(state),
-        }).then(response => {
-            if (!response.ok) {
-                console.error('Error sending state to server');
-            }
-        }).catch(error => {
-            console.error('Error sending state to server:', error);
-        });
-    }
-    
-    function updateFanState() {
-        const state = {
-            fan: fan_mode.textContent === 'Manual' ? 'Manual' : 'Auto',
-            fanOnOff: fanOnOffToggle.textContent === 'On' ? 'On' : 'Off'
-        };
-        sendState('/toggleFan', state);
-    }
-
-    function updateHeaterState() {
-        const state = {
-            heater: heater_mode.textContent === 'Manual' ? 'Manual' : 'Auto',
-            heaterOnOff: heaterOnOffToggle.textContent === 'On' ? 'On' : 'Off'
-        };
-        sendState('/toggleHeater', state);
-    }
-
-    function updateFanExhaustAirState() {
-        const state = {
-            fanExhaustAirOnOff: fanExhaustAirOnOffToggle.textContent === 'On' ? 'On' : 'Off'
-        };
-        sendState('/toggleFanExhaustAir', state);
-    }
-
-    function updateLightState() {
-        const state = {
-            light_mode: light_mode.textContent === 'Manual' ? 'Manual' : 'Auto',
-            light_state: lightToggle.textContent === 'On' ? 'On' : 'Off',
-        };
-        sendState('/toggleLight', state);
-    }
-
-    fan_mode.addEventListener('click', function() {
-        if (fan_mode.textContent === 'Auto') {
-            fan_mode.textContent = 'Manual';
-            fan_mode.classList.remove('auto');
-            fan_mode.classList.add('manual');
-            fanOnOffToggle.disabled = false;
-        } else {
-            fan_mode.textContent = 'Auto';
-            fan_mode.classList.remove('manual');
-            fan_mode.classList.add('auto');
-            fanOnOffToggle.disabled = true;
-            fanOnOffToggle.textContent = 'Off';  // Reset the Fan On/Off button to Off
-            fanOnOffToggle.classList.remove('on');
-            fanOnOffToggle.classList.add('off');
-        }
-        updateFanState();
-    });
-
-    fanOnOffToggle.addEventListener('click', function() {
-        if (fanOnOffToggle.textContent === 'Off') {
-            fanOnOffToggle.textContent = 'On';
-            fanOnOffToggle.classList.remove('off');
-            fanOnOffToggle.classList.add('on');
-        } else {
-            fanOnOffToggle.textContent = 'Off';
-            fanOnOffToggle.classList.remove('on');
-            fanOnOffToggle.classList.add('off');
-        }
-        updateFanState();
-    });
-
-    heater_mode.addEventListener('click', function() {
-        if (heater_mode.textContent === 'Auto') {
-            heater_mode.textContent = 'Manual';
-            heater_mode.classList.remove('auto');
-            heater_mode.classList.add('manual');
-            heaterOnOffToggle.disabled = false;
-        } else {
-            heater_mode.textContent = 'Auto';
-            heater_mode.classList.remove('manual');
-            heater_mode.classList.add('auto');
-            heaterOnOffToggle.disabled = true;
-            heaterOnOffToggle.textContent = 'Off';  // Reset the heater On/Off button to Off
-            heaterOnOffToggle.classList.remove('on');
-            heaterOnOffToggle.classList.add('off');
-        }
-        updateHeaterState();
-    });
-
-    heaterOnOffToggle.addEventListener('click', function() {
-        if (heaterOnOffToggle.textContent === 'Off') {
-            heaterOnOffToggle.textContent = 'On';
-            heaterOnOffToggle.classList.remove('off');
-            heaterOnOffToggle.classList.add('on');
-        } else {
-            heaterOnOffToggle.textContent = 'Off';
-            heaterOnOffToggle.classList.remove('on');
-            heaterOnOffToggle.classList.add('off');
-        }
-        updateHeaterState();
-    });
-
-    fanExhaustAirOnOffToggle.addEventListener('click', function() {
-        if (fanExhaustAirOnOffToggle.textContent === 'Off') {
-            fanExhaustAirOnOffToggle.textContent = 'On';
-            fanExhaustAirOnOffToggle.classList.remove('off');
-            fanExhaustAirOnOffToggle.classList.add('on');
-        } else {
-            fanExhaustAirOnOffToggle.textContent = 'Off';
-            fanExhaustAirOnOffToggle.classList.remove('on');
-            fanExhaustAirOnOffToggle.classList.add('off');
-        }
-        updateFanExhaustAirState();
-    });
-
-    light_mode.addEventListener('click', function() {
-        if (light_mode.textContent === 'Auto') {
-            light_mode.textContent = 'Manual';
-            light_mode.classList.remove('auto');
-            light_mode.classList.add('manual');
-            lightToggle.disabled = false;
-        } else {
-            light_mode.textContent = 'Auto';
-            light_mode.classList.remove('manual');
-            light_mode.classList.add('auto');
-            lightToggle.disabled = true;
-            lightToggle.textContent = 'Off';  // Reset the Light button to Off
-            lightToggle.classList.remove('on');
-            lightToggle.classList.add('off');
-        }
-        updateLightState();
-    });
-
-    lightToggle.addEventListener('click', function() {
-        if (lightToggle.textContent === 'Off') {
-            lightToggle.textContent = 'On';
-            lightToggle.classList.remove('off');
-            lightToggle.classList.add('on');
-        } else {
-            lightToggle.textContent = 'Off';
-            lightToggle.classList.remove('on');
-            lightToggle.classList.add('off');
-        }
-        updateLightState();
-    });
-    
-    function updatePumpState(id) {
-        console.log(id);
-        index = id.split("_").pop();
-        const pumpToggle = document.getElementById("pumpToggle_" + index);
-        const pumpOnOffToggle = document.getElementById("pumpOnOffToggle_" + index);
-        const state = {
-            index: index,
-            mode: pumpToggle.textContent === 'Manual' ? 'Manual' : 'Auto',
-            pumpOnOff: pumpOnOffToggle.textContent === 'On' ? 'On' : 'Off'
-        };
-        // console.log(state);
-        sendState('/togglePump', state);
-    }
-
-    var pumpToggle;
-    for (index=1; index < 10; index++) {
-        pumpToggle = document.getElementById("pumpToggle_" + index);
-        if (pumpToggle == null) break;
-        
-        pumpToggle.addEventListener('click', function() {
-            var index = this.id.split("_").pop();
-            const pumpOnOffToggle = document.getElementById("pumpOnOffToggle_" + index);
-            if (this.textContent === 'Auto') {
-                this.textContent = 'Manual';
-                this.classList.remove('auto');
-                this.classList.add('manual');
-                pumpOnOffToggle.disabled = false;
-            } else {
-                this.textContent = 'Auto';
-                this.classList.remove('manual');
-                this.classList.add('auto');
-                pumpOnOffToggle.disabled = true;
-                pumpOnOffToggle.textContent = 'Off';  // Reset the pump On/Off button to Off
-                pumpOnOffToggle.classList.remove('on');
-                pumpOnOffToggle.classList.add('off');
-            }
-            updatePumpState(this.id);    
-        });
-        
-        const pumpOnOffToggle = document.getElementById("pumpOnOffToggle_" + index);
-        pumpOnOffToggle.addEventListener('click', function() {
-            if (this.textContent === 'Off') {
-                this.textContent = 'On';
-                this.classList.remove('off');
-                this.classList.add('on');
-            } else {
-                this.textContent = 'Off';
-                this.classList.remove('on');
-                this.classList.add('off');
-            }
-            updatePumpState(this.id);
-        });
-        }
-});
