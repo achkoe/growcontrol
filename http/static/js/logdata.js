@@ -139,7 +139,7 @@ function callLogDataUpdate() {
                 });
                         
 
-                console.log('data:', data["tth"]);
+                console.log('data.min_max_mean:', data["min_max_mean"]);
                 //! var text = "";
                 // (currenttime, temperature, humidity, fan, heater, humidifier)
                 var plotdata = [[], [], [], [], [], []];
