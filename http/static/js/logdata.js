@@ -103,6 +103,8 @@ const initialData = [
 ];
 var tthplot;
 var moistureplot = {};
+var min_max_mean = {};
+const min_max_mean_fields = ["temperature_mean", "temperature_min", "temperature_max", "humidity_mean", "humidity_min", "humidity_max"];
 
 window.onload = function() {
     tthplot = new uPlot(tthoptions, [], document.getElementById("tthgraph"));
@@ -110,7 +112,11 @@ window.onload = function() {
         let e = document.getElementById("moisturegraph_" + index);
         if (e === null) break;
         moistureplot[index] = new uPlot(moistureoptions, [], e);
-    }
+      }
+      min_max_mean_fields.forEach(element => {
+        min_max_mean[element] = document.getElementById(element);
+    });
+    console.log(min_max_mean);
     // Start the process
     callLogDataUpdate();
 }
@@ -128,6 +134,11 @@ function callLogDataUpdate() {
                 return response.json();  // Change to response.json() if expecting JSON
             })
             .then(data => {
+                min_max_mean_fields.forEach(element => {
+                  min_max_mean[element].innerText = data["min_max_mean"][element].toFixed(1);
+                });
+                        
+
                 console.log('data:', data["tth"]);
                 //! var text = "";
                 // (currenttime, temperature, humidity, fan, heater, humidifier)
