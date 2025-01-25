@@ -163,8 +163,8 @@ def log():
 @ app.route("/logdata")
 def logdata():
     try:
-        output_list, moisture_dict = logdata_proxy.get()
-        return dict(tth=output_list, m=moisture_dict)
+        output_list, moisture_dict, min_max_mean = logdata_proxy.get()
+        return dict(tth=output_list, m=moisture_dict, min_max_mean=min_max_mean)
     except Exception:
         print("logdata issue")
         return dict(tth=[], m={})

@@ -166,3 +166,10 @@ label {
 .linkbutton:hover {
     background-color: #0056b3;
 }
+
+
+@media (max-width: 768px) {
+    .box, .column {
+        flex: 1 1 100%; /* Stack elements on smaller screens */
+    }
+}

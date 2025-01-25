@@ -8,6 +8,7 @@ import xmlrpc.client
 from xmlrpc.server import SimpleXMLRPCServer
 from xmlrpc.server import SimpleXMLRPCRequestHandler
 from collections import deque
+import statistics
 import time
 from base import load_settings, get_loglevel
 import configuration
@@ -75,10 +76,19 @@ class Bridge():
         return IDENTITY
 
     def get(self):
-        # returns two items:
+        # returns 3 items:
         # 1st is list with tuples (time, temperature, humidity, fan, heater, humidifier)
         # 2nd is dict with keys <pump> and tuples (time, moisture, pump)
-        return list(self.output_queue), dict([(str(key), list(self.pump_proxy_dict[key]["moisture"])) for key in self.pump_proxy_dict])
+        # 3rd is dict with keys "temperature_mean", "temperature_min", "temperature_max", "humidity_mean", "humidity_min", "humidity_max"
+        return list(self.output_queue), \
+            dict([(str(key), list(self.pump_proxy_dict[key]["moisture"])) for key in self.pump_proxy_dict]), \
+            dict(
+                temperature_mean=statistics.mean([item[1] for item in self.output_queue]),
+                temperature_min=min([item[1] for item in self.output_queue]),
+                temperature_max=max([item[1] for item in self.output_queue]),
+                humidity_mean=statistics.mean([item[2] for item in self.output_queue]),
+                humidity_min=min([item[2] for item in self.output_queue]),
+                humidity_max=max([item[2] for item in self.output_queue]))
 
     def set(self):
         return "OK"

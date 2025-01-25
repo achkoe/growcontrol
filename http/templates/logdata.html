@@ -18,6 +18,10 @@
 <body>
     <script src="{{ url_for('static', filename='js/logdata.js') }}"></script>
     <button type="button" class="back" onclick="window.location.href='/'">Back</button>
+    <div>
+        <p>Temperature mean=<span id="temperature_mean"></span>°C, min=<span id="temperature_min"></span>°C, max=<span id="temperature_max"></span>°C</p>
+        <p>Humidity mean=<span id="humidity_mean"></span>%, min=<span id="humidity_min"></span>%, max=<span id="humidity_max"></span>%</p>
+    </div>
 
     <h2>Grow Control Temperature/Humidity/Fan {{version}}</h2>
     <div id="tthgraph"></div>
