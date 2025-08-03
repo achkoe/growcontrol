@@ -7,7 +7,26 @@ function pollStatus() {
         .then(data => {
             // console.log(data);
             for (id of ["value-time", "value-temperature", "value-humidity", "value-humidifier", "value-watersupplylevel", "value-fan", "value-heater", "value-light"]) {
-                document.getElementById(id).innerText = data[id];
+                let e = document.getElementById(id)
+                e.innerText = data[id];
+                if (["ON", "OFF"].includes(data[id])) {
+                    e.parentElement.classList.remove("on");   
+                    e.parentElement.classList.remove("off");
+                    e.parentElement.classList.add(data[id].toLowerCase());
+                }
+            }
+            for (const key of ["temperature", "humidity"]) {
+                let e= document.getElementById(`value-${key}`).parentElement;
+                e.classList.remove("tohigh");
+                e.classList.remove("tolow");
+                e.classList.remove("acceptable");
+                if (data[`value-${key}`] >= data[`${key}_high_critical_level`]) {
+                    e.classList.add("tohigh");
+                } else if (data[`value-${key}`] <= data[`${key}_low_critical_level`]) {
+                    e.classList.add("tolow");
+                } else {
+                    e.classList.add("acceptable");
+                }
             }
             for (id of ["fan-mode", "fan-onoff", "heater-mode", "heater-onoff", "humidifier-mode", "humidifier-onoff", "light-mode", "light-onoff", "exhaustfan-onoff"]) {
                 var e;
@@ -22,6 +41,18 @@ function pollStatus() {
                         e.disabled = true;
                     }
                 }
+            }
+            // waterlevel
+            {
+                const id = "value-watersupplylevel";
+                const obj = {0: "critical", 1: "low", 2: "medium", 3: "full"}
+                let e = document.getElementById(id);
+                e.innerText = data[id] in obj ? obj[data[id]] : "unknown";
+                e = e.parentElement;
+                for (const name of ["critical", "low", "medium", "full"]) {
+                    e.classList.remove(name);
+                }
+                e.classList.add(obj[data[id]]);
             }
         });
 }

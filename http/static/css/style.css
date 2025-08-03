@@ -140,3 +140,13 @@ body {
 #field-watersupplylevel.red {
     background: #f8d7da;
 }
+
+.on {background-color: green;}
+.off {background-color: chocolate;}
+.tohigh {background-color: red;}
+.tolow {background-color: lightblue;}
+.acceptable {background-color: green;}
+.critical {background-color: red;}
+.low {background-color: coral;}
+.medium {background-color: darkolivegreen;}
+.full {background-color: green;}

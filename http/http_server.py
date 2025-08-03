@@ -27,6 +27,7 @@ logdata_proxy = xmlrpc.client.ServerProxy(
 
 
 settings = load_settings()
+print(settings)
 
 mode_dict = {
     'fan-mode': light_proxy.get_mode(),
@@ -77,7 +78,7 @@ def status():
         "value-humidity": humidity,
         "value-temperature": temperature,
         "value-time": time.strftime("%X"),
-        "value-watersupplylevel": {0: "critical", 1: "low", 2: "medium", 3: "full"}.get(waterlevel, "unknown"),
+        "value-watersupplylevel": waterlevel,
         "value-fan": fan,
         "value-humidifier": humidifier,
         "value-heater": heater,
@@ -97,7 +98,7 @@ def status():
         "heater-onoff": heater, 
         "humidifier-onoff": humidifier
     }
-    # reply.update(settings)
+    reply.update(settings)
     return reply
 
 
