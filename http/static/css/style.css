@@ -1,175 +1,142 @@
-h1 {
-    font-size: 120%;
-    text-align: center;
-    background-color: #ccc;
-    border: 2px solid #ccc;
-    border-radius: 5px;
-}
-
 body {
     font-family: Arial, sans-serif;
+    background: #f4f4f4;
+    margin: 0;
+    padding: 0;
 }
 
-div {
-    margin: 10px 0;
-}
-
-button {
-    margin: 5px;
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    border: 2px solid #ccc;
-    border-radius: 5px;
-    background-color: #f0f0f0;
-    transition: background-color 0.3s, color 0.3s;
-    height: 100%;
-}
-
-button:disabled {
-    cursor: not-allowed;
-    opacity: 0.5;
-}
-
-button.manual {
-    background-color: #4caf50;
-    color: white;
-    border-color: #4caf50;
-}
-
-button.auto {
-    background-color: #368ff4;
-    color: white;
-    border-color: #368ff4;
-}
-
-button.on {
-    background-color: #4caf50;
-    color: white;
-    border-color: #4caf50;
-}
-
-button.off {
-    background-color: #f44336;
-    color: white;
-    border-color: #f44336;
-}
-
-label {
-    margin-right: 10px;
-}
-
-.container {
+.tabs {
     display: flex;
-    justify-content: space-around; 
-    /* justify-content: space-between; */
+    background: #222;
 }
 
-.pumpcontainer {
-    display: flex;
-    justify-content: space-around; 
-    background-color: darkslategrey;
-    border-radius: 10px;
-}
-
-.pumplabel {
-    color: white;
-    font-size: 120%;
-}
-
-.controlcontainer {
-    display: flex;
-    justify-content: flex-start; 
-    background-color: darkslategrey;
-    border-radius: 10px;
-    align-items: center;
-}
-
-.controllabel {
-    color: white;
-    font-size: 120%;
-    margin-right: 1em;
-    margin-left: 1em;
-}
-
-
-.box {
-    width: 10%;
-    border-radius: 10px;
-    background-color: green;
-    color: white;
-    padding: 10px;
-    box-sizing: border-box;
-    text-align: center;
-}
-
-.alert {
-    background-color: #f44336;
-}
-
-.warn {
-    background-color: rgb(255, 166, 0);
-}
-
-.statuslabel {
-    color: black;
-}
-
-.column {
-    display: flex;
-    flex-direction: column;
-    margin-right: 20px;
-}
-.row {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-}
-.row label {
-    width: 100px; /* Set the desired width */
-    margin-right: 10px;
-    text-align: center;
-}
-.row button {
-    flex-shrink: 0; /* Prevent button from shrinking */
-}
-
-.settings {
-    border-top: #368ff4 solid;
-    text-align: center;
-    display: flex;
-    justify-content: space-around; 
-    align-items: center;
-
-}
-
-.settings > p {
-    font-size: 120%;
-}
-
-/* Basic Button Style */
-.linkbutton {
-    display: inline-block;
-    padding: 10px 60px;
-    background-color: #007bff;
-    color: white;
-    text-align: center;
-    text-decoration: none;
-    font-size: 120%;
-    border-radius: 5px;
+.tab {
+    flex: 1;
+    padding: 16px;
+    color: #fff;
+    background: #222;
     border: none;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    font-size: 16px;
+    outline: none;
+    transition: background 0.2s;
 }
 
-/* Button Hover Effect */
-.linkbutton:hover {
-    background-color: #0056b3;
+.tab.active, .tab:hover {
+    background: #444;
 }
 
+.tab-content {
+    padding: 24px;
+}
 
-@media (max-width: 768px) {
-    .box, .column {
-        flex: 1 1 100%; /* Stack elements on smaller screens */
-    }
+.fields-row {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.field {
+    background: #fff;
+    border-radius: 8px;
+    padding: 16px 12px;
+    min-width: 120px;
+    text-align: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.field-label {
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.field-value {
+    font-size: 1.5em;
+    margin-top: 8px;
+}
+
+.controls-row {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 24px;
+}
+
+.control-group {
+    background: #fff;
+    border-radius: 8px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+/*
+.toggle {
+    padding: 6px 18px;
+    border: none;
+    border-radius: 4px;
+    background: #eee;
+    color: #222;
+    font-size: 1em;
+    cursor: pointer;
+    margin-left: 4px;
+    transition: background 0.2s, color 0.2s;
+}
+
+.toggle:disabled {
+    background: #ccc;
+    color: #888;
+    cursor: not-allowed;
+}
+
+.toggle.active, .toggle.on {
+    background: #4caf50;
+    color: #fff;
+}
+
+.toggle.off {
+    background: #f44336;
+    color: #fff;
+}
+*/
+.pumps-row {
+    display: flex;
+    gap: 24px;
+}
+
+.pump-group {
+    background: #fff;
+    border-radius: 8px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.pump-label {
+    font-weight: bold;
+    margin-left: 8px;
+}
+
+.pump-value {
+    min-width: 40px;
+    text-align: center;
+}
+
+#field-temperature.green, #field-humidity.green, #field-humidifier.green, #field-fan.green, #field-heater.green, #field-light.green {
+    background: #d4edda;
+}
+#field-temperature.red, #field-humidity.red, #field-humidifier.red, #field-fan.red, #field-heater.red, #field-light.red {
+    background: #f8d7da;
+}
+#field-watersupplylevel.green {
+    background: #d4edda;
+}
+#field-watersupplylevel.red {
+    background: #f8d7da;
 }

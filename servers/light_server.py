@@ -54,17 +54,19 @@ class Bridge():
         return IDENTITY
 
     def get(self):
-        return {
-            "light": "ON" if self.light_on else "OFF",
-        }
+        return "ON" if self.light_on else "OFF"
+    
+    def set(self, onoff):
+        print(f"set -> {onoff}")
+        self.light_on = onoff == "ON"
+        return "OK"
         
     def get_mode(self):
         return "Manual" if self.light_mode_manual else "Auto"
 
-    def set(self, mode, light):
-        print(f"Bridge-set {mode}, {light}")
+    def set_mode(self, mode):
+        print(f"Bridge-set {mode}")
         self.light_mode_manual = mode == "Manual"
-        self.light_on = light == "On"
         return "OK"
 
     def reload(self):

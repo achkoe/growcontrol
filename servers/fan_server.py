@@ -151,13 +151,20 @@ class Bridge():
     def get_fan(self):
         return "ON" if self.fan_is_on is True else "OFF"
     
+    def set_fan(self, fan_state):
+        print(f"Brigde-set_fan {fan_state}")
+        self.fan_on = fan_state.upper() == "ON"
+        if self.fan_mode_manual is False:
+            if self.state in [RUN, DOWN]:
+                self.fan_is_on = True
+        return "OK"
+
     def get_fan_mode(self):
         return "Manual" if self.fan_mode_manual else "Auto"
 
-    def set_fan(self, mode, fan_state):
-        print(f"Brigde-set {mode} {fan_state}")
+    def set_fan_mode(self, mode):
+        print(f"Brigde-set_fan_mode {mode}")
         self.fan_mode_manual = mode == "Manual"
-        self.fan_on = fan_state.upper() == "ON"
         if self.fan_mode_manual is False:
             if self.state in [RUN, DOWN]:
                 self.fan_is_on = True
@@ -175,25 +182,33 @@ class Bridge():
     def get_heater(self):
         return "ON" if self.heater_is_on else "OFF"
     
+    def set_heater(self, heater_state):
+        print(f"Brigde-set_heater {heater_state}")
+        self.heater_on = heater_state.upper() == "ON"
+        return "OK"
+
     def get_heater_mode(self):
         return "Manual" if self.heater_mode_manual else "Auto"
     
-    def set_heater(self, mode, heater_state):
-        print(f"Brigde-set {mode} {heater_state}")
+    def set_heater_mode(self, mode):
+        print(f"Brigde-set_heater_mode {mode}")
         self.heater_mode_manual = mode == "Manual"
-        self.heater_on = heater_state.upper() == "ON"
         return "OK"
-        
+
     def get_humidifier(self):
         return "ON" if self.humidifier_is_on else "OFF"
     
+    def set_humidifier(self,humidifier_state):
+        print(f"Brigde-set_humidifier {humidifier_state}")
+        self.humidifier_on = humidifier_state.upper() == "ON"
+        return "OK"
+
     def get_humidifier_mode(self):
         return "Manual" if self.humidifier_mode_manual else "Auto"
-    
-    def set_humidifier(self, mode, humidifier_state):
-        print(f"Brigde-set {mode} {humidifier_state}")
+
+    def set_humidifier_mode(self, mode):
+        print(f"Brigde-sethumidifier_mode {mode}")
         self.humidifier_mode_manual = mode == "Manual"
-        self.humidifier_on = humidifier_state.upper() == "ON"
         return "OK"
     
     def reload(self):

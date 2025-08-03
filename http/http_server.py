@@ -28,6 +28,25 @@ logdata_proxy = xmlrpc.client.ServerProxy(
 
 settings = load_settings()
 
+mode_dict = {
+    'fan-mode': light_proxy.get_mode(),
+    'heater-mode': light_proxy.get_mode(),
+    'humidifier-mode': light_proxy.get_mode(),
+    'light-mode': light_proxy.get_mode(),
+}
+print(mode_dict)
+
+onoff_dict = {
+    'light-onoff': light_proxy.get(),
+    'fan-onoff': fan_proxy.get_fan(),
+    'exhaustfan-onoff': fan_proxy.get_fan_exhaust_air(),
+    "heater-onoff": fan_proxy.get_heater, 
+    "humidifier-onoff": fan_proxy.get_humidifier,
+    "exhaustfan-onoff": fan_proxy.get_fan_exhaust_air,
+
+}
+print(onoff_dict)
+
 app = Flask(__name__)
 
 
@@ -36,8 +55,8 @@ def index():
     return render_template('index.html', configuration=configuration, version=f"v{VERSION}")
 
 
-@ app.route("/update")
-def udpate():
+@ app.route("/status")
+def status():
     humidity = sensors_proxy.humidity()
     temperature = sensors_proxy.temperature()
     waterlevel = sensors_proxy.waterlevel()
@@ -53,26 +72,63 @@ def udpate():
     pump = dict((key, dict(on=pump_proxies[key].get(), state=pump_proxies[key].get_state())) for key in pump_proxies)
     moisture = dict((key, sensors_proxy.moisture(configuration.pump_moisture_dict[key]["channel"]))
                     for key in configuration.pump_moisture_dict)
+    
     reply = {
-        "humidity": humidity,
-        "temperature": temperature,
-        "fan": fan,
-        "fan_mode": fan_mode,
-        "light_mode": light_mode,
-        "time": time.strftime("%X"),
+        "value-humidity": humidity,
+        "value-temperature": temperature,
+        "value-time": time.strftime("%X"),
+        "value-watersupplylevel": {0: "critical", 1: "low", 2: "medium", 3: "full"}.get(waterlevel, "unknown"),
+        "value-fan": fan,
+        "value-humidifier": humidifier,
+        "value-heater": heater,
+        "value-light": light,
+        #
+        "light-mode": light_mode,
+        "fan-mode": fan_mode,
+        "heater-mode": heater_mode,
+        "humidifier-mode": humidifier_mode,
+        #
         "pump": pump,
         "moisture": moisture,
-        "waterlevel": waterlevel,
-        "fanExhaustAir": fan_exhaust_air,
-        "heater": heater,
-        "heater_mode": heater_mode,
-        "humidifier": humidifier,
-        "humidifier_mode": humidifier_mode
+        #
+        "exhaustfan-onoff": fan_exhaust_air,
+        "light-onoff": light,
+        "fan-onoff": fan, 
+        "heater-onoff": heater, 
+        "humidifier-onoff": humidifier
     }
-    reply.update(light)
-    reply.update(settings)
+    # reply.update(settings)
     return reply
 
+
+@ app.route("/control", methods=("POST", ))
+def control():
+    print(f"control -> {request.json}")
+    the_id = request.json["id"]
+    if the_id.endswith("mode"):
+        mode = "Manual" if mode_dict[the_id] == "Auto" else "Auto"
+        mode_dict[the_id] = mode
+        {    
+            'light-mode': light_proxy.set_mode,
+            'fan-mode': fan_proxy.set_fan_mode,
+            'heater-mode': fan_proxy.set_heater_mode,
+            'humidifier-mode': fan_proxy.set_humidifier_mode
+        }[the_id](mode)
+    else:    # mode is onoff
+        onoff = "OFF" if onoff_dict[the_id] == "ON" else "ON"
+        print(onoff)
+        onoff_dict[the_id] = onoff
+        {
+            "light-onoff": light_proxy.set,
+            "fan-onoff": fan_proxy.set_fan, 
+            "heater-onoff": fan_proxy.set_heater, 
+            "humidifier-onoff": fan_proxy.set_humidifier,
+            "exhaustfan-onoff": fan_proxy.set_fan_exhaust_air,
+            
+        }[the_id](onoff)
+        
+    return {"status": True}
+    
 
 @ app.route("/settings", methods=("POST", "GET"))
 def editsettings():
