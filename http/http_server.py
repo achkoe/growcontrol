@@ -98,7 +98,7 @@ def status():
         "heater-onoff": heater, 
         "humidifier-onoff": humidifier
     }
-    reply.update(settings)
+    reply.update({"settings": settings})
     return reply
 
 
@@ -133,6 +133,9 @@ def control():
 
 @ app.route("/settings", methods=("POST", "GET"))
 def editsettings():
+    s = load_settings(raw=True)
+    #print(s)
+    return s
     global settings
     if request.method == "POST":
         for key in request.form:
@@ -146,6 +149,11 @@ def editsettings():
         return render_template('index.html', configuration=configuration, version=f"v{VERSION}")
     else:
         return render_template("settings.html", settings=load_settings(raw=True), version=f"v{VERSION}")
+
+
+@ app.route("/main", methods=("POST", "GET"))
+def main():
+    return {}
 
 
 @ app.route("/toggleFan", methods=("POST", ))

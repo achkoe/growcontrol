@@ -20,9 +20,9 @@ function pollStatus() {
                 e.classList.remove("tohigh");
                 e.classList.remove("tolow");
                 e.classList.remove("acceptable");
-                if (data[`value-${key}`] >= data[`${key}_high_critical_level`]) {
+                if (data[`value-${key}`] >= data["settings"][`${key}_high_critical_level`]) {
                     e.classList.add("tohigh");
-                } else if (data[`value-${key}`] <= data[`${key}_low_critical_level`]) {
+                } else if (data[`value-${key}`] <= data["settings"][`${key}_low_critical_level`]) {
                     e.classList.add("tolow");
                 } else {
                     e.classList.add("acceptable");
@@ -60,9 +60,8 @@ function pollStatus() {
 window.addEventListener("load", (event) => {
     console.log("page is fully loaded");
     
-    for (id of ["fan-mode", "fan-onoff", "heater-mode", "heater-onoff", "humidifier-mode", "humidifier-onoff", "light-mode", "light-onoff", "exhaustfan-onoff"]) {
+    for (const id of ["fan-mode", "fan-onoff", "heater-mode", "heater-onoff", "humidifier-mode", "humidifier-onoff", "light-mode", "light-onoff", "exhaustfan-onoff"]) {
         document.getElementById(id).addEventListener("click", function(event) {
-            log(this.id);
             fetch(`/control`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
@@ -70,19 +69,20 @@ window.addEventListener("load", (event) => {
             });
         });
     }
-    setInterval(pollStatus, 1500);
-    pollStatus();
-    
-    if (false) {
-        let e = document.getElementById("light-mode");
-        e.addEventListener("click", function(event) {
-            if (this.innerText == "Auto") {
-                this.innerText = "Manual";
-                document.getElementById("light-onoff").disabled = false;
-            } else {
-                this.innerText = "Auto";
-                document.getElementById("light-onoff").disabled = true;
+
+    const tabs = document.querySelectorAll(".tab");
+    for (const tab of tabs) {
+        log(tab);
+        tab.addEventListener("click", function(event) {
+            for (let tab of tabs) {
+                tab.classList.remove("active");
+                document.getElementById(tab.getAttribute("data-tab")).style.display = "none";
             }
+            this.classList.add("active");
+            document.getElementById(this.getAttribute("data-tab")).style.display = "block";
+            fetch(`/${this.getAttribute("data-tab")}`) .then(res => res.json()) .then(data => { log(data); });            
         });
     }
+    setInterval(pollStatus, 1500);
+    pollStatus();
 });
