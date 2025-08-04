@@ -22,8 +22,10 @@ function pollStatus() {
                 e.classList.remove("acceptable");
                 if (data[`value-${key}`] >= data["settings"][`${key}_high_critical_level`]) {
                     e.classList.add("tohigh");
+                    e.title = "to high"
                 } else if (data[`value-${key}`] <= data["settings"][`${key}_low_critical_level`]) {
                     e.classList.add("tolow");
+                    e.title = "to low";
                 } else {
                     e.classList.add("acceptable");
                 }
@@ -32,7 +34,15 @@ function pollStatus() {
                 var e;
                 e = document.getElementById(id);
                 e.innerText = data[id];
-                if (id.split("-")[1] == "mode"){
+                let type = id.split("-")[1];
+                if (type == "mode"){
+                    if (data[id] == "Auto") {
+                        e.classList.remove("modemanual");
+                        e.classList.add("modeauto");
+                    } else {
+                        e.classList.add("modemanual");
+                        e.classList.remove("modeauto");
+                    }
                     let onoff = `${id.split("-")[0]}-onoff`;
                     e = document.getElementById(onoff);
                     if (data[id] == "Manual") {
@@ -40,6 +50,10 @@ function pollStatus() {
                     } else {
                         e.disabled = true;
                     }
+                } else if (type == "onoff") {
+                    e.classList.remove("on");   
+                    e.classList.remove("off");
+                    e.classList.add(e.innerText.toLowerCase());
                 }
             }
             // waterlevel
@@ -72,17 +86,16 @@ window.addEventListener("load", (event) => {
 
     const tabs = document.querySelectorAll(".tab");
     for (const tab of tabs) {
-        log(tab);
         tab.addEventListener("click", function(event) {
             for (let tab of tabs) {
                 tab.classList.remove("active");
                 document.getElementById(tab.getAttribute("data-tab")).style.display = "none";
             }
             this.classList.add("active");
-            document.getElementById(this.getAttribute("data-tab")).style.display = "block";
-            fetch(`/${this.getAttribute("data-tab")}`) .then(res => res.json()) .then(data => { log(data); });            
+            let e = document.getElementById(this.getAttribute("data-tab")).style.display = "block";
         });
     }
-    setInterval(pollStatus, 1500);
+    
+    setInterval(pollStatus, 500);
     pollStatus();
 });

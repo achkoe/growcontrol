@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>GrowControl Dashboard</title>
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
+
 <body>
     <div class="tabs">
         <button class="tab active" data-tab="main">Main</button>
@@ -51,22 +53,22 @@
         <div class="controls-row">
             <div class="control-group">
                 <span>Fan</span>
-                <button class="toggle auto-btn" id="fan-mode">Auto</button>
+                <button class="modeauto auto-btn" id="fan-mode">Auto</button>
                 <button class="toggle onoff-btn" id="fan-onoff" disabled>On</button>
             </div>
             <div class="control-group">
                 <span>Heater</span>
-                <button class="toggle auto-btn" id="heater-mode">Auto</button>
+                <button class="modeauto auto-btn" id="heater-mode">Auto</button>
                 <button class="toggle onoff-btn" id="heater-onoff" disabled>On</button>
             </div>
             <div class="control-group">
                 <span>Humidifier</span>
-                <button class="toggle auto-btn" id="humidifier-mode">Auto</button>
+                <button class="modeauto auto-btn" id="humidifier-mode">Auto</button>
                 <button class="toggle onoff-btn" id="humidifier-onoff" disabled>On</button>
             </div>
             <div class="control-group">
                 <span>Light</span>
-                <button class="toggle auto-btn" id="light-mode">Auto</button>
+                <button class="modeauto auto-btn" id="light-mode">Auto</button>
                 <button class="toggle onoff-btn" id="light-onoff" disabled>On</button>
             </div>
             <div class="control-group">
@@ -94,8 +96,32 @@
         </div>
     </div>
     <div class="tab-content" id="settings" style="display:none;">
-        <h2>Settings</h2>
         <!-- Settings content here -->
+        <div class="settings-container">
+            <form method="POST" action="/settings">
+                {% for item in settings %}
+                {% if settings[item]["title"] %}
+                <div class="settings-group">
+                    <label for="{{ item }}">{{ settings[item]["title"] }}:</label>
+                    <input type="{{ settings[item]['type'] }}" id="{{ item }}" name="{{ item }}"
+                    value="{{ settings[item]['value'] }}" 
+                    {% if settings[item].get("min", "notset" ) !="notset" %}
+                    min={{settings[item]["min"]}} 
+                    {% endif %} 
+                    {% if settings[item].get("max", "notset" ) !="notset" %}
+                    max={{settings[item]["max"]}} 
+                    {% endif %} required>
+                </div>
+                {% endif %}
+                {% endfor %}
+                <div class="settings-actions">
+                    <button type="submit" class="submit">Submit</button>
+                    <button type="button" class="cancel" onclick="window.location.href='/'">Cancel</button>
+                    <button type="button" class="back" onclick="window.location.href='/'">Back</button>
+                </div>
+            </form>
+        </div>
+
     </div>
     <div class="tab-content" id="logdata" style="display:none;">
         <h2>Log Data</h2>
@@ -106,4 +132,5 @@
         <!-- Watchdog content here -->
     </div>
 </body>
+
 </html>

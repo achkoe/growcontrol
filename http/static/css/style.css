@@ -22,7 +22,8 @@ body {
     transition: background 0.2s;
 }
 
-.tab.active, .tab:hover {
+.tab.active,
+.tab:hover {
     background: #444;
 }
 
@@ -42,7 +43,7 @@ body {
     padding: 16px 12px;
     min-width: 120px;
     text-align: center;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -71,28 +72,33 @@ body {
     display: flex;
     align-items: center;
     gap: 8px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
-/*
-.toggle {
+.modeauto {
+    background-color: lightskyblue;
+}
+.modemanual {
+    background-color: darkseagreen;
+}
+
+.auto-btn, .onoff-btn {
     padding: 6px 18px;
     border: none;
     border-radius: 4px;
-    background: #eee;
     color: #222;
     font-size: 1em;
     cursor: pointer;
     margin-left: 4px;
-    transition: background 0.2s, color 0.2s;
 }
-
-.toggle:disabled {
+    
+.onoff-btn:disabled {
     background: #ccc;
     color: #888;
     cursor: not-allowed;
-}
-
+    }
+    
+/*
 .toggle.active, .toggle.on {
     background: #4caf50;
     color: #fff;
@@ -115,7 +121,7 @@ body {
     display: flex;
     align-items: center;
     gap: 8px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
 .pump-label {
@@ -128,25 +134,131 @@ body {
     text-align: center;
 }
 
-#field-temperature.green, #field-humidity.green, #field-humidifier.green, #field-fan.green, #field-heater.green, #field-light.green {
+#field-temperature.green,
+#field-humidity.green,
+#field-humidifier.green,
+#field-fan.green,
+#field-heater.green,
+#field-light.green {
     background: #d4edda;
 }
-#field-temperature.red, #field-humidity.red, #field-humidifier.red, #field-fan.red, #field-heater.red, #field-light.red {
+
+#field-temperature.red,
+#field-humidity.red,
+#field-humidifier.red,
+#field-fan.red,
+#field-heater.red,
+#field-light.red {
     background: #f8d7da;
 }
+
 #field-watersupplylevel.green {
     background: #d4edda;
 }
+
 #field-watersupplylevel.red {
     background: #f8d7da;
 }
 
-.on {background-color: green;}
-.off {background-color: lightblue;}
-.tohigh {background-color: red;}
-.tolow {background-color: lightblue;}
-.acceptable {background-color: green;}
-.critical {background-color: red;}
-.low {background-color: coral;}
-.medium {background-color: darkolivegreen;}
-.full {background-color: green;}
+.on {
+    background-color: green;
+}
+
+.off {
+    background-color: lightblue;
+}
+
+.tohigh {
+    background-color: red;
+}
+
+.tolow {
+    background-color: red;
+}
+
+.acceptable {
+    background-color: green;
+}
+
+.critical {
+    background-color: red;
+}
+
+.low {
+    background-color: coral;
+}
+
+.medium {
+    background-color: darkolivegreen;
+}
+
+.full {
+    background-color: green;
+}
+
+
+/* settings styles */
+.settings-container {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+}
+
+.settings-group {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.settings-group label {
+    width: 60%;
+    text-align: right;
+    margin-right: 10px;
+}
+
+.settings-group input {
+    width: 35%;
+}
+
+.settings-actions {
+    display: flex;
+    justify-content: space-between;
+}
+
+.settings-actions button {
+    width: 30%;
+    padding: 10px;
+    border: none;
+    color: white;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.settings-actions button.submit {
+    background-color: #28a745;
+}
+
+.settings-actions button.submit:hover {
+    background-color: #218838;
+}
+
+.settings-actions button.cancel {
+    background-color: #dc3545;
+}
+
+.settings-actions button.cancel:hover {
+    background-color: #c82333;
+}
+
+.settings-actions button.back {
+    background-color: #007bff;
+}
+
+.settings-actions button.back:hover {
+    background-color: #0056b3;
+}

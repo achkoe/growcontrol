@@ -35,7 +35,6 @@ mode_dict = {
     'humidifier-mode': light_proxy.get_mode(),
     'light-mode': light_proxy.get_mode(),
 }
-print(mode_dict)
 
 onoff_dict = {
     'light-onoff': light_proxy.get(),
@@ -46,14 +45,16 @@ onoff_dict = {
     "exhaustfan-onoff": fan_proxy.get_fan_exhaust_air,
 
 }
-print(onoff_dict)
 
 app = Flask(__name__)
 
 
 @ app.route("/")
 def index():
-    return render_template('index.html', configuration=configuration, version=f"v{VERSION}")
+    return render_template('index.html', 
+                           configuration=configuration, 
+                           version=f"v{VERSION}",
+                           settings=load_settings(raw=True))
 
 
 @ app.route("/status")
@@ -133,9 +134,6 @@ def control():
 
 @ app.route("/settings", methods=("POST", "GET"))
 def editsettings():
-    s = load_settings(raw=True)
-    #print(s)
-    return s
     global settings
     if request.method == "POST":
         for key in request.form:
@@ -146,9 +144,7 @@ def editsettings():
         light_proxy.reload()
         for key, pump_proxy in pump_proxies.items():
             pump_proxy.reload()
-        return render_template('index.html', configuration=configuration, version=f"v{VERSION}")
-    else:
-        return render_template("settings.html", settings=load_settings(raw=True), version=f"v{VERSION}")
+    return index()
 
 
 @ app.route("/main", methods=("POST", "GET"))
