@@ -1,4 +1,6 @@
 let log = console.log;
+var logDataIntervalTimer = undefined;
+
 
 // Polling function
 function pollStatus() {
@@ -84,6 +86,7 @@ window.addEventListener("load", (event) => {
         });
     }
 
+    // tab handling
     const tabs = document.querySelectorAll(".tab");
     for (const tab of tabs) {
         tab.addEventListener("click", function(event) {
@@ -92,9 +95,26 @@ window.addEventListener("load", (event) => {
                 document.getElementById(tab.getAttribute("data-tab")).style.display = "none";
             }
             this.classList.add("active");
-            let e = document.getElementById(this.getAttribute("data-tab")).style.display = "block";
+            let id = this.getAttribute("data-tab");
+            let e = document.getElementById(id).style.display = "block";
+
+            if (id == "logdata") {
+                makeLogHttpRequest('/logdata');
+                logDataIntervalTimer = setInterval(makeLogHttpRequest, 20000, '/logdata');
+            } else {
+                if (logDataIntervalTimer !== undefined) {
+                    clearInterval(logDataIntervalTimer);
+                }
+            }
         });
     }
+
+    tthplot = new uPlot(tthoptions, [], document.getElementById("tthgraph"));
+    for (let index = 1; ; index++) {
+        let e = document.getElementById("moisturegraph_" + index);
+        if (e === null) break;
+        moistureplot[index] = new uPlot(moistureoptions, [], e);
+      }
     
     setInterval(pollStatus, 500);
     pollStatus();

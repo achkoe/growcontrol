@@ -106,84 +106,51 @@ var moistureplot = {};
 var min_max_mean = {};
 const min_max_mean_fields = ["temperature_mean", "temperature_min", "temperature_max", "humidity_mean", "humidity_min", "humidity_max"];
 
-window.onload = function() {
-    tthplot = new uPlot(tthoptions, [], document.getElementById("tthgraph"));
-    for (index = 1; index < 10; index++) {
-        let e = document.getElementById("moisturegraph_" + index);
-        if (e === null) break;
-        moistureplot[index] = new uPlot(moistureoptions, [], e);
-      }
-      min_max_mean_fields.forEach(element => {
-        min_max_mean[element] = document.getElementById(element);
-    });
-    console.log(min_max_mean);
-    // Start the process
-    callLogDataUpdate();
-}
-
-function callLogDataUpdate() {
-    const urlUpdate = `/logdata`;
-
-
-    function makeHttpRequest() {
-        fetch(urlUpdate)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok ' + response.statusText);
-                }
-                return response.json();  // Change to response.json() if expecting JSON
-            })
-            .then(data => {
-                min_max_mean_fields.forEach(element => {
-                  min_max_mean[element].innerText = data["min_max_mean"][element].toFixed(1);
-                });
-                        
-
-                console.log('data.min_max_mean:', data["min_max_mean"]);
-                //! var text = "";
-                // (currenttime, temperature, humidity, fan, heater, humidifier)
-                var plotdata = [[], [], [], [], [], []];
-                for (let tuple of data["tth"]) {
-                    //! text += "" + tuple[0] + "  " + tuple[1] + "  " + tuple[2] + "  " + tuple[3] + "\n";
+function makeLogHttpRequest(urlUpdate) {
+    fetch(urlUpdate)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.json();  
+        })
+        .then(data => {
+            min_max_mean_fields.forEach(element => {
+              document.getElementById(element).innerText = data["min_max_mean"][element].toFixed(1);
+            });
+                    
+            console.log('data.min_max_mean:', data["min_max_mean"]);
+            var plotdata = [[], [], [], [], [], []];
+            for (let tuple of data["tth"]) {
+                plotdata[0].push(tuple[0]);       // currenttime
+                plotdata[1].push(tuple[1]);       // temperature
+                plotdata[2].push(tuple[2]);       // humidity
+                plotdata[3].push(tuple[3]);       // fan
+                plotdata[4].push(tuple[4] + 1.2); // heater
+                plotdata[5].push(tuple[5] + 2.4); // humidifier
+            }
+            
+            if (data["tth"].length >= 2) {
+                tthplot.setData(plotdata);
+            }
+            
+            for (let [key, value] of Object.entries(data["m"])) {
+                plotdata = [[], [], []];
+                for (let tuple of value) {
                     plotdata[0].push(tuple[0]);
                     plotdata[1].push(tuple[1]);
                     plotdata[2].push(tuple[2]);
-                    plotdata[3].push(tuple[3]); // fan
-                    plotdata[4].push(tuple[4] + 1.2); // heater
-                    plotdata[5].push(tuple[5] + 2.4); // humidifier
-                }
-                //! var e = document.getElementById("tthpanel");
-                //! e.innerText = text;
-                
-                if (data["tth"].length >= 2) {
-                    tthplot.setData(plotdata);
                 }
                 
-                for (let [key, value] of Object.entries(data["m"])) {
-                    //! text = "";
-                    plotdata = [[], [], []];
-                    for (let tuple of value) {
-                        //! text += "" + tuple[0] + "  " + tuple[1] + "  " + tuple[2] + "\n";
-                        plotdata[0].push(tuple[0]);
-                        plotdata[1].push(tuple[1]);
-                        plotdata[2].push(tuple[2]);
-                    }
-                    if (plotdata[0].length >= 2) {
-                        moistureplot[key].setData(plotdata);
-                    }
-                    //! e = document.getElementById("moisturepanel_" + key);
-                    //! e.innerText = text;
+                if (plotdata[0].length >= 2) {
+                    moistureplot[key].setData(plotdata);
                 }
-            })
-            .catch(error => {
-                console.error('There has been a problem with your fetch operation:', error);
-            });
-    }
+            }
+        })
+        .catch(error => {
+            console.error('There has been a problem with your fetch operation:', error);
+        });
+  }
 
-    // Call the function immediately
-    makeHttpRequest();
-
-    // Set the interval to call the function every 20 seconds (20000 milliseconds)
-    setInterval(makeHttpRequest, 20000);
-}
+  
 

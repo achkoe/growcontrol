@@ -4,7 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <title>GrowControl Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/uPlot.min.css') }}">
+    <script src="{{ url_for('static', filename='js/uPlot.iife.min.js') }}"></script> 
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/logdata.js') }}"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 
@@ -77,22 +80,16 @@
             </div>
         </div>
         <div class="pumps-row">
+            {% for key in configuration["pump_moisture_dict"] %}
             <div class="pump-group">
-                <span>Pump1</span>
+                <span>Pump {{key}}</span>
                 <span class="pump-label">Last checked:</span>
-                <span class="pump-value" id="pump1-lastchecked">--</span>
+                <span class="pump-value" id="pump{{key}}-lastchecked">--</span>
                 <span class="pump-label">Soil moisture:</span>
-                <span class="pump-value" id="pump1-soilmoisture">--</span>
-                <button class="toggle onoff-btn" id="pump1-onoff">Off</button>
+                <span class="pump-value" id="pump{{key}}-soilmoisture">--</span>
+                <button class="toggle onoff-btn" id="pump{{key}}-onoff">Off</button>
             </div>
-            <div class="pump-group">
-                <span>Pump2</span>
-                <span class="pump-label">Last checked:</span>
-                <span class="pump-value" id="pump2-lastchecked">--</span>
-                <span class="pump-label">Soil moisture:</span>
-                <span class="pump-value" id="pump2-soilmoisture">--</span>
-                <button class="toggle onoff-btn" id="pump2-onoff">Off</button>
-            </div>
+            {% endfor %}
         </div>
     </div>
     <div class="tab-content" id="settings" style="display:none;">
@@ -124,8 +121,29 @@
 
     </div>
     <div class="tab-content" id="logdata" style="display:none;">
-        <h2>Log Data</h2>
         <!-- Log data content here -->
+        <div class="table">
+            <div class="table-row">
+                <div class="table-cell">Temperature</div>
+                <div class="table-cell mean-value">&#8960; <span id="temperature_mean"></span>°C</div>
+                <div class="table-cell min-value">&darr; <span id="temperature_min"></span>°C</div>
+                <div class="table-cell max-value">&uarr; <span id="temperature_max"></span>°C</div>
+            </div>
+            <div class="table-row">
+                <div class="table-cell">Humidity </div>
+                <div class="table-cell mean-value">&#8960; <span id="humidity_mean"></span>%</div>
+                <div class="table-cell min-value">&darr; <span id="humidity_min"></span>%</div>
+                <div class="table-cell max-value">&uarr; <span id="humidity_max"></span>%</div>
+            </div>
+        </div>
+
+        <div id="tthgraph"></div>
+
+        {% for key in configuration["pump_moisture_dict"] %}
+        <h2>Moisture/Pump {{key}}</h2>
+        <div id="moisturegraph_{{key}}" class="moisturegraph"></div>
+        {% endfor %}
+
     </div>
     <div class="tab-content" id="watchdog" style="display:none;">
         <h2>Watchdog</h2>

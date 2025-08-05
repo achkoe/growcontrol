@@ -262,3 +262,23 @@ body {
 .settings-actions button.back:hover {
     background-color: #0056b3;
 }
+
+.table {
+    display: table;
+    border-spacing: 1em;
+    border-collapse: collapse;
+}
+.table-row {
+    display: table-row; 
+    background-color: lightgray;
+    border: 1pt solid black;
+    border-radius: 5pt;
+}
+.table-cell {
+    display: table-cell;
+    padding: 5pt 1em;
+}
+
+.min-value { background-color: lightblue;}
+.max-value { background-color: lightpink;}
+.mean-value { background-color: lavenderblush;}
