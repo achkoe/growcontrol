@@ -84,14 +84,15 @@ class Bridge:
         return IDENTITY
 
     def get(self):
+        # print(f"{IDENTITY}-pump_state -> {self.pump_state}")
         return "ON" if self.pump_state is ON else "OFF"
     
     def get_state(self):
         return "-" if self.last_time is None else time.strftime("%Y-%m-%d, %H:%M:%S", time.localtime(self.last_time))
 
     def set(self, pump_state):
-        print(f"Brigde-set {pump_state}")
-        self.pump_request_on = pump_state == "On"
+        print(f"{IDENTITY}-brigde-set {pump_state}")
+        self.pump_request_on = pump_state == "ON"
         return "OK"
 
     def reload(self):

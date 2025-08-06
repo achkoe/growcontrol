@@ -55,34 +55,34 @@
         </div>
         <div class="controls-row">
             <div class="control-group">
-                <span>Fan</span>
+                <span class="bold">Fan</span>
                 <button class="modeauto auto-btn" id="fan-mode">Auto</button>
                 <button class="toggle onoff-btn" id="fan-onoff" disabled>On</button>
             </div>
             <div class="control-group">
-                <span>Heater</span>
+                <span class="bold">Heater</span>
                 <button class="modeauto auto-btn" id="heater-mode">Auto</button>
                 <button class="toggle onoff-btn" id="heater-onoff" disabled>On</button>
             </div>
             <div class="control-group">
-                <span>Humidifier</span>
+                <span class="bold">Humidifier</span>
                 <button class="modeauto auto-btn" id="humidifier-mode">Auto</button>
                 <button class="toggle onoff-btn" id="humidifier-onoff" disabled>On</button>
             </div>
             <div class="control-group">
-                <span>Light</span>
+                <span class="bold">Light</span>
                 <button class="modeauto auto-btn" id="light-mode">Auto</button>
                 <button class="toggle onoff-btn" id="light-onoff" disabled>On</button>
             </div>
             <div class="control-group">
-                <span>Exhaust Air Fan</span>
+                <span class="bold">Exhaust Air Fan</span>
                 <button class="toggle onoff-btn" id="exhaustfan-onoff">Off</button>
             </div>
         </div>
         <div class="pumps-row">
             {% for key in configuration["pump_moisture_dict"] %}
             <div class="pump-group">
-                <span>Pump {{key}}</span>
+                <span class="bold">Pump {{key}}</span>
                 <span class="pump-label">Last checked:</span>
                 <span class="pump-value" id="pump{{key}}-lastchecked">--</span>
                 <span class="pump-label">Soil moisture:</span>
@@ -146,7 +146,7 @@
 
     </div>
     <div class="tab-content" id="watchdog" style="display:none;">
-        <h2>Watchdog</h2>
+        <p id="watchdog-status"></p>
         <!-- Watchdog content here -->
     </div>
 </body>

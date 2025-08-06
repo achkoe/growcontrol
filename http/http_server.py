@@ -40,11 +40,23 @@ onoff_dict = {
     'light-onoff': light_proxy.get(),
     'fan-onoff': fan_proxy.get_fan(),
     'exhaustfan-onoff': fan_proxy.get_fan_exhaust_air(),
-    "heater-onoff": fan_proxy.get_heater, 
-    "humidifier-onoff": fan_proxy.get_humidifier,
-    "exhaustfan-onoff": fan_proxy.get_fan_exhaust_air,
-
+    "heater-onoff": fan_proxy.get_heater(), 
+    "humidifier-onoff": fan_proxy.get_humidifier(),
+    "exhaustfan-onoff": fan_proxy.get_fan_exhaust_air(),
 }
+
+onoff_set_dict = {
+    'light-onoff': light_proxy.set,
+    'fan-onoff': fan_proxy.set_fan,
+    'exhaustfan-onoff': fan_proxy.set_fan_exhaust_air,
+    "heater-onoff": fan_proxy.set_heater, 
+    "humidifier-onoff": fan_proxy.set_humidifier,
+    "exhaustfan-onoff": fan_proxy.set_fan_exhaust_air,
+}
+
+for key in configuration.pump_moisture_dict.keys():
+    onoff_dict[f"pump{key}-onoff"] = "OFF"
+    onoff_set_dict[f"pump{key}-onoff"] = pump_proxies[key].set
 
 app = Flask(__name__)
 
@@ -90,15 +102,15 @@ def status():
         "heater-mode": heater_mode,
         "humidifier-mode": humidifier_mode,
         #
-        "pump": pump,
-        "moisture": moisture,
-        #
         "exhaustfan-onoff": fan_exhaust_air,
         "light-onoff": light,
         "fan-onoff": fan, 
         "heater-onoff": heater, 
         "humidifier-onoff": humidifier
     }
+    for key in configuration.pump_moisture_dict.keys():
+        reply.update({f"pump{key}-onoff": pump[key]["on"]})
+        reply.update({f"pump{key}-soilmoisture": moisture[key]})
     reply.update({"settings": settings})
     return reply
 
@@ -120,14 +132,7 @@ def control():
         onoff = "OFF" if onoff_dict[the_id] == "ON" else "ON"
         print(onoff)
         onoff_dict[the_id] = onoff
-        {
-            "light-onoff": light_proxy.set,
-            "fan-onoff": fan_proxy.set_fan, 
-            "heater-onoff": fan_proxy.set_heater, 
-            "humidifier-onoff": fan_proxy.set_humidifier,
-            "exhaustfan-onoff": fan_proxy.set_fan_exhaust_air,
-            
-        }[the_id](onoff)
+        onoff_set_dict[the_id](onoff)
         
     return {"status": True}
     
@@ -163,59 +168,6 @@ def toggle_fan():
     return {"status": reply}
 
 
-@ app.route("/toggleHeater", methods=("POST", ))
-def toggle_heater():
-    print("toggleHeater: ", request.get_json())
-    # {'heater': 'Manual', 'heaterOnOff': 'Off'}
-    heater_mode = request.get_json()["heater_mode"]  # either 'Manual' or 'Auto'
-    heater_state = request.get_json()["heaterOnOff"]
-    reply = fan_proxy.set_heater(heater_mode, heater_state)
-    print(f"reply -> {reply}")
-    return {"status": reply}
-
-
-@ app.route("/toggleHumidifier", methods=("POST", ))
-def toggle_humidifier():
-    print("toggleHumidifier: ", request.get_json())
-    # {'humidifier': 'Manual', 'humidifierOnOff': 'Off'}
-    humidifier_mode = request.get_json()["humidifier_mode"]  # either 'Manual' or 'Auto'
-    humidifier_state = request.get_json()["humidifierOnOff"]
-    reply = fan_proxy.set_humidifier(humidifier_mode, humidifier_state)
-    print(f"reply -> {reply}")
-    return {"status": reply}
-
-
-@ app.route("/toggleFanExhaustAir", methods=("POST", ))
-def toggle_fan_exhaust_air():
-    print(request.get_json())
-    # {'fan': 'Manual', 'fanOnOff': 'Off'}
-    fan_state = request.get_json()["fanExhaustAirOnOff"]
-    reply = fan_proxy.set_fan_exhaust_air(fan_state)
-    print(f"reply -> {reply}")
-    return {"status": reply}
-
-
-@ app.route("/toggleLight", methods=("POST", ))
-def toggle_light():
-    print(request.get_json())
-    # 'light_mode': 'Manual', 'light_state': 'Off'}
-    light_mode = request.get_json()["light_mode"]
-    light_state = request.get_json()["lightOnOff"]
-    reply = light_proxy.set(light_mode, light_state)
-    return {"status": reply}
-
-
-@ app.route("/togglePump1", methods=("POST", ))
-@ app.route("/togglePump2", methods=("POST", ))
-@ app.route("/togglePump3", methods=("POST", ))
-def toggle_pump():
-    index = int(request.full_path[-2])
-    pump = request.get_json()
-    pump_proxy = pump_proxies[index]
-    reply = pump_proxy.set(pump[f"pump{index}OnOff"])
-    return {"status": reply}
-
-
 @app.route("/log", methods=("GET", ))
 def log():
     return render_template('logdata.html', configuration=configuration, version=f"v{VERSION}")
@@ -233,9 +185,10 @@ def logdata():
 
 @app.route("/watchdog", methods=("GET", ))
 def watchdog():
+    status = "unknown"
     try:
         with pathlib.Path(__file__).parent.parent.joinpath("watchdog.log").open("r") as fh:
-            watchdog = fh.read()
+            status = fh.read()
     except Exception as watchdog:
         pass
-    return render_template('watchdog.html', watchdog=watchdog, version=f"v{VERSION}")
+    return {"watchdog": status}
