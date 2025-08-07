@@ -9,7 +9,12 @@ function pollStatus() {
         .then(res => res.json())
         .then(data => {
             // console.log(data);
-            for (id of ["value-time", "value-temperature", "value-humidity", "value-humidifier", "value-watersupplylevel", "value-fan", "value-heater", "value-light"]) {
+            for (id of [ "value-temperature", "value-humidity"]) {
+                let e = document.getElementById(id)
+                log(typeof data[id]);
+                e.innerText = parseFloat(data[id]).toFixed(1);
+            }
+            for (id of ["value-time", "value-watersupplylevel", "value-fan", "value-heater", "value-light", "value-humidifier"]) {
                 let e = document.getElementById(id)
                 e.innerText = data[id];
                 if (["ON", "OFF"].includes(data[id])) {
