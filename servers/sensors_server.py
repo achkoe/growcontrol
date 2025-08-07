@@ -21,10 +21,6 @@ import configuration
 from configuration import port_waterlow, port_watermedium, port_waterhigh
 
 
-# set to True to use mocked values
-USE_MOCK_VALUES = os.getenv("USE_MOCK_VALUES", False)
-
-
 IDENTITY = "sensors_server.py v0.0.1"
 logging.basicConfig(format=configuration.log_format, level=logging.DEBUG)
 LOGGER = logging.getLogger()
@@ -33,8 +29,53 @@ LOGGER.setLevel(get_loglevel("SENSOR_SERVER_LOGLEVEL"))
 GPIO.setmode(GPIO.BCM)
 
 
-class Bridge():
+class BridgeBase():
     def __init__(self):
+        self.settings = load_settings()
+        self._temperature = 22.2
+        self._humidity = 11.1
+        self._waterlevel = 2
+        self._moisture = {0: 55, 1: 66, 2: 77 ,3: 88}
+
+    def settemperature(self, value):
+        LOGGER.info(("settemperature", repr(value), type(value)))
+        self._temperature = value
+        return self._temperature
+
+    def sethumidity(self, value):
+        LOGGER.info(("sethumidity", repr(value), type(value)))
+        self._humidity = value
+        return self._humidity
+
+    def setwaterlevel(self, value):
+        LOGGER.info(("setwaterlevel", repr(value), type(value)))
+        self._waterlevel = value
+        return self._waterlevel
+    
+    def setmoisture(self, channel, value):
+        self._moisture[channel] = value
+        return value
+
+    def reload(self):
+        self.settings = load_settings()
+        LOGGER.setLevel(get_loglevel("SENSOR_SERVER_LOGLEVEL"))
+        return "OK"
+
+    def identity(self):
+        return IDENTITY
+        
+    def temperature(self):
+        return self._temperature
+
+    def humidity(self):
+        return self._humidity
+
+    def waterlevel(self):
+        return self._waterlevel
+
+class Bridge(BridgeBase):
+    def __init__(self):
+        super().__init__()
         GPIO.setup(configuration.port_waterlow, GPIO.IN)
         GPIO.setup([port_waterlow, port_watermedium, port_waterhigh], GPIO.IN)
 
@@ -55,65 +96,32 @@ class Bridge():
         self._offset = - self._slope * self._max
         # dummy read moisture to clear false readings at startup
         [self.moisture(channel) for channel in [0, 1, 2, 3]]
-        self.settings = load_settings()
         self._execute()
 
     def _execute(self):
-        if USE_MOCK_VALUES:
-            self._temperature = 24.1
-            self._humidity = 48
-            self._waterlevel = 0
+        self._temperature = self.bme280.get_temperature()
+        self._humidity = self.bme280.get_humidity()
+        waterlevels = [GPIO.input(pin) for pin in (
+            port_waterlow, port_watermedium, port_waterhigh)]
+        # LOGGER.critical(waterlevels)
+        # [1, 1, 1] -> water level is below low marker
+        # [0, 1, 1] -> water is between low and medium marker
+        # [0, 0, 1] -> water is between medium and high marker
+        # [0, 0, 0] -> water is between above high marker
+        # LOGGER.critical(waterlevels)
+        if waterlevels == [0, 0, 0]:
+            self._waterlevel = 0        # critical
+        elif waterlevels == [1, 0, 0]:
+            self._waterlevel = 1        # low
+        elif waterlevels == [1, 1, 0]:
+            self._waterlevel = 2        # medium
+        elif waterlevels == [1, 1, 1]:  
+            self._waterlevel = 3        # full
         else:
-            self._temperature = self.bme280.get_temperature()
-            self._humidity = self.bme280.get_humidity()
-            waterlevels = [GPIO.input(pin) for pin in (
-                port_waterlow, port_watermedium, port_waterhigh)]
-            # LOGGER.critical(waterlevels)
-            # [1, 1, 1] -> water level is below low marker
-            # [0, 1, 1] -> water is between low and medium marker
-            # [0, 0, 1] -> water is between medium and high marker
-            # [0, 0, 0] -> water is between above high marker
-            # LOGGER.critical(waterlevels)
-            if waterlevels == [0, 0, 0]:
-                self._waterlevel = 0        # critical
-            elif waterlevels == [1, 0, 0]:
-                self._waterlevel = 1        # low
-            elif waterlevels == [1, 1, 0]:
-                self._waterlevel = 2        # medium
-            elif waterlevels == [1, 1, 1]:  
-                self._waterlevel = 3        # full
-            else:
-                # this should be impossible, therefore set to critical
-                self._waterlevel = 0
-            LOGGER.info(
-                f"T={self._temperature:4.1f}°C, H={self._humidity:5.1f}%, WL={self._waterlevel}")
-
-    def settemperature(self, value):
-        LOGGER.info(("settemperature", repr(value), type(value)))
-        self._temperature = value
-        return self._temperature
-
-    def sethumidity(self, value):
-        LOGGER.info(("sethumidity", repr(value), type(value)))
-        self._humidity = value
-        return self._humidity
-
-    def identity(self):
-        return IDENTITY
-
-    def temperature(self):
-        return self._temperature
-
-    def humidity(self):
-        return self._humidity
-
-    def waterlevel(self):
-        return self._waterlevel
-
-    def setwaterlevel(self, value):
-        LOGGER.info(("setwaterlevel", repr(value), type(value)))
-        self._waterlevel = value
-        return self._waterlevel
+            # this should be impossible, therefore set to critical
+            self._waterlevel = 0
+        LOGGER.info(
+            f"T={self._temperature:4.1f}°C, H={self._humidity:5.1f}%, WL={self._waterlevel}")
 
     def moisture(self, channel):
         """Return moisture between 0 ... 100"""
@@ -126,11 +134,13 @@ class Bridge():
         LOGGER.info(f"moisture:{channel} -> {rval}")
         return rval
 
-    def reload(self):
-        self.settings = load_settings()
-        LOGGER.setLevel(get_loglevel("SENSOR_SERVER_LOGLEVEL"))
-        return "OK"
 
+class RemoteControlBride(BridgeBase):
+    def _execute(self):
+        pass
+    
+    def moisture(self, channel):
+        return self._moisture[channel]
 
 class TheServer(SimpleXMLRPCServer):
     def service_actions(self):
@@ -143,8 +153,13 @@ class RequestHandler(SimpleXMLRPCRequestHandler):
 
 
 LOGGER.critical("SENSOR PROCESS STARTED")
+LOGGER.critical(os.environ.get("REMOTECONTROL", None))
+if os.environ.get("REMOTECONTROL", None) is not None:
+    bridge = RemoteControlBride()
+else:
+    bridge = Bridge()
 port = configuration.sensors_server_port
 with TheServer(('localhost', port), requestHandler=RequestHandler, logRequests=False) as server:
     server.register_introspection_functions()
-    server.register_instance(Bridge())
+    server.register_instance(bridge)
     server.serve_forever()

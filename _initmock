@@ -6,7 +6,7 @@ echo "server | tst | http"
 echo "$1"
 
 if [[ "$1" == "server" ]]; then
-    python servers/sensors_server.py &
+    REMOTECONTROL=true python servers/sensors_server.py &
     python servers/light_server.py &
     sleep 2
     python servers/fan_server.py &
