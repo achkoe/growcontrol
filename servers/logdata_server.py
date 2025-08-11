@@ -30,15 +30,16 @@ class Bridge():
             f"http://localhost:{configuration.fan_server_port}")
         self.sensors_proxy = xmlrpc.client.ServerProxy(
             f"http://localhost:{configuration.sensors_server_port}")
-        self.pump_proxy_dict = copy.deepcopy(configuration.pump_moisture_dict)
-        for key, value in self.pump_proxy_dict.items():
-            self.pump_proxy_dict[key]["proxy"] = xmlrpc.client.ServerProxy(
-                f"http://localhost:{value['pump']}")
-            self.pump_proxy_dict[key]["moisture"] = deque(maxlen=MAX_LENGTH)
-            self.pump_proxy_dict[key]["pump"] = -1
+        self.pump_proxy = xmlrpc.client.ServerProxy(
+                f"http://localhost:{configuration.pump_server_port}")
+        self.moisture_proxy_dict = copy.deepcopy(configuration.moisture_dict)
+        for key in self.moisture_proxy_dict:
+            self.moisture_proxy_dict[key]["moisture"] = deque(maxlen=MAX_LENGTH)
+            self.moisture_proxy_dict[key]["previous"] = -1
         self.output_queue = deque(maxlen=MAX_LENGTH)
         self.previous_time = -1
         self.previous_fan = -1
+        self.previous_pump = -1
         self.previous_heater = -1
         self.previous_humidifier = -1
 
@@ -46,28 +47,27 @@ class Bridge():
         interval = 60
         currenttime = time.time()
         fan = 1 if self.fan_proxy.get_fan() == "ON" else 0
+        pump = 1 if self.pump_proxy.get() == "ON" else 0
         heater = 1 if self.fan_proxy.get_heater() == "ON" else 0
         humidifier = 1 if self.fan_proxy.get_humidifier() == "ON" else 0
         temperature = float(self.sensors_proxy.temperature())
         humidity = float(self.sensors_proxy.humidity())
 
-        if (fan != self.previous_fan) or (heater != self.previous_heater) or (humidifier != self.previous_humidifier) or (currenttime - self.previous_time > interval):
+        if (fan != self.previous_fan) or (pump != self.previous_pump) or (heater != self.previous_heater) or (humidifier != self.previous_humidifier) or (currenttime - self.previous_time > interval):
             # take atmost one sample in 60 seconds
             self.output_queue.append(
-                (currenttime, temperature, humidity, fan, heater, humidifier))
+                (currenttime, temperature, humidity, fan, heater, humidifier, pump))
             # ic(self.output_queue)
             self.previous_fan = fan
+            self.previous_pump = pump
             self.previous_heater = heater
             self.previous_humidifier = humidifier
 
-        for key in self.pump_proxy_dict:
-            pump = 1 if self.pump_proxy_dict[key]["proxy"].get() == "ON" else 0
-            if (pump != self.pump_proxy_dict[key]["pump"]) or (currenttime - self.previous_time > interval):
-                moisture = self.sensors_proxy.moisture(
-                    self.pump_proxy_dict[key]["channel"])
-                self.pump_proxy_dict[key]["moisture"].append(
-                    (currenttime, moisture, pump))
-                self.pump_proxy_dict[key]["pump"] = pump
+        for key in self.moisture_proxy_dict:
+            moisture = self.sensors_proxy.moisture(self.moisture_proxy_dict[key]["channel"])
+            if (moisture != self.moisture_proxy_dict[key]["previous"]) or (currenttime - self.previous_time > interval):
+                self.moisture_proxy_dict[key]["moisture"].append((currenttime, moisture))
+                self.moisture_proxy_dict[key]["previous"] = moisture
 
         if (currenttime - self.previous_time > interval):
             self.previous_time = currenttime
@@ -77,11 +77,11 @@ class Bridge():
 
     def get(self):
         # returns 3 items:
-        # 1st is list with tuples (time, temperature, humidity, fan, heater, humidifier)
-        # 2nd is dict with keys <pump> and tuples (time, moisture, pump)
+        # 1st is list with tuples (time, temperature, humidity, fan, heater, humidifier, pump)
+        # 2nd is dict with keys <channel> and tuples (time, moisture)
         # 3rd is dict with keys "temperature_mean", "temperature_min", "temperature_max", "humidity_mean", "humidity_min", "humidity_max"
         return list(self.output_queue), \
-            dict([(str(key), list(self.pump_proxy_dict[key]["moisture"])) for key in self.pump_proxy_dict]), \
+            dict([(str(key), list(self.moisture_proxy_dict[key]["moisture"])) for key in self.moisture_proxy_dict]), \
             dict(
                 temperature_mean=statistics.mean([item[1] for item in self.output_queue]),
                 temperature_min=min([item[1] for item in self.output_queue]),

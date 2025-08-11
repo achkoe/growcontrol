@@ -32,32 +32,38 @@
                 <span class="field-label">Humidity</span>
                 <span class="field-value" id="value-humidity">--</span>
             </div>
-            <div class="field" id="field-humidifier">
-                <span class="field-label">Humidifier</span>
-                <span class="field-value" id="value-humidifier">--</span>
-            </div>
             <div class="field" id="field-watersupplylevel">
                 <span class="field-label">Water Supply Level</span>
                 <span class="field-value" id="value-watersupplylevel">--</span>
             </div>
-            <div class="field" id="field-fan">
-                <span class="field-label">Fan</span>
-                <span class="field-value" id="value-fan">--</span>
+        </div>
+        <div class="fields-row">
+            <div class="field" id="field-light">
+                <span class="field-label">Light</span>
+                <span class="field-value" id="value-light">--</span>
             </div>
             <div class="field" id="field-heater">
                 <span class="field-label">Heater</span>
                 <span class="field-value" id="value-heater">--</span>
             </div>
-            <div class="field" id="field-light">
-                <span class="field-label">Light</span>
-                <span class="field-value" id="value-light">--</span>
+            <div class="field" id="field-fan">
+                <span class="field-label">Fan</span>
+                <span class="field-value" id="value-fan">--</span>
+            </div>
+            <div class="field" id="field-humidifier">
+                <span class="field-label">Humidifier</span>
+                <span class="field-value" id="value-humidifier">--</span>
+            </div>
+            <div class="field" id="field-pump">
+                <span class="field-label">Pump</span>
+                <span class="field-value" id="value-pump">--</span>
             </div>
         </div>
         <div class="controls-row">
             <div class="control-group">
-                <span class="bold">Fan</span>
-                <button class="modeauto auto-btn" id="fan-mode">Auto</button>
-                <button class="toggle onoff-btn" id="fan-onoff" disabled>On</button>
+                <span class="bold">Light</span>
+                <button class="modeauto auto-btn" id="light-mode">Auto</button>
+                <button class="toggle onoff-btn" id="light-onoff" disabled>On</button>
             </div>
             <div class="control-group">
                 <span class="bold">Heater</span>
@@ -65,29 +71,32 @@
                 <button class="toggle onoff-btn" id="heater-onoff" disabled>On</button>
             </div>
             <div class="control-group">
+                <span class="bold">Fan</span>
+                <button class="modeauto auto-btn" id="fan-mode">Auto</button>
+                <button class="toggle onoff-btn" id="fan-onoff" disabled>On</button>
+            </div>
+            <div class="control-group">
                 <span class="bold">Humidifier</span>
                 <button class="modeauto auto-btn" id="humidifier-mode">Auto</button>
                 <button class="toggle onoff-btn" id="humidifier-onoff" disabled>On</button>
             </div>
             <div class="control-group">
-                <span class="bold">Light</span>
-                <button class="modeauto auto-btn" id="light-mode">Auto</button>
-                <button class="toggle onoff-btn" id="light-onoff" disabled>On</button>
+                <span class="bold">Pump</span>
+                <button class="modeauto auto-btn" id="pump-mode">Auto</button>
+                <button class="toggle onoff-btn" id="pump-onoff" disabled>On</button>
             </div>
+        </div>
+        <div class="controls-row">
             <div class="control-group">
                 <span class="bold">Exhaust Air Fan</span>
                 <button class="toggle onoff-btn" id="exhaustfan-onoff">Off</button>
             </div>
         </div>
-        <div class="pumps-row">
-            {% for key in configuration["pump_moisture_dict"] %}
-            <div class="pump-group">
-                <span class="bold">Pump {{key}}</span>
-                <span class="pump-label">Last checked:</span>
-                <span class="pump-value" id="pump{{key}}-lastchecked">--</span>
-                <span class="pump-label">Soil moisture:</span>
-                <span class="pump-value" id="pump{{key}}-soilmoisture">--</span>
-                <button class="toggle onoff-btn" id="pump{{key}}-onoff">Off</button>
+        <div class="fields-row">
+            {% for key in configuration["moisture_dict"] %}
+            <div class="field">
+                <span class="field-label">Soil moisture {{key}}:</span>
+                <span class="field-value" id="soilmoisture-{{key}}">--</span>
             </div>
             {% endfor %}
         </div>

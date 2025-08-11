@@ -9,25 +9,22 @@
         "title": "Light Off Time",
         "type": "time"
     },
+    "pump_on_time": {
+        "value": "17:00",
+        "title": "Pump On Time",
+        "type": "time"
+    },
+    "pump_off_time": {
+        "value": "17:30",
+        "title": "Pump Off Time",
+        "type": "time"
+    },
     "moisture_low_level": {
         "value": "68",
         "title": "Moisture Low Level",
         "type": "number",
         "min": 0,
         "max": 100
-    },
-    "pump_amount": {
-        "value": "200",
-        "title": "Pump water amount (ml)",
-        "type": "number",
-        "min": 50,
-        "max": 5000
-    },
-    "pump_check_interval": {
-        "value": "16",
-        "title": "Moisture check interval (h)",
-        "min": 1,
-        "max": 72
     },
     "temperature_high_level": {
         "value": "35",

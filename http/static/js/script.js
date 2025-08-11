@@ -11,10 +11,9 @@ function pollStatus() {
             // console.log(data);
             for (id of [ "value-temperature", "value-humidity"]) {
                 let e = document.getElementById(id)
-                log(typeof data[id]);
                 e.innerText = parseFloat(data[id]).toFixed(1);
             }
-            for (id of ["value-time", "value-watersupplylevel", "value-fan", "value-heater", "value-light", "value-humidifier"]) {
+            for (id of ["value-time", "value-watersupplylevel", "value-fan", "value-heater", "value-light", "value-humidifier", "value-pump"]) {
                 let e = document.getElementById(id)
                 e.innerText = data[id];
                 if (["ON", "OFF"].includes(data[id])) {
@@ -90,7 +89,7 @@ window.addEventListener("load", (event) => {
         ids.push(id);
         ids.push(`pump${index}-soilmoisture`);
     }
-    ids = ids.concat(["fan-mode", "fan-onoff", "heater-mode", "heater-onoff", "humidifier-mode", "humidifier-onoff", "light-mode", "light-onoff", "exhaustfan-onoff"]);
+    ids = ids.concat(["fan-mode", "fan-onoff", "pump-mode", "pump-onoff", "heater-mode", "heater-onoff", "humidifier-mode", "humidifier-onoff", "light-mode", "light-onoff", "exhaustfan-onoff"]);
     for (const id of ids) {
         document.getElementById(id).addEventListener("click", function (event) {
             fetch(`/control`, {
