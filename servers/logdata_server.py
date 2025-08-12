@@ -66,7 +66,7 @@ class Bridge():
         for key in self.moisture_proxy_dict:
             moisture = self.sensors_proxy.moisture(self.moisture_proxy_dict[key]["channel"])
             if (moisture != self.moisture_proxy_dict[key]["previous"]) or (currenttime - self.previous_time > interval):
-                self.moisture_proxy_dict[key]["moisture"].append((currenttime, moisture))
+                self.moisture_proxy_dict[key]["moisture"].append((currenttime, moisture, pump))
                 self.moisture_proxy_dict[key]["previous"] = moisture
 
         if (currenttime - self.previous_time > interval):

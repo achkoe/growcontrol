@@ -25,8 +25,9 @@
 
     <h2>Grow Control Temperature/Humidity/Fan {{version}}</h2>
     <div id="tthgraph"></div>
-    {% for key in configuration["pump_moisture_dict"] %}
-    <h2>Moisture/Pump {{key}} {{version}}</h2>
+
+    {% for key in configuration["moisture_dict"] %}
+    <h2>Moisture {{key}}</h2>
     <div id="moisturegraph_{{key}}" class="moisturegraph"></div>
     {% endfor %}
     <!-- 

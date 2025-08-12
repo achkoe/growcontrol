@@ -27,7 +27,7 @@ logdata_proxy = xmlrpc.client.ServerProxy(
 
 
 settings = load_settings()
-print(settings)
+print(f"settings -> {settings}")
 
 mode_dict = {
     'fan-mode': light_proxy.get_mode(),

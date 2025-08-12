@@ -10,24 +10,24 @@
         "type": "time"
     },
     "pump_on_time": {
-        "value": "17:00",
+        "value": "05:00",
         "title": "Pump On Time",
         "type": "time"
     },
     "pump_off_time": {
-        "value": "17:30",
+        "value": "06:40",
         "title": "Pump Off Time",
         "type": "time"
     },
     "moisture_low_level": {
-        "value": "68",
+        "value": "60",
         "title": "Moisture Low Level",
         "type": "number",
         "min": 0,
         "max": 100
     },
     "temperature_high_level": {
-        "value": "35",
+        "value": "25",
         "title": "Temperature High Level",
         "type": "number",
         "min": 0,
@@ -105,6 +105,20 @@
     },
     "light_off_time_i": {
         "value": 60540,
+        "title": null,
+        "type": "number",
+        "min": 0,
+        "max": 100
+    },
+    "pump_on_time_i": {
+        "value": 18000,
+        "title": null,
+        "type": "number",
+        "min": 0,
+        "max": 100
+    },
+    "pump_off_time_i": {
+        "value": 24000,
         "title": null,
         "type": "number",
         "min": 0,

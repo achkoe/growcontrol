@@ -152,7 +152,7 @@ class Bridge():
         return "ON" if self.fan_is_on is True else "OFF"
     
     def set_fan(self, fan_state):
-        print(f"Brigde-set_fan {fan_state}")
+        print(f"{IDENTITY} set_fan {fan_state}")
         self.fan_on = fan_state.upper() == "ON"
         if self.fan_mode_manual is False:
             if self.state in [RUN, DOWN]:
@@ -163,7 +163,7 @@ class Bridge():
         return "Manual" if self.fan_mode_manual else "Auto"
 
     def set_fan_mode(self, mode):
-        print(f"Brigde-set_fan_mode {mode}")
+        print(f"{IDENTITY} set_fan_mode {mode}")
         self.fan_mode_manual = mode == "Manual"
         if self.fan_mode_manual is False:
             if self.state in [RUN, DOWN]:
@@ -174,6 +174,7 @@ class Bridge():
         return "ON" if self.fan_exhaust_air_is_on else "OFF"
 
     def set_fan_exhaust_air(self, fan_exhaust_air_state):
+        print(f"{IDENTITY} set_fan_exhaust_air {mode}")
         self.fan_exhaust_air_is_on = fan_exhaust_air_state.upper() == "ON"
         GPIO.output(self.port_fan_exhaust_air, GPIO.LOW if self.fan_exhaust_air_is_on else GPIO.HIGH)
         LOGGER.info(f"Fan Exhaust Air -> {self.fan_exhaust_air_is_on}")
