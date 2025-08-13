@@ -41,7 +41,7 @@
         "max": 100
     },
     "temperature_high_critical_level": {
-        "value": "31",
+        "value": "30",
         "title": "Temperature High Critical Level",
         "type": "number",
         "min": 0,
@@ -76,7 +76,7 @@
         "max": 100
     },
     "humidity_low_critical_level": {
-        "value": "40",
+        "value": "16",
         "title": "Humidity Low Critical Level",
         "type": "number",
         "min": 0,

@@ -4,7 +4,7 @@ import xmlrpc.client
 import time
 import logging
 import pathlib
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 from icecream import ic
 import configuration
 from version import VERSION                                                                                                                                                                                                                                                         
@@ -151,7 +151,7 @@ def editsettings():
         fan_proxy.reload()
         light_proxy.reload()
         pump_proxy.reload()
-    return index()
+    return redirect(url_for("index"))
 
 
 @ app.route("/logdata")
