@@ -53,6 +53,7 @@ class BridgeBase():
         return self._waterlevel
     
     def setmoisture(self, channel, value):
+        LOGGER.info(f"{IDENTITY} setmoisture {channel} {value}")
         self._moisture[channel] = value
         return value
 

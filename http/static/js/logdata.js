@@ -119,7 +119,8 @@ function makeLogHttpRequest(urlUpdate) {
               document.getElementById(element).innerText = data["min_max_mean"][element].toFixed(1);
             });
                     
-            console.log('data.min_max_mean:', data["min_max_mean"]);
+            console.log(data);
+            // console.log('data.min_max_mean:', data["min_max_mean"]);
             var plotdata = [[], [], [], [], [], []];
             for (let tuple of data["tth"]) {
                 plotdata[0].push(tuple[0]);       // currenttime

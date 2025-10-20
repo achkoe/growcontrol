@@ -11,16 +11,30 @@ function pollStatus() {
             // console.log(data);
             for (id of [ "value-temperature", "value-humidity"]) {
                 let e = document.getElementById(id)
-                log(typeof data[id]);
                 e.innerText = parseFloat(data[id]).toFixed(1);
             }
-            for (id of ["value-time", "value-watersupplylevel", "value-fan", "value-heater", "value-light", "value-humidifier"]) {
+            for (id of ["value-time", "value-watersupplylevel", "value-fan", "value-heater", "value-light", "value-humidifier", "value-pump"]) {
                 let e = document.getElementById(id)
                 e.innerText = data[id];
                 if (["ON", "OFF"].includes(data[id])) {
                     e.parentElement.classList.remove("on");
                     e.parentElement.classList.remove("off");
                     e.parentElement.classList.add(data[id].toLowerCase());
+                }
+            }
+            for (let i = 1; i < 10; i++) {
+                let key = `soilmoisture-${i}`
+                let e = document.getElementById(key);
+                if (e === null) break;
+                e.innerText = data[key];
+                e = e.parentElement;
+                e.classList.remove("tolow");
+                e.classList.remove("acceptable");
+                if (data[key] <= data["settings"]["moisture_low_level"]) {
+                    e.classList.add("tolow");
+                    e.title = "to low";
+                } else {
+                    e.classList.add("acceptable");
                 }
             }
             for (const key of ["temperature", "humidity"]) {
@@ -82,15 +96,7 @@ function pollStatus() {
 window.addEventListener("load", (event) => {
     console.log("page is fully loaded");
 
-    
-    for (let index = 1; ; index++) {
-        let id = `pump${index}-onoff`;
-        let e = document.getElementById(id);
-        if (e === null) break;
-        ids.push(id);
-        ids.push(`pump${index}-soilmoisture`);
-    }
-    ids = ids.concat(["fan-mode", "fan-onoff", "heater-mode", "heater-onoff", "humidifier-mode", "humidifier-onoff", "light-mode", "light-onoff", "exhaustfan-onoff"]);
+    ids = ["fan-mode", "fan-onoff", "pump-mode", "pump-onoff", "heater-mode", "heater-onoff", "humidifier-mode", "humidifier-onoff", "light-mode", "light-onoff", "exhaustfan-onoff"];
     for (const id of ids) {
         document.getElementById(id).addEventListener("click", function (event) {
             fetch(`/control`, {
