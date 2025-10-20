@@ -1,11 +1,11 @@
 {
     "light_on_time": {
-        "value": "16:50",
+        "value": "05:50",
         "title": "Light On Time",
         "type": "time"
     },
     "light_off_time": {
-        "value": "16:49",
+        "value": "17:50",
         "title": "Light Off Time",
         "type": "time"
     },
@@ -30,14 +30,14 @@
         "max": 72
     },
     "temperature_high_level": {
-        "value": "35",
+        "value": "20",
         "title": "Temperature High Level",
         "type": "number",
         "min": 0,
         "max": 100
     },
     "temperature_low_level": {
-        "value": "21",
+        "value": "18",
         "title": "Temperature Low Level",
         "type": "number",
         "min": 0,
@@ -100,14 +100,14 @@
         "max": 60
     },
     "light_on_time_i": {
-        "value": 60600,
+        "value": 21000,
         "title": null,
         "type": "number",
         "min": 0,
         "max": 100
     },
     "light_off_time_i": {
-        "value": 60540,
+        "value": 64200,
         "title": null,
         "type": "number",
         "min": 0,
