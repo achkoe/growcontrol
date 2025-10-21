@@ -13,7 +13,7 @@ binho-host-adapter==0.1.6
 blinker==1.8.2
 click==8.1.7
 colorama==0.4.6
-dotenv==0.0.5
+dotenv
 executing==2.1.0
 Flask==3.0.3
 i2cdevice==1.0.0
