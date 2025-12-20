@@ -69,5 +69,5 @@ if __name__ == "__main__":
         # create log file
         print("Everything okay", file=fh)
     start()
-    # watch()
+    watch()
     
