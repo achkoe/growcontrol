@@ -10,7 +10,7 @@ function pollStatus() {
         .then(data => {
             // console.log(data);
             for (id of [ "value-temperature", "value-humidity"]) {
-                let e = document.getElementById(id)
+                let e = document.getElementById(id);
                 e.innerText = parseFloat(data[id]).toFixed(1);
             }
             for (id of ["value-time", "value-watersupplylevel", "value-fan", "value-heater", "value-light", "value-humidifier", "value-pump"]) {
@@ -26,7 +26,7 @@ function pollStatus() {
                 let key = `soilmoisture-${i}`
                 let e = document.getElementById(key);
                 if (e === null) break;
-                e.innerText = data[key];
+                e.innerText = parseFloat(data[key].toFixed(1));
                 e = e.parentElement;
                 e.classList.remove("tolow");
                 e.classList.remove("acceptable");

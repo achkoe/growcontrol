@@ -25,11 +25,11 @@
                 <span class="field-value" id="value-time">--:--:--</span>
             </div>
             <div class="field" id="field-temperature">
-                <span class="field-label">Temperature</span>
+                <span class="field-label">Temperature [°C]</span>
                 <span class="field-value" id="value-temperature">--</span>
             </div>
             <div class="field" id="field-humidity">
-                <span class="field-label">Humidity</span>
+                <span class="field-label">Humidity [%]</span>
                 <span class="field-value" id="value-humidity">--</span>
             </div>
             <div class="field" id="field-watersupplylevel">
@@ -95,7 +95,7 @@
         <div class="fields-row">
             {% for key in configuration["moisture_dict"] %}
             <div class="field">
-                <span class="field-label">Soil moisture {{key}}</span>
+                <span class="field-label">Soil moisture {{key}} [%]</span>
                 <span class="field-value" id="soilmoisture-{{key}}">--</span>
             </div>
             {% endfor %}
