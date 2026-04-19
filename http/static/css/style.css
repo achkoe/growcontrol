@@ -1,3 +1,65 @@
+.rtable {
+    display: table;
+    margin: auto;
+}
+
+.tr{
+    display: table-row;
+    background-color: #ddd;
+}
+.tr:nth-child(even) {
+    background-color: #ccc;
+}
+.td {
+    display: table-cell;
+    padding: 10px;
+}
+.button {
+    padding: 6px 18px;
+    border: none;
+    border-radius: 4px;
+    color: #222;
+    font-size: 1em;
+    cursor: pointer;
+    font-weight: bolder;
+}
+.btn-on {
+    background-color: #28a745;
+    width: 4em;
+}
+.btn-off {
+    background-color: #dc3545;
+    width: 4em;
+}
+.btn-manual {
+    background-color: #ffabfb;
+    width: 8em;
+}
+.btn-auto {
+    background-color: #abd3ff;
+    width: 8em;
+}
+@keyframes blink-animation {
+    50% {
+        visibility: hidden;
+    }
+}
+.status-above {
+    background-color: red;
+    animation: blink-animation 1s steps(1, start) infinite;
+}
+.status-below {
+    background-color: blue;
+    color: white;
+    animation: blink-animation 1s steps(1, start) infinite;
+}
+#d-temperature::after {
+    content: "°C";
+}
+#d-humidity::after {
+    content: "%";
+}
+/* ---------------------------------  */
 body {
     font-family: Arial, sans-serif;
     background: #f4f4f4;

@@ -4,10 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <title>GrowControl Dashboard</title>
+    
+    <!--
     <link rel="stylesheet" href="{{ url_for('static', filename='css/uPlot.min.css') }}">
     <script src="{{ url_for('static', filename='js/uPlot.iife.min.js') }}"></script> 
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
     <script src="{{ url_for('static', filename='js/logdata.js') }}"></script>
+    -->    
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 
@@ -18,89 +21,76 @@
         <button class="tab" data-tab="settings">Settings</button>
         <button class="tab" data-tab="watchdog">View watchdog</button>
     </div>
-    <div class="tab-content" id="main">
-        <div class="fields-row">
-            <div class="field on" id="field-time">
-                <span class="field-label">Time</span>
-                <span class="field-value" id="value-time">--:--:--</span>
-            </div>
-            <div class="field" id="field-temperature">
-                <span class="field-label">Temperature [°C]</span>
-                <span class="field-value" id="value-temperature">--</span>
-            </div>
-            <div class="field" id="field-humidity">
-                <span class="field-label">Humidity [%]</span>
-                <span class="field-value" id="value-humidity">--</span>
-            </div>
-            <div class="field" id="field-watersupplylevel">
-                <span class="field-label">Water Supply Level</span>
-                <span class="field-value" id="value-watersupplylevel">--</span>
-            </div>
+
+
+    <div class="rtable">
+        <div class="tr" id="r-time">
+            <div class="td">Time</div>
+            <div class="td" id="d-time">12:12:01</div>
+            <div class="td"></div>
         </div>
-        <div class="fields-row">
-            <div class="field" id="field-light">
-                <span class="field-label">Light</span>
-                <span class="field-value" id="value-light">--</span>
-            </div>
-            <div class="field" id="field-heater">
-                <span class="field-label">Heater</span>
-                <span class="field-value" id="value-heater">--</span>
-            </div>
-            <div class="field" id="field-fan">
-                <span class="field-label">Fan</span>
-                <span class="field-value" id="value-fan">--</span>
-            </div>
-            <div class="field" id="field-humidifier">
-                <span class="field-label">Humidifier</span>
-                <span class="field-value" id="value-humidifier">--</span>
-            </div>
-            <div class="field" id="field-pump">
-                <span class="field-label">Pump</span>
-                <span class="field-value" id="value-pump">--</span>
-            </div>
+        <div class="tr" id="r-temperature">
+            <div class="td">Temperature</div>
+            <div class="td" id="d-temperature">25.1</div>
+            <div class="td" id="s-temperature"></div>
         </div>
-        <div class="controls-row">
-            <div class="control-group">
-                <span class="bold">Light</span>
-                <button class="modeauto auto-btn" id="light-mode">Auto</button>
-                <button class="toggle onoff-btn" id="light-onoff" disabled>On</button>
-            </div>
-            <div class="control-group">
-                <span class="bold">Heater</span>
-                <button class="modeauto auto-btn" id="heater-mode">Auto</button>
-                <button class="toggle onoff-btn" id="heater-onoff" disabled>On</button>
-            </div>
-            <div class="control-group">
-                <span class="bold">Fan</span>
-                <button class="modeauto auto-btn" id="fan-mode">Auto</button>
-                <button class="toggle onoff-btn" id="fan-onoff" disabled>On</button>
-            </div>
+        <div class="tr" id="r-humidity">
+            <div class="td">Humidity</div>
+            <div class="td" id="d-humidity">44</div>
+            <div class="td" id="s-humidity"></div>
         </div>
-        <div class="controls-row">
-            <div class="control-group">
-                <span class="bold">Humidifier</span>
-                <button class="modeauto auto-btn" id="humidifier-mode">Auto</button>
-                <button class="toggle onoff-btn" id="humidifier-onoff" disabled>On</button>
-            </div>
-            <div class="control-group">
-                <span class="bold">Pump</span>
-                <button class="modeauto auto-btn" id="pump-mode">Auto</button>
-                <button class="toggle onoff-btn" id="pump-onoff" disabled>On</button>
-            </div>
-            <div class="control-group">
-                <span class="bold">Exhaust Air Fan</span>
-                <button class="toggle onoff-btn" id="exhaustfan-onoff">Off</button>
-            </div>
+        <div class="tr" id="r-watersupplylevel">
+            <div class="td">Water Supply Level</div>
+            <div class="td">medium</div>
+            <div class="td"></div>
         </div>
-        <div class="fields-row">
-            {% for key in configuration["moisture_dict"] %}
-            <div class="field">
-                <span class="field-label">Soil moisture {{key}} [%]</span>
-                <span class="field-value" id="soilmoisture-{{key}}">--</span>
-            </div>
-            {% endfor %}
+        <div class="tr" id=""r-light>
+            <div class="td">Light</div>
+            <div class="td"><button id="c-light" class="button btn-on">On</button></div>
+            <div class="td"><button id="a-light" class="button btn-manual">Manual</button></div>
+        </div>
+        <div class="tr">
+            <div class="td">Heater</div>
+            <div class="td"><button class="button btn-on">On</button></div>
+            <div class="td"><button class="button btn-auto">Auto</button></div>
+        </div>
+        <div class="tr">
+            <div class="td">Fan</div>
+            <div class="td"><button class="button btn-off">Off</button></div>
+            <div class="td"><button class="button btn-auto">Auto</button></div>
+        </div>
+        <div class="tr">
+            <div class="td">Humidifier</div>
+            <div class="td"><button class="button btn-on">On</button></div>
+            <div class="td"><button class="button btn-auto">Auto</button></div>
+        </div>
+        <div class="tr">
+            <div class="td">Exhaust Air Fan</div>
+            <div class="td"><button class="button btn-on">On</button></div>
+            <div class="td"><button class="button btn-auto">Auto</button></div>
+        </div>
+        <div class="tr">
+            <div class="td">Pump 1</div>
+            <div class="td"><button class="button btn-on">On</button></div>
+            <div class="td"><button class="button btn-auto">Auto</button></div>
+        </div>
+        <div class="tr">
+            <div class="td">Pump 2</div>
+            <div class="td"><button class="button btn-on">On</button></div>
+            <div class="td"><button class="button btn-auto">Auto</button></div>
+        </div>
+        <div class="tr">
+            <div class="td">Soil Moisture 1</div>
+            <div class="td">11%</div>
+            <div class="td"></div>
+        </div>
+        <div class="tr">
+            <div class="td">Soil Moisture 2</div>
+            <div class="td">22%</div>
+            <div class="td"></div>
         </div>
     </div>
+    
     <div class="tab-content" id="settings" style="display:none;">
         <!-- Settings content here -->
         <div class="settings-container">
@@ -147,6 +137,7 @@
         </div>
 
         <div id="tthgraph"></div>
+
 
         {% for key in configuration["moisture_dict"] %}
         <h2>Soil Moisture {{key}}</h2>
