@@ -4,55 +4,63 @@ let ids = [];
 
 
 // Polling function
-function pollStatus() {
-    fetch('/status')
-        .then(result => result.json())
-        .then(data => {
-            document.getElementById("d-time").innerText = data.time;
+async function pollStatus() {
+    response = await fetch('/status');
+    let relement = document.getElementById("r-httpstatus");
+    let delement = document.getElementById("d-httpstatus");
+    if (!response.ok) {
+        delement.innerText = response.status;
+        relement.classList.remove("hidden");
+        throw new Error(`Response status: ${response.status}`);
+    } else {
+        delement.innerText = response.status;
+        relement.classList.add("hidden");
+    }
+    const data = await response.json();
+    document.getElementById("d-time").innerText = data.time;
 
-            for (const id of ["temperature", "humidity"]) {
-                document.getElementById(`d-${id}`).innerText = data[id];
-                let element = document.getElementById(`s-${id}`);
-                element.classList.remove("status-below", "status-above");
-                if (data[`${id}-status`] == "below") {
-                    element.classList.add("status-below");
-                    element.innerText = "below";
-                } else if (data[`${id}-status`] == "above") {
-                    element.classList.add("status-above");
-                    element.innerText = "above";
-                } else {
-                    element.innerText = "";
-                }
-            }
-            
-            for (const id of ["light", "heater", "fan", "humidifier", "exhaustairfan", "pump1", "pump2"]) {
-                let mode = document.getElementById(`btn-a-${id}`);
-                let control = document.getElementById(`btn-s-${id}`);
-                if (data[`${id}-on`]) {
-                    control.innerText = "On";
-                    control.classList.remove("btn-off");
-                    control.classList.add("btn-on");
-                } else {
-                    control.innerText = "Off";
-                    control.classList.remove("btn-on");
-                    control.classList.add("btn-off");
-                }
-                if (data[`${id}-mode`] == "auto") {
-                    mode.innerText = "Auto";
-                    mode.classList.remove("btn-manual");
-                    mode.classList.add("btn-auto");
-                    control.disabled = true;
-                    control.classList.remove("btn-on", "btn-off");
-                    control.classList.add("btn-disabled");
-                } else {
-                    mode.innerText = "Manual";
-                    mode.classList.remove("btn-auto");
-                    mode.classList.add("btn-manual");
-                    control.disabled = false;
-                    control.classList.remove("btn-disabled");
-                }
-            }
-        });
+    for (const id of ["temperature", "humidity"]) {
+        document.getElementById(`d-${id}`).innerText = data[id];
+        let element = document.getElementById(`s-${id}`);
+        element.classList.remove("status-below", "status-above");
+        if (data[`${id}-status`] == "below") {
+            element.classList.add("status-below");
+            element.innerText = "below";
+        } else if (data[`${id}-status`] == "above") {
+            element.classList.add("status-above");
+            element.innerText = "above";
+        } else {
+            element.innerText = "";
+        }
+    }
+    
+    for (const id of ["light", "heater", "fan", "humidifier", "exhaustairfan", "pump1", "pump2"]) {
+        let mode = document.getElementById(`btn-a-${id}`);
+        let control = document.getElementById(`btn-s-${id}`);
+        if (data[`${id}-on`]) {
+            control.innerText = "On";
+            control.classList.remove("btn-off");
+            control.classList.add("btn-on");
+        } else {
+            control.innerText = "Off";
+            control.classList.remove("btn-on");
+            control.classList.add("btn-off");
+        }
+        if (data[`${id}-mode`] == "auto") {
+            mode.innerText = "Auto";
+            mode.classList.remove("btn-manual");
+            mode.classList.add("btn-auto");
+            control.disabled = true;
+            control.classList.remove("btn-on", "btn-off");
+            control.classList.add("btn-disabled");
+        } else {
+            mode.innerText = "Manual";
+            mode.classList.remove("btn-auto");
+            mode.classList.add("btn-manual");
+            control.disabled = false;
+            control.classList.remove("btn-disabled");
+        }
+    }
 }
 
 window.addEventListener("load", (event) => {

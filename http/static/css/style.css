@@ -64,6 +64,9 @@
 #d-humidity::after {
     content: "%";
 }
+.hidden {
+    display: none;
+}
 /* ---------------------------------  */
 body {
     font-family: Arial, sans-serif;
