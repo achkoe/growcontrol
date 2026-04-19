@@ -23,6 +23,11 @@
     cursor: pointer;
     font-weight: bolder;
 }
+.btn-disabled {
+    background-color: gray;
+    cursor: not-allowed;
+    width: 4em;
+}
 .btn-on {
     background-color: #28a745;
     width: 4em;

@@ -33,6 +33,37 @@ def status():
     return reply
 
 
+@app.route("/buttonclick", methods=("POST", ))
+def buttonclick():
+    recv = request.json
+    print(f"buttonclick -> {recv}")
+    _, what, element = recv["id"].split("-")
+    classlist = recv["classlist"].split(" ")
+    print(f"what={what}, element={element}, classlist={classlist}")
+    
+    with pathlib.Path(__file__).parent.joinpath("_data.json").open("r") as fh:
+        data = json.load(fh)
+        
+    if what == "s":
+        data[f"{element}-on"] = not data[f"{element}-on"]
+    elif what == "a":
+        data[f"{element}-mode"] = "manual" if "btn-auto" in classlist else "auto"
+    else:
+        print(f"UNKNOWN what: {what!r}")
+        
+    # TODO: remove next statements
+    import time
+    time.sleep(1)
+    
+    print(data)
+    with pathlib.Path(__file__).parent.joinpath("_data.json").open("w") as fh:
+        json.dump(data, fh, indent=4)
+    
+    
+    return {}
+    
+
+
 @ app.route("/control", methods=("POST", ))
 def control():
     print(f"control -> {request.json}")
