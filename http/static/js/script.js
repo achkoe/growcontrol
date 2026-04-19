@@ -5,7 +5,6 @@ let ids = [];
 
 // Polling function
 function pollStatus() {
-    log("pollStatus");
     fetch('/status')
         .then(result => result.json())
         .then(data => {
@@ -26,7 +25,7 @@ function pollStatus() {
                 }
             }
             
-            for (const id of ["light", "heater"]) {
+            for (const id of ["light", "heater", "fan", "humidifier", "exhaustairfan", "pump1", "pump2"]) {
                 let mode = document.getElementById(`btn-a-${id}`);
                 let control = document.getElementById(`btn-s-${id}`);
                 if (data[`${id}-on`]) {
@@ -53,7 +52,6 @@ function pollStatus() {
                     control.classList.remove("btn-disabled");
                 }
             }
-            log(data);
         });
 }
 
