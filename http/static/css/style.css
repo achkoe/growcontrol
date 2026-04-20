@@ -49,6 +49,10 @@
         visibility: hidden;
     }
 }
+#d-httpstatus {
+    background-color: red;
+    animation: blink-animation 1s steps(1, start) infinite;
+}
 .status-above {
     background-color: red;
     animation: blink-animation 1s steps(1, start) infinite;

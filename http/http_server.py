@@ -9,10 +9,12 @@ from flask import Flask, render_template, request, redirect, url_for
 from icecream import ic
 from version import VERSION                                                                                                                                                                                                                                                         
 from servers.base import load_settings, save_settings
+import configuration
 
 
 logging.getLogger('werkzeug').setLevel(logging.ERROR)
 
+sensors_proxy = xmlrpc.client.ServerProxy(f"http://localhost:{configuration.sensors_server_port}")
 
 app = Flask(__name__)
 configuration = dict(moisture_dict=dict())
@@ -27,8 +29,9 @@ def index():
 
 @ app.route("/status")
 def status():
-    with pathlib.Path(__file__).parent.joinpath("_data.json").open("r") as fh:
+    with pathlib.Path(__file__).parent.parent.joinpath("_data.json").open("r") as fh:
         data = json.load(fh)
+    data["temperature"] = data["humidity"] + 0.666
     reply = data
     return reply
 
@@ -41,7 +44,7 @@ def buttonclick():
     classlist = recv["classlist"].split(" ")
     print(f"what={what}, element={element}, classlist={classlist}")
     
-    with pathlib.Path(__file__).parent.joinpath("_data.json").open("r") as fh:
+    with pathlib.Path(__file__).parent.parent.joinpath("_data.json").open("r") as fh:
         data = json.load(fh)
         
     if what == "s":
@@ -56,7 +59,7 @@ def buttonclick():
     time.sleep(1)
     
     print(data)
-    with pathlib.Path(__file__).parent.joinpath("_data.json").open("w") as fh:
+    with pathlib.Path(__file__).parent.parent.joinpath("_data.json").open("w") as fh:
         json.dump(data, fh, indent=4)
     
     

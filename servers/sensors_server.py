@@ -1,20 +1,13 @@
 #!/usr/bin/env python
 """Server to deliver temperature and humidity over xmlrpc."""
 
-
+import json
 import logging
 import os
 import pathlib
 from xmlrpc.server import SimpleXMLRPCServer
 from xmlrpc.server import SimpleXMLRPCRequestHandler
 from dotenv import dotenv_values
-import RPi.GPIO as GPIO
-import smbus2
-from bme280 import BME280
-import board
-import busio
-import adafruit_ads1x15.ads1015 as ADS
-from adafruit_ads1x15.analog_in import AnalogIn
 
 from base import load_settings, get_loglevel
 import configuration
@@ -26,16 +19,17 @@ logging.basicConfig(format=configuration.log_format, level=logging.DEBUG)
 LOGGER = logging.getLogger()
 LOGGER.setLevel(get_loglevel("SENSOR_SERVER_LOGLEVEL"))
 
-GPIO.setmode(GPIO.BCM)
-
 
 class BridgeBase():
     def __init__(self):
         self.settings = load_settings()
-        self._temperature = 22.2
-        self._humidity = 11.1
-        self._waterlevel = 2
-        self._moisture = {0: 55, 1: 66, 2: 77 ,3: 88}
+        with pathlib.Path(__file__).parent.parent.joinpath("_data.json").open("r") as fh:
+            data = json.load(fh)
+
+        self._temperature = data["temperature"]
+        self._humidity = data["humidity"]
+        self._waterlevel = data["waterlevel"]
+        self._moisture = data["moisture"]
 
     def settemperature(self, value):
         LOGGER.info(("settemperature", repr(value), type(value)))
@@ -77,63 +71,24 @@ class BridgeBase():
 class Bridge(BridgeBase):
     def __init__(self):
         super().__init__()
-        GPIO.setup(configuration.port_waterlow, GPIO.IN)
-        GPIO.setup([port_waterlow, port_watermedium, port_waterhigh], GPIO.IN)
-
-        # initialize BME280 sensor for temperature and humidity
-        bus = smbus2.SMBus(1)
-        self.bme280 = BME280(i2c_dev=bus)
-
-        # Create the I2C bus
-        i2c = busio.I2C(board.SCL, board.SDA)
-        # Create the ADC object using the I2C bus
-        self.ads = ADS.ADS1015(i2c)
-        # settings for moisture
-        # max value ~17390: dry
-        # min value ~7470: wet
-        self._min = 7500
-        self._max = 17000
-        self._slope = (100.0 - 0.0) / (self._min - self._max)
-        self._offset = - self._slope * self._max
         # dummy read moisture to clear false readings at startup
         [self.moisture(channel) for channel in [0, 1, 2, 3]]
         self._execute()
 
     def _execute(self):
-        self._temperature = self.bme280.get_temperature()
-        self._humidity = self.bme280.get_humidity()
-        waterlevels = [GPIO.input(pin) for pin in (
-            port_waterlow, port_watermedium, port_waterhigh)]
-        # LOGGER.critical(waterlevels)
-        # [1, 1, 1] -> water level is below low marker
-        # [0, 1, 1] -> water is between low and medium marker
-        # [0, 0, 1] -> water is between medium and high marker
-        # [0, 0, 0] -> water is between above high marker
-        # LOGGER.critical(waterlevels)
-        if waterlevels == [0, 0, 0]:
-            self._waterlevel = 0        # critical
-        elif waterlevels == [1, 0, 0]:
-            self._waterlevel = 1        # low
-        elif waterlevels == [1, 1, 0]:
-            self._waterlevel = 2        # medium
-        elif waterlevels == [1, 1, 1]:  
-            self._waterlevel = 3        # full
-        else:
-            # this should be impossible, therefore set to critical
-            self._waterlevel = 0
+        with pathlib.Path(__file__).parent.parent.joinpath("_data.json").open("r") as fh:
+            data = json.load(fh)
+
+        self._temperature = data["temperature"]
+        self._humidity = data["humidity"]
+        self._waterlevel = data["waterlevel"]
+        self._moisture = data["moisture"]
+        
         LOGGER.info(
             f"T={self._temperature:4.1f}°C, H={self._humidity:5.1f}%, WL={self._waterlevel}")
 
     def moisture(self, channel):
-        """Return moisture between 0 ... 100"""
-        adc = AnalogIn(self.ads, channel)
-        rval = adc.value
-        LOGGER.debug(f"moisture:getValue() -> {rval}")
-        rval = min(self._max, rval)      # set upper limit
-        rval = max(self._min, rval)      # set lower limit
-        rval = self._slope * rval + self._offset
-        LOGGER.info(f"moisture:{channel} -> {rval}")
-        return rval
+        return self._moisture + 10 * channel
 
 
 class RemoteControlBride(BridgeBase):
