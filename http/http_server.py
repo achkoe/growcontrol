@@ -31,7 +31,14 @@ def index():
 def status():
     with pathlib.Path(__file__).parent.parent.joinpath("_data.json").open("r") as fh:
         data = json.load(fh)
-    data["temperature"] = data["humidity"] + 0.666
+    try:
+        data["temperature"] = sensors_proxy.temperature()
+        data["humidity"] = sensors_proxy.humidity()
+        data["waterlevel"] = sensors_proxy.waterlevel()
+        data["moisture"] = sensors_proxy.moisture()
+        data["sensorstatus"] = "ok"
+    except Exception as e:
+        data["sensorstatus"] = repr(e)
     reply = data
     return reply
 

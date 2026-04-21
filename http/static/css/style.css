@@ -44,10 +44,17 @@
     background-color: #abd3ff;
     width: 8em;
 }
+#table-status {
+    margin-top: 1em;
+}
 @keyframes blink-animation {
     50% {
         visibility: hidden;
     }
+}
+.red-blink {
+    animation: blink-animation 1s steps(1, start) infinite;
+    background-color: red;
 }
 #d-httpstatus {
     background-color: red;
@@ -55,12 +62,15 @@
 }
 .status-above {
     background-color: red;
-    animation: blink-animation 1s steps(1, start) infinite;
+    /* animation: blink-animation 1s steps(1, start) infinite; */
 }
 .status-below {
     background-color: blue;
     color: white;
-    animation: blink-animation 1s steps(1, start) infinite;
+    /* animation: blink-animation 1s steps(1, start) infinite; */
+}
+.status-okay {
+    background-color: inherit;
 }
 #d-temperature::after {
     content: "°C";
@@ -68,8 +78,25 @@
 #d-humidity::after {
     content: "%";
 }
+.moisture::after {
+    content: "%";
+}
 .hidden {
     display: none;
+}
+.status-critical {
+    background-color: red;
+}
+.status-low {
+    background-color: coral;
+}
+
+.status-medium {
+    background-color: darkolivegreen;
+}
+
+.status-full {
+    background-color: green;
 }
 /* ---------------------------------  */
 body {
@@ -246,21 +273,6 @@ body {
     background-color: green;
 }
 
-.critical {
-    background-color: red;
-}
-
-.low {
-    background-color: coral;
-}
-
-.medium {
-    background-color: darkolivegreen;
-}
-
-.full {
-    background-color: green;
-}
 
 
 /* settings styles */

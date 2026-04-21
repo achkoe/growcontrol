@@ -8,7 +8,6 @@ async function pollStatus() {
     let relement = document.getElementById("r-httpstatus");
     let delement = document.getElementById("d-httpstatus");
     try {
-        
         response = await fetch('/status');
         if (!response.ok) {
             delement.innerText = response.status;
@@ -19,6 +18,7 @@ async function pollStatus() {
             relement.classList.add("hidden");
         }
         const data = await response.json();
+        log(data);
         document.getElementById("d-time").innerText = data.time;
         
         for (const id of ["temperature", "humidity"]) {
@@ -34,6 +34,33 @@ async function pollStatus() {
             } else {
                 element.innerText = "";
             }
+        }
+        
+        for (const id in [0, 1]) {
+            document.getElementById(`moisture-${id}`).innerText = data.moisture[id];
+            let element = document.getElementById(`moisture-status-${id}`);
+            element.classList.remove("status-below", "status-above", "status-okay");
+            element.innerText = data["moisture_status"][id] != "okay" ? data["moisture_status"][id] : "";
+            element.classList.add(`status-${data["moisture_status"][id]}`)
+        }
+
+        for (const id of ["waterlevel"]) {
+            let element = document.getElementById(`d-${id}`);
+            const text = {0: "critical", 1: "low", 2: "medium", 3: "full"}
+            element.innerText = text[data[id]];
+            for (const [key, value] of Object.entries(text)) {
+                element.classList.remove(`status-${value}`);
+            }
+            element.classList.add(`status-${text[data[id]]}`);
+        }
+
+        for (const id of ["sensorstatus"]) {
+            let element = document.getElementById(`d-${id}`);
+            element.innerText = data[id];
+            if (data[id] != "ok") 
+                document.getElementById(`r-${id}`).classList.remove("hidden")
+            else
+                document.getElementById(`r-${id}`).classList.add("hidden")
         }
         
         for (const id of ["light", "heater", "fan", "humidifier", "exhaustairfan", "pump1", "pump2"]) {

@@ -23,6 +23,7 @@ LOGGER.setLevel(get_loglevel("SENSOR_SERVER_LOGLEVEL"))
 class BridgeBase():
     def __init__(self):
         self.settings = load_settings()
+        print(self.settings)
         with pathlib.Path(__file__).parent.parent.joinpath("_data.json").open("r") as fh:
             data = json.load(fh)
 
@@ -67,12 +68,14 @@ class BridgeBase():
 
     def waterlevel(self):
         return self._waterlevel
+    
+    def moisture(self):
+        return self._moisture
 
 class Bridge(BridgeBase):
     def __init__(self):
         super().__init__()
         # dummy read moisture to clear false readings at startup
-        [self.moisture(channel) for channel in [0, 1, 2, 3]]
         self._execute()
 
     def _execute(self):
@@ -86,9 +89,6 @@ class Bridge(BridgeBase):
         
         LOGGER.info(
             f"T={self._temperature:4.1f}°C, H={self._humidity:5.1f}%, WL={self._waterlevel}")
-
-    def moisture(self, channel):
-        return self._moisture + 10 * channel
 
 
 class RemoteControlBride(BridgeBase):
