@@ -17,6 +17,7 @@ logging.getLogger('werkzeug').setLevel(logging.ERROR)
 sensors_proxy = xmlrpc.client.ServerProxy(f"http://localhost:{configuration.sensors_server_port}")
 
 app = Flask(__name__)
+app._settings = load_settings()
 configuration = dict(moisture_dict=dict())
 
 @ app.route("/")
@@ -30,16 +31,43 @@ def index():
 @ app.route("/status")
 def status():
     with pathlib.Path(__file__).parent.parent.joinpath("_data.json").open("r") as fh:
-        data = json.load(fh)
+        data = json.load(fh)["rest"]
     try:
+        data["time"] = time.strftime("%X")
         data["temperature"] = sensors_proxy.temperature()
+        if data["temperature"] < float(app._settings["temperature_low_level"]):
+            data["temperature-status"] = "below"
+        elif data["temperature"] > float(app._settings["temperature_high_level"]):
+            data["temperature-status"] = "above"
+        else:
+            data["temperature-status"] = "okay"
         data["humidity"] = sensors_proxy.humidity()
+        if data["humidity"] < float(app._settings["humidity_low_level"]):
+            data["humidity-status"] = "below"
+        elif data["humidity"] > float(app._settings["humidity_high_level"]):
+            data["humidity-status"] = "above"
+        else:
+            data["humidity-status"] = "okay"
         data["waterlevel"] = sensors_proxy.waterlevel()
         data["moisture"] = sensors_proxy.moisture()
+        data["moisture-status"] = []
+        for value in data["moisture"]:
+            if value > float(app._settings["moisture_high_level"]):
+                data["moisture-status"].append("above")
+            elif value < float(app._settings["moisture_low_level"]):
+                data["moisture-status"].append("below")
+            else:
+                data["moisture-status"].append("okay")
         data["sensorstatus"] = "ok"
     except Exception as e:
+        data["temperature"] = '?'
+        data["humidity"] = '?'
+        data["moisture"] = ['?'] * 10
+        data["moisture-status"] = ['?'] * 10
+        data["waterlevel"] = "?"
         data["sensorstatus"] = repr(e)
     reply = data
+    print(reply)
     return reply
 
 

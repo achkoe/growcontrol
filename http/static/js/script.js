@@ -40,13 +40,13 @@ async function pollStatus() {
             document.getElementById(`moisture-${id}`).innerText = data.moisture[id];
             let element = document.getElementById(`moisture-status-${id}`);
             element.classList.remove("status-below", "status-above", "status-okay");
-            element.innerText = data["moisture_status"][id] != "okay" ? data["moisture_status"][id] : "";
-            element.classList.add(`status-${data["moisture_status"][id]}`)
+            element.innerText = data["moisture-status"][id] != "okay" ? data["moisture-status"][id] : "";
+            element.classList.add(`status-${data["moisture-status"][id]}`)
         }
 
         for (const id of ["waterlevel"]) {
             let element = document.getElementById(`d-${id}`);
-            const text = {0: "critical", 1: "low", 2: "medium", 3: "full"}
+            const text = {0: "critical", 1: "low", 2: "medium", 3: "full", "?": "?"}
             element.innerText = text[data[id]];
             for (const [key, value] of Object.entries(text)) {
                 element.classList.remove(`status-${value}`);

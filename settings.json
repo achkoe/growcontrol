@@ -26,6 +26,13 @@
         "min": 0,
         "max": 100
     },
+    "moisture_high_level": {
+        "value": "90",
+        "title": "Moisture Low Level",
+        "type": "number",
+        "min": 0,
+        "max": 100
+    },
     "temperature_high_level": {
         "value": "20",
         "title": "Temperature High Level",

@@ -25,7 +25,7 @@ class BridgeBase():
         self.settings = load_settings()
         print(self.settings)
         with pathlib.Path(__file__).parent.parent.joinpath("_data.json").open("r") as fh:
-            data = json.load(fh)
+            data = json.load(fh)["sensor"]
 
         self._temperature = data["temperature"]
         self._humidity = data["humidity"]
@@ -80,7 +80,7 @@ class Bridge(BridgeBase):
 
     def _execute(self):
         with pathlib.Path(__file__).parent.parent.joinpath("_data.json").open("r") as fh:
-            data = json.load(fh)
+            data = json.load(fh)["sensor"]
 
         self._temperature = data["temperature"]
         self._humidity = data["humidity"]
