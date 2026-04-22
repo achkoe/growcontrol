@@ -71,6 +71,14 @@ class BridgeBase():
     
     def moisture(self):
         return self._moisture
+    
+    def get(self):
+        return dict(
+            temperature=self._temperature,
+            humidity=self._humidity,
+            waterlevel=self._waterlevel,
+            moisture=self._moisture
+        )
 
 class Bridge(BridgeBase):
     def __init__(self):

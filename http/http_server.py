@@ -5,7 +5,7 @@ import time
 import json
 import logging
 import pathlib
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, jsonify
 from icecream import ic
 from version import VERSION                                                                                                                                                                                                                                                         
 from servers.base import load_settings, save_settings
@@ -18,13 +18,14 @@ sensors_proxy = xmlrpc.client.ServerProxy(f"http://localhost:{configuration.sens
 
 app = Flask(__name__)
 app._settings = load_settings()
-configuration = dict(moisture_dict=dict())
+hint = dict(pumps=list(configuration.pump_dict.keys()), moistures=list(configuration.moisture_dict.keys()))
 
 @ app.route("/")
 def index():
     return render_template('index.html', 
                            version=f"v{VERSION}",
                            configuration=configuration,
+                           hint=hint,
                            settings=load_settings(raw=True))
 
 
@@ -34,22 +35,16 @@ def status():
         data = json.load(fh)["rest"]
     try:
         data["time"] = time.strftime("%X")
-        data["temperature"] = sensors_proxy.temperature()
-        if data["temperature"] < float(app._settings["temperature_low_level"]):
-            data["temperature-status"] = "below"
-        elif data["temperature"] > float(app._settings["temperature_high_level"]):
-            data["temperature-status"] = "above"
-        else:
-            data["temperature-status"] = "okay"
-        data["humidity"] = sensors_proxy.humidity()
-        if data["humidity"] < float(app._settings["humidity_low_level"]):
-            data["humidity-status"] = "below"
-        elif data["humidity"] > float(app._settings["humidity_high_level"]):
-            data["humidity-status"] = "above"
-        else:
-            data["humidity-status"] = "okay"
-        data["waterlevel"] = sensors_proxy.waterlevel()
-        data["moisture"] = sensors_proxy.moisture()
+        data.update(sensors_proxy.get())
+        
+        for key in ["temperature", "humidity"]:
+            if data[key] < float(app._settings[f"{key}_low_level"]):
+                data[f"{key}-status"] = "below"
+            elif data[key] > float(app._settings[f"{key}_high_level"]):
+                data[f"{key}-status"] = "above"
+            else:
+                data[f"{key}-status"] = "okay"
+
         data["moisture-status"] = []
         for value in data["moisture"]:
             if value > float(app._settings["moisture_high_level"]):
@@ -66,9 +61,7 @@ def status():
         data["moisture-status"] = ['?'] * 10
         data["waterlevel"] = "?"
         data["sensorstatus"] = repr(e)
-    reply = data
-    print(reply)
-    return reply
+    return data
 
 
 @app.route("/buttonclick", methods=("POST", ))
@@ -83,9 +76,9 @@ def buttonclick():
         data = json.load(fh)
         
     if what == "s":
-        data[f"{element}-on"] = not data[f"{element}-on"]
+        data["rest"][f"{element}-on"] = not data["rest"][f"{element}-on"]
     elif what == "a":
-        data[f"{element}-mode"] = "manual" if "btn-auto" in classlist else "auto"
+        data["rest"][f"{element}-mode"] = "manual" if "btn-auto" in classlist else "auto"
     else:
         print(f"UNKNOWN what: {what!r}")
         

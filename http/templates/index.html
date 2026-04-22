@@ -10,6 +10,13 @@
     <script src="{{ url_for('static', filename='js/uPlot.iife.min.js') }}"></script> 
     <script src="{{ url_for('static', filename='js/logdata.js') }}"></script>
     -->    
+    <!--
+        {{configuration["moisture_dict"]|tojson}}
+        {{hint|tojson}}
+    -->
+    <script>
+        const HINT = {{hint|tojson}};
+    </script>
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
@@ -79,17 +86,16 @@
             <div class="td"><button class="button btn-on" id="btn-s-pump2">On</button></div>
             <div class="td"><button class="button btn-auto" id="btn-a-pump2">Auto</button></div>
         </div>
+
+        {% for key in hint["pumps"] %}
         <div class="tr">
-            <div class="td">Soil Moisture 1</div>
-            <div class="td moisture" id="moisture-0"></div>
-            <div class="td" id="moisture-status-0"></div>
+            <div class="td">Soil Moisture {{key}}</div>
+            <div class="td moisture" id="moisture-{{key}}"></div>
+            <div class="td" id="moisture-status-{{key}}"></div>
         </div>
-        <div class="tr">
-            <div class="td">Soil Moisture 2</div>
-            <div class="td moisture" id="moisture-1"></div>
-            <div class="td" id="moisture-status-1"></div>
-        </div>
+        {% endfor %}
     </div>
+
     <div class="rtable" id="table-status">
         <div class="tr hidden" id="r-httpstatus" >
             <div class="td">HTTP Server Status</div>
@@ -99,7 +105,7 @@
             <div class="td">Sensor Server Status</div>
             <div class="td red-blink" id="d-sensorstatus"></div>
         </div>
-</div>
+    </div>
 
     <div class="tab-content" id="settings" style="display:none;">
         <!-- Settings content here -->

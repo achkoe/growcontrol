@@ -36,12 +36,12 @@ async function pollStatus() {
             }
         }
         
-        for (const id in [0, 1]) {
-            document.getElementById(`moisture-${id}`).innerText = data.moisture[id];
+        for (const id of HINT.moistures) {
+            document.getElementById(`moisture-${id}`).innerText = data.moisture[id - 1];
             let element = document.getElementById(`moisture-status-${id}`);
             element.classList.remove("status-below", "status-above", "status-okay");
-            element.innerText = data["moisture-status"][id] != "okay" ? data["moisture-status"][id] : "";
-            element.classList.add(`status-${data["moisture-status"][id]}`)
+            element.innerText = data["moisture-status"][id - 1] != "okay" ? data["moisture-status"][id - 1] : "";
+            element.classList.add(`status-${data["moisture-status"][id - 1]}`)
         }
 
         for (const id of ["waterlevel"]) {
@@ -63,7 +63,9 @@ async function pollStatus() {
                 document.getElementById(`r-${id}`).classList.add("hidden")
         }
         
-        for (const id of ["light", "heater", "fan", "humidifier", "exhaustairfan", "pump1", "pump2"]) {
+        let items = ["light", "heater", "fan", "humidifier", "exhaustairfan"]
+        for (const id of HINT.pumps) items.push(`pump${id}`);
+        for (const id of items) {
             let mode = document.getElementById(`btn-a-${id}`);
             let control = document.getElementById(`btn-s-${id}`);
             if (data[`${id}-on`]) {
@@ -123,6 +125,10 @@ window.addEventListener("load", (event) => {
                 element.disabled = false;
             });
         });
+    }
+
+    {
+
     }
 
     setInterval(pollStatus, 500);

@@ -30,6 +30,7 @@ moisture_dict = {
     1: dict(channel=0),
     2: dict(channel=1),
 }
+pump_dict = {1: port_pump, 2: port_reserved}
 
 log_format = "%(module)s:%(levelname)s:%(asctime)s:%(message)s"
 
