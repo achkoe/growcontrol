@@ -1,8 +1,7 @@
 sensors_server_port = 4000
-fan_server_port = 4001
-light_server_port = 4002
+actors_server_port = 4001
+pumps_server_port = 4002
 logdata_server_port = 4003
-pump_server_port = 4004
 
 # GPIO for water low sensor, 1: water is low, 0: water is available
 port_waterlow = 18

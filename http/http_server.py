@@ -15,6 +15,7 @@ import configuration
 logging.getLogger('werkzeug').setLevel(logging.ERROR)
 
 sensors_proxy = xmlrpc.client.ServerProxy(f"http://localhost:{configuration.sensors_server_port}")
+actors_proxy = xmlrpc.client.ServerProxy(f"http://localhost:{configuration.actors_server_port}")
 
 app = Flask(__name__)
 app._settings = load_settings()
@@ -31,8 +32,17 @@ def index():
 
 @ app.route("/status")
 def status():
-    with pathlib.Path(__file__).parent.parent.joinpath("_data.json").open("r") as fh:
-        data = json.load(fh)["rest"]
+    
+    data = {
+        "temperature": '?',
+        "humidity": '?',
+        "moisture": ['?'] * len(hint["moistures"]),
+        "moisture-status": ['?'] * len(hint["moistures"]),
+        "waterlevel": "?",
+        "sensorstatus": "?",
+        "actorstatus": "?"
+    }
+    
     try:
         data["time"] = time.strftime("%X")
         data.update(sensors_proxy.get())
@@ -56,13 +66,17 @@ def status():
                 
         data["sensorstatus"] = "ok"
     except Exception as e:
-        data["temperature"] = '?'
-        data["humidity"] = '?'
-        data["moisture"] = ['?'] * len(hint["moistures"])
-        data["moisture-status"] = ['?'] * len(hint["moistures"])
-        data["waterlevel"] = "?"
         data["sensorstatus"] = repr(e)
+        
+    try:
+        data.update(actors_proxy.get())
+        data["actorstatus"] = "ok"
+    except Exception as e:
+        data["actorstatus"] = repr(e)
+        
+    #print(json.dumps(data, indent=4))
     return data
+
 
 
 @app.route("/buttonclick", methods=("POST", ))
@@ -71,27 +85,8 @@ def buttonclick():
     print(f"buttonclick -> {recv}")
     _, what, element = recv["id"].split("-")
     classlist = recv["classlist"].split(" ")
-    print(f"what={what}, element={element}, classlist={classlist}")
-    
-    with pathlib.Path(__file__).parent.parent.joinpath("_data.json").open("r") as fh:
-        data = json.load(fh)
-        
-    if what == "s":
-        data["rest"][f"{element}-on"] = not data["rest"][f"{element}-on"]
-    elif what == "a":
-        data["rest"][f"{element}-mode"] = "manual" if "btn-auto" in classlist else "auto"
-    else:
-        print(f"UNKNOWN what: {what!r}")
-        
-    # TODO: remove next statements
-    import time
-    time.sleep(1)
-    
-    print(data)
-    with pathlib.Path(__file__).parent.parent.joinpath("_data.json").open("w") as fh:
-        json.dump(data, fh, indent=4)
-    
-    
+    # print(f"what={what}, element={element}, classlist={classlist}")
+    actors_proxy.set(element, what)    
     return {}
     
 

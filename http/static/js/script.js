@@ -18,7 +18,7 @@ async function pollStatus() {
             relement.classList.add("hidden");
         }
         const data = await response.json();
-        log(data);
+        // log(data);
         document.getElementById("d-time").innerText = data.time;
         
         for (const id of ["temperature", "humidity"]) {
@@ -54,7 +54,7 @@ async function pollStatus() {
             element.classList.add(`status-${text[data[id]]}`);
         }
 
-        for (const id of ["sensorstatus"]) {
+        for (const id of ["sensorstatus", "actorstatus"]) {
             let element = document.getElementById(`d-${id}`);
             element.innerText = data[id];
             if (data[id] != "ok") 
@@ -68,6 +68,11 @@ async function pollStatus() {
         for (const id of items) {
             let mode = document.getElementById(`btn-a-${id}`);
             let control = document.getElementById(`btn-s-${id}`);
+            //log(`${id}-on`);
+            if (`${id}-on` == "exhaustairfan-on") {
+                log(data[`${id}-on`]);
+
+            }
             if (data[`${id}-on`]) {
                 control.innerText = "On";
                 control.classList.remove("btn-off");

@@ -18,13 +18,14 @@ IDENTITY = "sensors_server.py v0.0.2"
 logging.basicConfig(format=configuration.log_format, level=logging.DEBUG)
 LOGGER = logging.getLogger()
 LOGGER.setLevel(get_loglevel("SENSOR_SERVER_LOGLEVEL"))
+    
 
-
-class BridgeBase():
+class Bridge():
     def __init__(self):
         self.settings = load_settings()
-        print(self.settings)
-        
+        # dummy read moisture to clear false readings at startup
+        self._execute()
+
     def reload(self):
         self.settings = load_settings()
         LOGGER.setLevel(get_loglevel("SENSOR_SERVER_LOGLEVEL"))
@@ -33,32 +34,6 @@ class BridgeBase():
     def identity(self):
         return IDENTITY
         
-    def temperature(self):
-        return self._temperature
-
-    def humidity(self):
-        return self._humidity
-
-    def waterlevel(self):
-        return self._waterlevel
-    
-    def moisture(self):
-        return self._moisture
-    
-    def get(self):
-        return dict(
-            temperature=self._temperature,
-            humidity=self._humidity,
-            waterlevel=self._waterlevel,
-            moisture=self._moisture
-        )
-
-class Bridge(BridgeBase):
-    def __init__(self):
-        super().__init__()
-        # dummy read moisture to clear false readings at startup
-        self._execute()
-
     def _execute(self):
         data = driver.get()
 
@@ -67,10 +42,17 @@ class Bridge(BridgeBase):
         self._waterlevel = data["waterlevel"]
         self._moisture = data["moisture"]
         
+    def get(self):
+        return dict(
+            temperature=self._temperature,
+            humidity=self._humidity,
+            waterlevel=self._waterlevel,
+            moisture=self._moisture
+        )
+
 class TheServer(SimpleXMLRPCServer):
     def service_actions(self):
         self.instance._execute()
-
 
 class RequestHandler(SimpleXMLRPCRequestHandler):
     rpc_paths = ('/RPC2',)
