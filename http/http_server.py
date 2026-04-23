@@ -53,12 +53,13 @@ def status():
                 data["moisture-status"].append("below")
             else:
                 data["moisture-status"].append("okay")
+                
         data["sensorstatus"] = "ok"
     except Exception as e:
         data["temperature"] = '?'
         data["humidity"] = '?'
-        data["moisture"] = ['?'] * 10
-        data["moisture-status"] = ['?'] * 10
+        data["moisture"] = ['?'] * len(hint["moistures"])
+        data["moisture-status"] = ['?'] * len(hint["moistures"])
         data["waterlevel"] = "?"
         data["sensorstatus"] = repr(e)
     return data
