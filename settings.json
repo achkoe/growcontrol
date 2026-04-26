@@ -1,33 +1,45 @@
 {
     "light": {
+        "type": "time",
         "ontime": {
-            "value": "05:50"
+            "title": "Light On Time",
+            "value": "05:30"
         },
         "offtime": {
-            "value": "17:50"
+            "title": "Light Off Time",
+            "value": "17:50 "
         }
     },
     "fan": {
+        "type": "time",
         "ontime": {
-            "value": "*:*:00"
+            "title": "Fan On Time",
+            "value": "*:*:00 "
         },
         "offtime": {
-            "value": "*:*:30"
+            "title": "Fan Off Time",
+            "value": "*:00:01"
         }
     },
     "exhaustairfan": {
+        "type": "time",
         "ontime": {
+            "title": "Exhaust Air Fan On Time",
             "value": "*:*:00"
         },
         "offtime": {
+            "title": "Exhaust Air Fan Off Time",
             "value": "*:*:30"
         }
     },
     "humidifier": {
+        "type": "time",
         "ontime": {
-            "value": "*:*:05"
+            "title": "Humidifier On Time",
+            "value": "*:*:06"
         },
         "offtime": {
+            "title": "Humidifier Off Time",
             "value": "*:*:30"
         }
     },
@@ -35,6 +47,7 @@
         "value": "60",
         "title": "Moisture Low Level",
         "type": "number",
+        "unit": "%",
         "min": 0,
         "max": 100
     },
@@ -42,6 +55,7 @@
         "value": "90",
         "title": "Moisture Low Level",
         "type": "number",
+        "unit": "%",
         "min": 0,
         "max": 100
     },
@@ -49,6 +63,7 @@
         "value": "19",
         "title": "Temperature High Level",
         "type": "number",
+        "unit": "\u00b0C",
         "min": 0,
         "max": 100
     },
@@ -56,6 +71,7 @@
         "value": "18",
         "title": "Temperature Low Level",
         "type": "number",
+        "unit": "\u00b0C",
         "min": 0,
         "max": 100
     },
@@ -63,24 +79,26 @@
         "value": "70",
         "title": "Humidity High Level",
         "type": "number",
+        "unit": "%",
         "min": 0,
         "max": 100
     },
     "humidity_low_level": {
-        "value": "60",
+        "value": "2",
         "title": "Humidity Low Level",
         "type": "number",
+        "unit": "%",
         "min": 0,
         "max": 100
     },
     "pump_on_time": {
         "value": "05:00",
         "title": "Pump On Time",
-        "type": "time"
+        "type": "time-"
     },
     "pump_off_time": {
         "value": "06:40",
         "title": "Pump Off Time",
-        "type": "time"
+        "type": "time-"
     }
 }

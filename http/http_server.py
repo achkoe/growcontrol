@@ -5,8 +5,10 @@ import time
 import json
 import logging
 import pathlib
+from datetime import datetime
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 from icecream import ic
+from oncalendar import BaseIterator
 from version import VERSION                                                                                                                                                                                                                                                         
 from servers.base import load_settings, save_settings
 import configuration
@@ -27,7 +29,7 @@ def index():
                            version=f"v{VERSION}",
                            configuration=configuration,
                            hint=hint,
-                           settings=load_settings(raw=True))
+                           settings=load_settings())
 
 
 @ app.route("/status")
@@ -91,42 +93,40 @@ def buttonclick():
     return {}
     
 
-
-@ app.route("/control", methods=("POST", ))
-def control():
-    print(f"control -> {request.json}")
-    the_id = request.json["id"]
-    if the_id.endswith("mode"):
-        mode = "Manual" if mode_dict[the_id] == "Auto" else "Auto"
-        mode_dict[the_id] = mode
-        {    
-            'light-mode': light_proxy.set_mode,
-            'pump-mode': pump_proxy.set_mode,
-            'fan-mode': fan_proxy.set_fan_mode,
-            'heater-mode': fan_proxy.set_heater_mode,
-            'humidifier-mode': fan_proxy.set_humidifier_mode
-        }[the_id](mode)
-    else:    # mode is onoff
-        onoff = "OFF" if onoff_dict[the_id] == "ON" else "ON"
-        print(onoff)
-        onoff_dict[the_id] = onoff
-        onoff_set_dict[the_id](onoff)
-        
-    return {"status": True}
-    
-
-@ app.route("/settings", methods=("POST", "GET"))
-def editsettings():
-    global settings
+@app.route("/settings", methods=("POST", "GET"))
+def settings():
     if request.method == "POST":
         for key in request.form:
-            settings[key] = request.form[key]
-        settings = save_settings(settings)
-        sensors_proxy.reload()
-        fan_proxy.reload()
-        light_proxy.reload()
-        pump_proxy.reload()
+            print(f"{key}: {request.form[key]}")
+            if key.endswith("time"):
+                try:
+                    next(BaseIterator(request.form[key], datetime.now()))
+                    key_a, key_b = key.split("-")
+                    app._settings[key_a][key_b]["value"] = request.form[key]
+                except Exception as e:
+                    print(e)                    
+                    continue
+            else:
+                app._settings[key]["value"] = request.form[key].strip()
+    save_settings(app._settings)
+    sensors_proxy.reload()
+    actors_proxy.reload()
+        # pump_proxy.reload()
     return redirect(url_for("index"))
+
+
+@app.route("/verifytimeinput", methods=("POST",))
+def verifytimeinput():
+    data = request.get_json()
+    value = data["value"]
+    try:
+        it = BaseIterator(value, datetime.now())
+        title = "\n".join(next(it).isoformat() for _ in range(10))
+        valid = True
+    except Exception:
+        title = "Use e.g. *:00:01 or 17:50"
+        valid = False
+    return {"valid": valid, "title": title}
 
 
 @ app.route("/logdata")

@@ -34,14 +34,8 @@ def load_settings():
 
 
 def save_settings(settings):
-    with pathlib.Path(__file__).parent.parent.joinpath("settings.json").open("r") as fh:
-        raw_settings = json.load(fh)
-    for key in ("light_on_time", "light_off_time", "pump_on_time", "pump_off_time"):
-        settings[f"{key}_i"] = _make_integer_time(settings[key])
-    for key in settings:
-        raw_settings[key]["value"] = settings[key]
     with pathlib.Path(__file__).parent.parent.joinpath("settings.json").open("w") as fh:
-        json.dump(raw_settings, fh, indent=4)
+        json.dump(settings, fh, indent=4)
     return settings
 
 

@@ -1,7 +1,7 @@
 let log = console.log;
 var logDataIntervalTimer = undefined;
 let ids = [];
-
+let invalid_time_settings_count = 0
 
 // Polling function
 async function pollStatus() {
@@ -68,11 +68,6 @@ async function pollStatus() {
         for (const id of items) {
             let mode = document.getElementById(`btn-a-${id}`);
             let control = document.getElementById(`btn-s-${id}`);
-            //log(`${id}-on`);
-            if (`${id}-on` == "exhaustairfan-on") {
-                log(data[`${id}-on`]);
-
-            }
             if (data[`${id}-on`]) {
                 control.innerText = "On";
                 control.classList.remove("btn-off");
@@ -132,8 +127,54 @@ window.addEventListener("load", (event) => {
         });
     }
 
-    {
-
+    // tab handling
+    const tabs = document.querySelectorAll(".tab");
+    for (const tab of tabs) {
+        tab.addEventListener("click", function (event) {
+            for (let tab of tabs) {
+                log(tab);
+                tab.classList.remove("active");
+                document.getElementById(tab.getAttribute("data-tab")).style.display = "none";
+            }
+            this.classList.add("active");
+            let id = this.getAttribute("data-tab");
+            document.getElementById(id).style.display = "block";
+        });
+    }
+    
+    const timeinputs = document.querySelectorAll(".timeinput");
+    for (const timeinput of timeinputs) {
+        timeinput.addEventListener("input", async function(event) {
+            try {
+                response = await fetch('/verifytimeinput', {
+                    headers: {"Content-Type": "application/json"},
+                    method: "POST",
+                    body: JSON.stringify({"value": timeinput.value, "element": timeinput.id})
+                });
+                if (!response.ok) {
+                    throw new Error(`Response status: ${response.status}`);
+                }
+                const data = await response.json();
+                log(data);
+                timeinput.title = data.title;
+                if (!data.valid) {
+                    timeinput.classList.add("status-invalid");
+                    invalid_time_settings_count += 1;
+                } else {
+                    timeinput.classList.remove("status-invalid");
+                    invalid_time_settings_count -= 1;
+                }
+                let element = document.getElementById("submit");
+                element.disabled = invalid_time_settings_count > 0;
+                if (invalid_time_settings_count <= 0)
+                    element.classList.remove("btn-disabled");
+                else
+                    element.classList.add("btn-disabled")   
+            }
+            catch (error) {
+                log(error);
+            }
+        });
     }
 
     setInterval(pollStatus, 500);
