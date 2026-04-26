@@ -1,4 +1,28 @@
 {
+    "light": {
+        "ontime": {
+            "value": "05:50"
+        },
+        "offtime": {
+            "value": "17:50"
+        }
+    },
+    "fan": {
+        "ontime": {
+            "value": "*:*:00"
+        },
+        "offtime": {
+            "value": "*:*:30"
+        }
+    },
+    "exhaustairfan": {
+        "ontime": {
+            "value": "*:*:00"
+        },
+        "offtime": {
+            "value": "*:*:30"
+        }
+    },
     "light_on_time": {
         "value": "05:50",
         "title": "Light On Time",
@@ -96,9 +120,16 @@
         "min": 0,
         "max": 60
     },
-    "fan_minutes_in_hour": {
-        "value": "45",
-        "title": "Fan Minutes in Hour",
+    "fan_on_time": {
+        "value": "*:*:00",
+        "title": "Fan On Time",
+        "type": "number",
+        "min": 0,
+        "max": 60
+    },
+    "fan_off_time": {
+        "value": "*:*:55",
+        "title": "Fan Off Time",
         "type": "number",
         "min": 0,
         "max": 60

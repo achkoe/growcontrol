@@ -28,15 +28,9 @@ def _make_integer_time(timestr: str) -> int:
     return rval
 
 
-def load_settings(raw=False):
+def load_settings():
     with pathlib.Path(__file__).parent.parent.joinpath("settings.json").open("r") as fh:
-        raw_settings = json.load(fh)
-    if raw:
-        return raw_settings
-    settings = dict((k, raw_settings[k]["value"]) for k in raw_settings)
-    for key in ("light_on_time", "light_off_time", "pump_on_time", "pump_off_time"):
-        settings[f"{key}_i"] = _make_integer_time(settings[key])
-    return settings
+        return json.load(fh)
 
 
 def save_settings(settings):

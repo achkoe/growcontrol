@@ -48,30 +48,32 @@ def status():
         data.update(sensors_proxy.get())
         
         for key in ["temperature", "humidity"]:
-            if data[key] < float(app._settings[f"{key}_low_level"]):
+            if data[key] < float(app._settings[f"{key}_low_level"]["value"]):
                 data[f"{key}-status"] = "below"
-            elif data[key] > float(app._settings[f"{key}_high_level"]):
+            elif data[key] > float(app._settings[f"{key}_high_level"]["value"]):
                 data[f"{key}-status"] = "above"
             else:
                 data[f"{key}-status"] = "okay"
-
         data["moisture-status"] = []
         for value in data["moisture"]:
-            if value > float(app._settings["moisture_high_level"]):
+            if value > float(app._settings["moisture_high_level"]["value"]):
                 data["moisture-status"].append("above")
-            elif value < float(app._settings["moisture_low_level"]):
+            elif value < float(app._settings["moisture_low_level"]["value"]):
                 data["moisture-status"].append("below")
             else:
                 data["moisture-status"].append("okay")
                 
+        print("HERE", data)
         data["sensorstatus"] = "ok"
     except Exception as e:
+        print(e)
         data["sensorstatus"] = repr(e)
         
     try:
         data.update(actors_proxy.get())
         data["actorstatus"] = "ok"
     except Exception as e:
+        print(e)
         data["actorstatus"] = repr(e)
         
     #print(json.dumps(data, indent=4))
