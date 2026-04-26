@@ -63,7 +63,6 @@ def status():
             else:
                 data["moisture-status"].append("okay")
                 
-        print("HERE", data)
         data["sensorstatus"] = "ok"
     except Exception as e:
         print(e)
