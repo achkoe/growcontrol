@@ -7,18 +7,18 @@
         },
         "offtime": {
             "title": "Light Off Time",
-            "value": "17:50 "
+            "value": "17:50"
         }
     },
     "fan": {
         "type": "time",
         "ontime": {
             "title": "Fan On Time",
-            "value": "*:*:00 "
+            "value": "*:00:01"
         },
         "offtime": {
             "title": "Fan Off Time",
-            "value": "*:00:01"
+            "value": "*:00:50"
         }
     },
     "exhaustairfan": {
@@ -36,7 +36,7 @@
         "type": "time",
         "ontime": {
             "title": "Humidifier On Time",
-            "value": "*:*:06"
+            "value": "*:*:00"
         },
         "offtime": {
             "title": "Humidifier Off Time",

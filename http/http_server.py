@@ -25,11 +25,23 @@ hint = dict(pumps=list(configuration.pump_dict.keys()), moistures=list(configura
 
 @ app.route("/")
 def index():
+    hint.update({"timetitle": dict()})
+    for key, value in app._settings.items():
+        if value["type"] == "time":
+            hint["timetitle"][key] = dict(ontime="Use e.g. *:00:01 or 17:50", offtime="Use e.g. *:00:01 or 17:50")
+            for subkey in hint["timetitle"][key]:
+                try:
+                    it = BaseIterator(app._settings[key][subkey]["value"], datetime.now())
+                    title = "\n".join(next(it).isoformat() for _ in range(10))
+                    hint["timetitle"][key][subkey] = title
+                except Exception as e:
+                    print(e)
+                                    
     return render_template('index.html', 
                            version=f"v{VERSION}",
                            configuration=configuration,
                            hint=hint,
-                           settings=load_settings())
+                           settings=app._settings)
 
 
 @ app.route("/status")
