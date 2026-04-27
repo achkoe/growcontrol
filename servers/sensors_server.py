@@ -16,7 +16,7 @@ import  servers.sensor_driver as driver
 
 IDENTITY = "sensors_server.py v0.0.2"
 logging.basicConfig(format=configuration.log_format, level=logging.DEBUG)
-LOGGER = logging.getLogger()
+LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(get_loglevel("SENSOR_SERVER_LOGLEVEL"))
     
 

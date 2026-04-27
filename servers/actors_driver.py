@@ -6,7 +6,6 @@ from base import get_loglevel
 logging.basicConfig(format=configuration.log_format, level=logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(get_loglevel("ACTOR_DRIVER_LOGLEVEL"))
-print(repr(get_loglevel("ACTOR_DRIVER_LOGLEVEL")))
 
 
 _STATE_MAP = dict()

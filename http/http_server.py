@@ -18,6 +18,7 @@ logging.getLogger('werkzeug').setLevel(logging.ERROR)
 
 sensors_proxy = xmlrpc.client.ServerProxy(f"http://localhost:{configuration.sensors_server_port}")
 actors_proxy = xmlrpc.client.ServerProxy(f"http://localhost:{configuration.actors_server_port}")
+logdata_proxy = xmlrpc.client.ServerProxy(f"http://localhost:{configuration.logdata_server_port}")
 
 app = Flask(__name__)
 app._settings = load_settings()
@@ -144,8 +145,9 @@ def verifytimeinput():
 @ app.route("/logdata")
 def logdata():
     try:
-        output_list, moisture_dict, min_max_mean = logdata_proxy.get()
-        return dict(tth=output_list, m=moisture_dict, min_max_mean=min_max_mean)
+        q = logdata_proxy.get()
+        print(q)
+        return q
     except Exception:
         print("logdata issue")
         return dict(tth=[], m={})
