@@ -3,19 +3,31 @@ var logDataIntervalTimer = undefined;
 let ids = [];
 let invalid_time_settings_count = 0
 
+function showHttpError(show, message) {
+    if (show === false) {
+        for (const element of document.querySelectorAll(".r-httpstatus")) {
+            element.classList.add("hidden");
+        }
+        return;
+    }
+    for (const element of document.querySelectorAll(".r-httpstatus")) {
+        element.classList.remove("hidden");
+    }
+    for (const element of document.querySelectorAll(".d-httpstatus")) {
+        element.innerText = message;
+    }
+}
+
+
 // Polling function
 async function pollStatus() {
-    let relement = document.getElementById("r-httpstatus");
-    let delement = document.getElementById("d-httpstatus");
     try {
         response = await fetch('/status');
         if (!response.ok) {
-            delement.innerText = response.status;
-            relement.classList.remove("hidden");
+            showHttpError(true, response.status);
             throw new Error(`Response status: ${response.status}`);
         } else {
-            delement.innerText = response.status;
-            relement.classList.add("hidden");
+            showHttpError(false, null);
         }
         const data = await response.json();
         // log(data);
@@ -94,9 +106,7 @@ async function pollStatus() {
         }
     } catch (error) {
         console.error(error.message);
-        delement.innerText = error.message;
-        relement.classList.remove("hidden");
-
+        showHttpError(true, error.message);
     }
 }
 
@@ -139,6 +149,15 @@ window.addEventListener("load", (event) => {
             this.classList.add("active");
             let id = this.getAttribute("data-tab");
             document.getElementById(id).style.display = "block";
+
+            if (id == "logdata") {
+                fetchLogData('/logdata');
+                logDataIntervalTimer = setInterval(fetchLogData, 2000, '/logdata');
+            } else {
+                if (logDataIntervalTimer !== undefined) {
+                    clearInterval(logDataIntervalTimer);
+                }
+            }
         });
     }
     

@@ -8,16 +8,16 @@
     <!--
     <link rel="stylesheet" href="{{ url_for('static', filename='css/uPlot.min.css') }}">
     <script src="{{ url_for('static', filename='js/uPlot.iife.min.js') }}"></script> 
-    <script src="{{ url_for('static', filename='js/logdata.js') }}"></script>
     -->    
     <!--
         {{configuration["moisture_dict"]|tojson}}
         {{hint|tojson}}
-    -->
-    <script>
-        const HINT = {{hint|tojson}};
-    </script>
+        -->
+        <script>
+            const HINT = {{hint|tojson}};
+            </script>
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/logdata.js') }}"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 
@@ -98,9 +98,9 @@
         </div>
 
         <div class="rtable" id="table-status">
-            <div class="tr hidden" id="r-httpstatus" >
+            <div class="tr hidden r-httpstatus" >
                 <div class="td">HTTP Server Status</div>
-                <div class="td" id="d-httpstatus"></div>
+                <div class="td d-httpstatus red-blink"></div>
             </div>
             <div class="tr hidden" id="r-sensorstatus" >
                 <div class="td">Sensor Server Status</div>
@@ -156,18 +156,29 @@
 
     <div class="tab-content" id="logdata" style="display:none;">
         <!-- Log data content here -->
-        <div class="table">
-            <div class="table-row">
-                <div class="table-cell">Temperature</div>
-                <div class="table-cell mean-value">&#8960; <span id="temperature_mean"></span>°C</div>
-                <div class="table-cell min-value">&darr; <span id="temperature_min"></span>°C</div>
-                <div class="table-cell max-value">&uarr; <span id="temperature_max"></span>°C</div>
+         <div class="rtable">
+            <div class="tr hidden r-httpstatus">
+                <div class="td">HTTP Server Status</div>
+                <div class="td red-blink d-httpstatus"></div>
             </div>
-            <div class="table-row">
-                <div class="table-cell">Humidity </div>
-                <div class="table-cell mean-value">&#8960; <span id="humidity_mean"></span>%</div>
-                <div class="table-cell min-value">&darr; <span id="humidity_min"></span>%</div>
-                <div class="table-cell max-value">&uarr; <span id="humidity_max"></span>%</div>
+            <div class="tr hidden" id="r-logstatus">
+                <div class="td">Log Server Status</div>
+                <div class="td red-blink" id="d-logstatus"></div>
+            </div>
+         </div>
+         <br/>
+        <div class="rtable">
+            <div class="tr">
+                <div class="td">Temperature</div>
+                <div class="td mean-value">&#8960; <span id="temperature_mean"></span>°C</div>
+                <div class="td min-value">&darr; <span id="temperature_min"></span>°C</div>
+                <div class="td max-value">&uarr; <span id="temperature_max"></span>°C</div>
+            </div>
+            <div class="tr">
+                <div class="td">Humidity </div>
+                <div class="td mean-value">&#8960; <span id="humidity_mean"></span>%</div>
+                <div class="td min-value">&darr; <span id="humidity_min"></span>%</div>
+                <div class="td max-value">&uarr; <span id="humidity_max"></span>%</div>
             </div>
         </div>
 

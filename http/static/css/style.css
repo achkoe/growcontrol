@@ -28,6 +28,10 @@
     background-color: gray;
     cursor: not-allowed !important;
 }
+.mean-value, .max-value,  .min-value {
+    width: 10em;
+    text-align: center;
+}
 .btn-on {
     background-color: #28a745;
     width: 4em;

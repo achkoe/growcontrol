@@ -60,8 +60,9 @@ class Bridge():
         # returns 2 items:
         # 1st is list with dict of all gathered data
         # 2nd is dict with keys "temperature_mean", "temperature_min", "temperature_max", "humidity_mean", "humidity_min", "humidity_max"
-        print(list(self.output), statisticdata)
-        return list(self.output), statisticdata
+        rval = dict(statistics=statisticdata, control=list(self.output))
+        print(rval)
+        return rval
 
     def set(self):
         return "OK"

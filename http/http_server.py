@@ -146,11 +146,12 @@ def verifytimeinput():
 def logdata():
     try:
         q = logdata_proxy.get()
-        print(q)
+        q.update(dict(status="ok"))
+        print(q["statistics"])
         return q
-    except Exception:
-        print("logdata issue")
-        return dict(tth=[], m={})
+    except Exception as e:
+        print(f"logdata issue -> {e}")
+        return dict(status="error")
     
 
 @app.route("/watchdog", methods=("GET", ))
