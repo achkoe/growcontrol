@@ -6,16 +6,16 @@
     <title>GrowControl Dashboard</title>
     
     <!--
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/uPlot.min.css') }}">
-    <script src="{{ url_for('static', filename='js/uPlot.iife.min.js') }}"></script> 
-    -->    
-    <!--
+        -->    
+        <!--
         {{configuration["moisture_dict"]|tojson}}
         {{hint|tojson}}
         -->
-        <script>
-            const HINT = {{hint|tojson}};
-            </script>
+    <script>
+        const HINT = {{hint|tojson}};
+    </script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/uPlot.min.css') }}">
+    <script src="{{ url_for('static', filename='js/uPlot.iife.min.js') }}"></script> 
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
     <script src="{{ url_for('static', filename='js/logdata.js') }}"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
@@ -24,7 +24,7 @@
 <body>
     <div class="tabs">
         <button class="tab active" data-tab="main">Main</button>
-        <button class="tab" data-tab="logdata">Log data</button>
+        <button class="tab" active data-tab="logdata">Log data</button>
         <button class="tab" data-tab="settings">Settings</button>
         <button class="tab" data-tab="watchdog">View watchdog</button>
     </div>
@@ -182,13 +182,8 @@
             </div>
         </div>
 
-        <div id="tthgraph"></div>
-
-
-        {% for key in configuration["moisture_dict"] %}
-        <h2>Soil Moisture {{key}}</h2>
-        <div id="moisturegraph_{{key}}" class="moisturegraph"></div>
-        {% endfor %}
+        <div id="datagraph"></div>
+        <div id="moisturegraph"></div>
 
     </div>
     <div class="tab-content" id="watchdog" style="display:none;">

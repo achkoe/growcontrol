@@ -142,7 +142,6 @@ window.addEventListener("load", (event) => {
     for (const tab of tabs) {
         tab.addEventListener("click", function (event) {
             for (let tab of tabs) {
-                log(tab);
                 tab.classList.remove("active");
                 document.getElementById(tab.getAttribute("data-tab")).style.display = "none";
             }
@@ -195,6 +194,8 @@ window.addEventListener("load", (event) => {
             }
         });
     }
+
+    initLogPlot();
 
     setInterval(pollStatus, 500);
     pollStatus();

@@ -147,7 +147,7 @@ def logdata():
     try:
         q = logdata_proxy.get()
         q.update(dict(status="ok"))
-        print(q["statistics"])
+        ic(q)
         return q
     except Exception as e:
         print(f"logdata issue -> {e}")
