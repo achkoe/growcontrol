@@ -1,4 +1,3 @@
-log = console.log;
 const tthoptions = {
   title: null,
   width: 1110,
@@ -85,71 +84,3 @@ const moistureoptions = {
   };
 
 
-async function fetchLogData(url) {
-  showHttpError(false, null);
-  try {
-    response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`Response status: ${response.status}`);
-    }
-    const data = await response.json();
-    if (data.status != "ok") {
-      document.getElementById("r-logstatus").classList.remove("hidden");
-      document.getElementById("d-logstatus").innerText = data.status;
-      throw new Error(`Data status: ${data.status}`);
-    } else {
-      document.getElementById("r-logstatus").classList.add("hidden");
-    }
-    // log(data.statistics);
-    for (const key in data.statistics) {
-      let element = document.getElementById(key);
-      if (element === undefined) continue;
-      element.innerText = data.statistics[key].toFixed(1);
-    }
-    updateTTHGraph(data.control);
-  } catch (error) {
-    showHttpError(true, error.message);
-    log(error.message);
-  }
-}
-
-function updateTTHGraph(data) {
-  if (data.length < 2) return;
-
-  var plotdata = [[], [], [], [], [], []];
-  for (let item of data) {
-    plotdata[0].push(item.time);       // currenttime
-    plotdata[1].push(item.temperature);       // temperature
-    plotdata[2].push(item.humidity);       // humidity
-    plotdata[3].push(item["fan-on"] ? 1 : 0);       // fan
-    plotdata[4].push(item["heater-on"] ? 2.2 : 1.2); // heater
-    plotdata[5].push(item["humidifier-on"] ? 3.4 : 2.4); // humidifier
-  }
-  dataplot.setData(plotdata);
-
-  plotdata = [[]];
-  for (index in HINT.moistures) {
-    plotdata.push([]);
-  }
-  for (const item of data) {
-    plotdata[0].push(item.time);
-    for (index of HINT.moistures) {
-      plotdata[index].push(item.moisture[index - 1]);
-    }
-  }
-  moistureplot.setData(plotdata);
-}
-
-function initLogPlot() {
-  const color = ["black", "blue", "red", "green"];
-  moistureoptions.series.push({});
-  for (index of HINT.moistures) {
-    moistureoptions.series.push({
-      "label": `Moisture ${index}`,
-      "stroke": color[index],
-      "scale": "left"
-    });
-  }
-  dataplot = new uPlot(tthoptions, [], document.getElementById("datagraph"));
-  moistureplot = new uPlot(moistureoptions, [], document.getElementById("moisturegraph"));
-}

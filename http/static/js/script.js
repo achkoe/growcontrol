@@ -2,6 +2,12 @@ let log = console.log;
 var logDataIntervalTimer = undefined;
 let ids = [];
 let invalid_time_settings_count = 0
+var previous_data = null;
+var tthdata = [[], [], [], [], [], []];
+var moisturedata = [[]];
+const MAX_QUEUE_LENGTH  = 5000;
+var flag = false;
+
 
 function showHttpError(show, message) {
     if (show === false) {
@@ -31,6 +37,38 @@ async function pollStatus() {
         }
         const data = await response.json();
         // log(data);
+        if (JSON.stringify(data) != JSON.stringify(previous_data)) {
+            previous_data = data;
+            tthdata[0].push(data.stime);       // currenttime
+            tthdata[1].push(data.temperature);       // temperature
+            tthdata[2].push(data.humidity);       // humidity
+            tthdata[3].push(data["fan-on"] ? 1 : 0);       // fan
+            tthdata[4].push(data["heater-on"] ? 2.2 : 1.2); // heater
+            tthdata[5].push(data["humidifier-on"] ? 3.4 : 2.4); // humidifier
+
+            moisturedata[0].push(data.stime);
+            for (index of HINT.moistures) {
+                moisturedata[index].push(data.moisture[index - 1]);
+            }
+         
+            if (tthdata[0].length > MAX_QUEUE_LENGTH) {
+                for (array of tthdata) {
+                    array.shift();
+                }
+                for (array of moisturedata) {
+                    array.shift();
+                }                
+            }
+            if (tthdata.length > 2) {
+                moistureplot.setData(moisturedata);
+                dataplot.setData(tthdata);
+                if (!flag) {
+                    flag = true;
+                    log(moisturedata);
+                }
+            }
+        }
+        
         document.getElementById("d-time").innerText = data.time;
         
         for (const id of ["temperature", "humidity"]) {
@@ -113,6 +151,19 @@ async function pollStatus() {
 window.addEventListener("load", (event) => {
     console.log("page is fully loaded");
 
+    const color = ["black", "blue", "red", "green"];
+    moistureoptions.series.push({});
+    for (index of HINT.moistures) {
+        moisturedata.push([]);
+        moistureoptions.series.push({
+            "label": `Moisture ${index}`,
+            "stroke": color[index],
+            "scale": "left"
+        });
+    }
+    dataplot = new uPlot(tthoptions, [], document.getElementById("datagraph"));
+    moistureplot = new uPlot(moistureoptions, [], document.getElementById("moisturegraph"));
+
     for (const element of document.querySelectorAll(".button")) {
         element.addEventListener("click", async function (event) {
             let buttonlist = document.querySelectorAll(".button");
@@ -149,14 +200,6 @@ window.addEventListener("load", (event) => {
             let id = this.getAttribute("data-tab");
             document.getElementById(id).style.display = "block";
 
-            if (id == "logdata") {
-                fetchLogData('/logdata');
-                logDataIntervalTimer = setInterval(fetchLogData, 2000, '/logdata');
-            } else {
-                if (logDataIntervalTimer !== undefined) {
-                    clearInterval(logDataIntervalTimer);
-                }
-            }
         });
     }
     
@@ -194,8 +237,6 @@ window.addEventListener("load", (event) => {
             }
         });
     }
-
-    initLogPlot();
 
     setInterval(pollStatus, 500);
     pollStatus();
