@@ -60,7 +60,6 @@ def status():
     
     try:
         data["time"] = time.strftime("%X")
-        data["stime"] = time.time()
         data.update(sensors_proxy.get())
         
         for key in ["temperature", "humidity"]:
