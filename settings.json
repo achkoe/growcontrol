@@ -14,33 +14,33 @@
         "type": "time",
         "ontime": {
             "title": "Fan On Time",
-            "value": "*:00:01"
+            "value": "*:*:00"
         },
         "offtime": {
             "title": "Fan Off Time",
-            "value": "*:00:50"
+            "value": "*:*:50"
         }
     },
     "exhaustairfan": {
         "type": "time",
         "ontime": {
             "title": "Exhaust Air Fan On Time",
-            "value": "*:*:00"
+            "value": "*:00:00"
         },
         "offtime": {
             "title": "Exhaust Air Fan Off Time",
-            "value": "*:*:30"
+            "value": "*:00:30"
         }
     },
     "humidifier": {
         "type": "time",
         "ontime": {
             "title": "Humidifier On Time",
-            "value": "*:*:00"
+            "value": "*:00:00"
         },
         "offtime": {
             "title": "Humidifier Off Time",
-            "value": "*:*:30"
+            "value": "*:10:00"
         }
     },
     "moisture_low_level": {

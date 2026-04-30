@@ -1,8 +1,16 @@
 log = console.log;
+
+
+function getSize() {
+  return {
+    width: window.innerWidth - 100,
+    height: window.innerHeight - 200,
+  }
+}
+
 const tthoptions = {
   title: null,
-  width: 1110,
-  height: 480,
+  ...getSize(),
   series: [
     {},
     {
@@ -63,26 +71,25 @@ const tthoptions = {
   ]
 };
 const moistureoptions = {
-    title: null,
-    width: 1110,
-    height: 480,
-    series: [],
-    scales: {
-        left: { range: [0, 100]},
-        third: { range: [0, 10]},
+  title: null,
+  ...getSize(),
+  series: [],
+  scales: {
+    left: { range: [0, 100] },
+    third: { range: [0, 10] },
+  },
+  axes: [
+    {
+      scale: "x", // x-axis
+      label: "Time",
     },
-    axes: [
-        {
-          scale: "x", // x-axis
-          label: "Time",
-        },
-        {
-          scale: "left", // left y-axis
-          label: "Moisture/%",
-          side: 3,  // position: left
-        },
-      ]
-  };
+    {
+      scale: "left", // left y-axis
+      label: "Moisture/%",
+      side: 3,  // position: left
+    },
+  ]
+};
 
 
 async function fetchLogData(url) {

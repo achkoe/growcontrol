@@ -40,8 +40,7 @@ class Bridge():
         except Exception:
             return
         
-        if data != self.previous_data:
-            # print(data)
+        if data != self.previous_data or time.time() - self.output[-1]["time"] >= INTERVAL:
             self.previous_data = data
             data["time"] = time.time()
             self.output.append(data)
@@ -57,11 +56,7 @@ class Bridge():
             humidity_mean=statistics.mean([item["humidity"] for item in self.output]),
             humidity_min=min([item["humidity"] for item in self.output]),
             humidity_max=max([item["humidity"] for item in self.output]))
-        # returns 2 items:
-        # 1st is list with dict of all gathered data
-        # 2nd is dict with keys "temperature_mean", "temperature_min", "temperature_max", "humidity_mean", "humidity_min", "humidity_max"
         rval = dict(statistics=statisticdata, control=list(self.output))
-        print(rval)
         return rval
 
     def set(self):

@@ -3,17 +3,20 @@
     margin: auto;
 }
 
-.tr{
+.tr {
     display: table-row;
     background-color: #ddd;
 }
+
 .tr:nth-child(even) {
     background-color: #ccc;
 }
+
 .td {
     display: table-cell;
     padding: 10px;
 }
+
 .button {
     padding: 6px 18px;
     border: none;
@@ -24,77 +27,111 @@
     font-weight: bolder;
     width: 4em;
 }
+
 .btn-disabled {
     background-color: gray;
     cursor: not-allowed !important;
 }
-.mean-value, .max-value,  .min-value {
+
+.mean-value,
+.max-value,
+.min-value {
     width: 10em;
     text-align: center;
 }
+
+.min-value {
+    background-color: lightblue;
+}
+
+.max-value {
+    background-color: lightpink;
+}
+
+.mean-value {
+    background-color: lavenderblush;
+}
+
 .btn-on {
     background-color: #28a745;
     width: 4em;
 }
+
 .btn-off {
     background-color: #dc3545;
     width: 4em;
 }
+
 .btn-manual {
     background-color: #ffabfb;
     width: 8em;
 }
+
 .btn-auto {
     background-color: #abd3ff;
     width: 8em;
 }
+
 #table-status {
     margin-top: 1em;
 }
+
 @keyframes blink-animation {
     50% {
         visibility: hidden;
     }
 }
+
 .red-blink {
     animation: blink-animation 1s steps(1, start) infinite;
     background-color: red;
 }
+
 #d-httpstatus {
     background-color: red;
     animation: blink-animation 1s steps(1, start) infinite;
 }
+
 .status-above {
     background-color: red;
     /* animation: blink-animation 1s steps(1, start) infinite; */
 }
+
 .status-invalid {
     background-color: salmon;
     /* animation: blink-animation 1s steps(1, start) infinite; */
 }
+
 .status-below {
     background-color: blue;
     color: white;
     /* animation: blink-animation 1s steps(1, start) infinite; */
 }
+
 .status-okay {
     background-color: inherit;
 }
+
 #d-temperature::after {
     content: "°C";
 }
+
 #d-humidity::after {
     content: "%";
 }
+
 .moisture::after {
     content: "%";
 }
+
 .hidden {
     display: none;
 }
+
 .status-critical {
     background-color: red;
 }
+
 .status-low {
     background-color: coral;
 }
@@ -106,7 +143,7 @@
 .status-full {
     background-color: green;
 }
-/* ---------------------------------  */
+
 body {
     font-family: Arial, sans-serif;
     background: #f4f4f4;
@@ -116,7 +153,6 @@ body {
 
 .tabs {
     display: flex;
-    background: #222;
 }
 
 .tab {
@@ -125,13 +161,18 @@ body {
     color: #fff;
     background: #222;
     border: none;
+    border-radius: 15pt 10pt 0pt 0pt;
     cursor: pointer;
     font-size: 16px;
     outline: none;
     transition: background 0.2s;
+    margin-bottom: 10pt;
 }
 
-.tab.active,
+.tab.active {
+    background: #666;
+
+}
 .tab:hover {
     background: #444;
 }
@@ -140,58 +181,8 @@ body {
     padding: 24px;
 }
 
-.fields-row {
-    display: flex;
-    gap: 16px;
-    margin-bottom: 24px;
-}
-
-.field {
-    background: #fff;
-    border-radius: 8px;
-    padding: 16px 12px;
-    min-width: 120px;
-    text-align: center;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-.field-label {
-    font-weight: bold;
-    margin-bottom: 8px;
-}
-
-.field-value {
-    font-size: 1.5em;
-    margin-top: 8px;
-}
-
-.controls-row {
-    display: flex;
-    gap: 24px;
-    margin-bottom: 24px;
-}
-
-.control-group {
-    background: rgb(217, 245, 241);
-    border-radius: 8px;
-    padding: 12px 16px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-}
-
-.modeauto {
-    background-color: lightskyblue;
-}
-.modemanual {
-    background-color: darkseagreen;
-}
-
-.auto-btn, .onoff-btn {
+.auto-btn,
+.onoff-btn {
     padding: 6px 18px;
     border: none;
     border-radius: 4px;
@@ -200,88 +191,12 @@ body {
     cursor: pointer;
     margin-left: 4px;
 }
-    
+
 .onoff-btn:disabled {
     background: #ccc;
     color: #888;
     cursor: not-allowed;
-    }
-    
-.moisture-row {
-    display: flex;
-    gap: 24px;
 }
-
-.moisture-group {
-    background: rgb(217, 245, 241);
-    border-radius: 8px;
-    padding: 12px 16px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-}
-
-.bold {
-    font-weight: bold;
-}
-
-.moisture-label {
-    margin-left: 8px;
-}
-
-.moisture-value {
-    min-width: 40px;
-    text-align: center;
-}
-
-#field-temperature.green,
-#field-humidity.green,
-#field-humidifier.green,
-#field-fan.green,
-#field-heater.green,
-#field-light.green {
-    background: #d4edda;
-}
-
-#field-temperature.red,
-#field-humidity.red,
-#field-humidifier.red,
-#field-fan.red,
-#field-heater.red,
-#field-light.red {
-    background: #f8d7da;
-}
-
-#field-watersupplylevel.green {
-    background: #d4edda;
-}
-
-#field-watersupplylevel.red {
-    background: #f8d7da;
-}
-
-.on {
-    background-color: green;
-}
-
-.off {
-    background-color: lightblue;
-}
-
-.tohigh {
-    background-color: red;
-}
-
-.tolow {
-    background-color: red;
-}
-
-.acceptable {
-    background-color: green;
-}
-
-
 
 /* settings styles */
 .settings-container {
@@ -309,6 +224,7 @@ body {
 .settings-group input {
     width: 35%;
 }
+
 .settings-group input:invalid {
     background-color: red;
 }
@@ -352,35 +268,3 @@ body {
 .settings-actions button.back:hover {
     background-color: #0056b3;
 }
-
-.table {
-    display: flex;
-    flex-direction: column;
-    border: 1pt solid black;
-    border-radius: 10pt;
-    overflow: hidden; /* Ensures the border-radius is applied correctly */
-    background-color: white; /* Optional: background color for the table */
- max-width: 600px;      /* Limit the table width */
-    width: 100%;           /* Responsive: up to max-width */
-    margin: 0px 4em;     /* Center the table horizontally */
-}
-
-.table-row {
-    display: flex;
-    border-bottom: 1pt solid black; /* Border between rows */
-}
-
-.table-row:last-child {
-    border-bottom: none; /* Remove border for the last row */
-}
-
-.table-cell {
-    flex: 1; /* Equal width for all cells */
-    padding: 10pt;
-    text-align: center;
-    background-color: lightgray; /* Optional: background color for cells */
-}
-
-.min-value { background-color: lightblue;}
-.max-value { background-color: lightpink;}
-.mean-value { background-color: lavenderblush;}
