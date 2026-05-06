@@ -139,7 +139,7 @@
                 {% for subitem in ["ontime", "offtime"] %}
                 <div class="settings-group">
                     <label for="{{item}}-{{subitem}}">{{settings[item][subitem]["title"]}}</label>
-                    <input title="{{hint['timetitle'][item][subitem]}}" class="timeinput" id="{{item}}-{{subitem}}" value={{settings[item][subitem]["value"]}} required name="{{item}}-{{subitem}}">
+                    <input title="{{hint['timetitle'][item][subitem]}}" class="timeinput" id="{{item}}-{{subitem}}" value="{{settings[item][subitem]['value']}}" required name="{{item}}-{{subitem}}">
                 </div>
                 {% endfor %}
                 {% endif %}
