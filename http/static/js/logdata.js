@@ -113,7 +113,7 @@ async function fetchLogData(url) {
       if (element === undefined) continue;
       element.innerText = data.statistics[key].toFixed(1);
     }
-    updateTTHGraph(data.control);
+    updateTTHGraph(data);
   } catch (error) {
     showHttpError(true, error.message);
     log(error.message);
@@ -121,30 +121,17 @@ async function fetchLogData(url) {
 }
 
 function updateTTHGraph(data) {
-  if (data.length < 2) return;
+  log(data);
+  if (data.plotdata[0].length < 2) return;
 
-  var plotdata = [[], [], [], [], [], []];
-  for (let item of data) {
-    plotdata[0].push(item.time);       // currenttime
-    plotdata[1].push(item.temperature);       // temperature
-    plotdata[2].push(item.humidity);       // humidity
-    plotdata[3].push(item["fan-on"] ? 1 : 0);       // fan
-    plotdata[4].push(item["heater-on"] ? 2.2 : 1.2); // heater
-    plotdata[5].push(item["humidifier-on"] ? 3.4 : 2.4); // humidifier
-  }
-  dataplot.setData(plotdata);
-
-  plotdata = [[]];
-  for (index in HINT.moistures) {
-    plotdata.push([]);
-  }
-  for (const item of data) {
-    plotdata[0].push(item.time);
-    for (index of HINT.moistures) {
-      plotdata[index].push(item.moisture[index - 1]);
-    }
-  }
-  moistureplot.setData(plotdata);
+  dataplot.setData(data.plotdata);
+  data.plotdata[4].forEach(function(element, index) {
+    data.plotdata[4][index] += 1.2;
+  });
+  data.plotdata[5].forEach(function(element, index) {
+    data.plotdata[5][index] += 2.4;
+  });
+  moistureplot.setData(data.moisturedata);
 }
 
 function initLogPlot() {

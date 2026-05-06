@@ -56,9 +56,28 @@ class Bridge():
             humidity_mean=statistics.mean([item["humidity"] for item in self.output]),
             humidity_min=min([item["humidity"] for item in self.output]),
             humidity_max=max([item["humidity"] for item in self.output]))
-        rval = dict(statistics=statisticdata, control=list(self.output))
-        return rval
-
+        result = {
+            "plotdata": [[], [], [], [], [], []],
+            "moisturedata": [[]],
+            "statistics": statisticdata
+        }
+        for  index in configuration.moisture_dict:
+            result["moisturedata"].append([])
+        
+        for item in self.output:
+            result["plotdata"][0].append(item["time"])
+            result["plotdata"][1].append(item["temperature"])
+            result["plotdata"][2].append(item["humidity"])
+            result["plotdata"][3].append(1 if item["fan-on"] else 0)
+            result["plotdata"][4].append(1 if item["heater-on"] else 0)
+            result["plotdata"][5].append(1 if item["humidifier-on"] else 0)
+            
+            result["moisturedata"][0].append(item["time"])
+            for index, value in enumerate(item["moisture"]):
+                result["moisturedata"][index + 1].append(value)
+                
+        return result
+    
     def set(self):
         return "OK"
 
