@@ -110,6 +110,25 @@ async function pollStatus() {
     }
 }
 
+async function fetchWatchdog(url) {
+  showHttpError(false, null);
+  try {
+    response = await fetch(url);
+    log(response);
+    if (!response.ok) {
+      throw new Error(`Response status: ${response.status}`);
+    }
+    const data = await response.json();
+    if (data.status != "ok") {
+      throw new Error(`Data status: ${data.status}`);
+    }
+    document.getElementById("watchdog").innerText = data.watchdog;
+  } catch (error) {
+    showHttpError(true, error.message);
+    log(error.message);
+  }
+}
+
 window.addEventListener("load", (event) => {
     console.log("page is fully loaded");
 
@@ -155,6 +174,14 @@ window.addEventListener("load", (event) => {
             } else {
                 if (logDataIntervalTimer !== undefined) {
                     clearInterval(logDataIntervalTimer);
+                }
+            }
+            if (id == "watchdog") {
+                fetchWatchdog('/watchdog');
+                watchdogIntervalTimer = setInterval(fetchWatchdog, 2000, '/watchdog');
+            } else {
+                if (watchdogIntervalTimer !== undefined) {
+                    clearInterval(watchdogIntervalTimer);
                 }
             }
         });

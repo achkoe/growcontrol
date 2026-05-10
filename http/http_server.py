@@ -162,4 +162,4 @@ def watchdog():
             status = fh.read()
     except Exception as watchdog:
         pass
-    return {"watchdog": status}
+    return {"watchdog": status, "status": "ok"}
