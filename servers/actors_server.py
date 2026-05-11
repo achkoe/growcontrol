@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-"""Server to deliver temperature and humidity over xmlrpc."""
-
+"""Server to set relays over xmlrpc."""
+import os
 import json
 import logging
 import xmlrpc.client
@@ -11,7 +11,11 @@ from dotenv import dotenv_values
 from oncalendar import BaseIterator
 from base import load_settings, get_loglevel
 import configuration
-import  servers.actors_driver as driver
+if os.environ.get("SIMULATEDRIVER", None) is None:
+    import  servers.actors_driver as driver
+else:
+    import  servers.actors_simdriver as driver
+    
 
 
 IDENTITY = "actor_server.py v0.0.1"

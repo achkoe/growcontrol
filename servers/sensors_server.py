@@ -11,13 +11,18 @@ from dotenv import dotenv_values
 
 from base import load_settings, get_loglevel
 import configuration
-import  servers.sensor_driver as driver
+if os.environ.get("SIMULATEDRIVER", None) is None:
+    import  servers.sensor_driver as driver
+else:
+    import  servers.sensor_simdriver as driver
+    
 
 
 IDENTITY = "sensors_server.py v0.0.2"
 logging.basicConfig(format=configuration.log_format, level=logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(get_loglevel("SENSOR_SERVER_LOGLEVEL"))
+driver.init()
     
 
 class Bridge():
