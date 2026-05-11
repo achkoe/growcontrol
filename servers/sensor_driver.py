@@ -13,6 +13,7 @@ from configuration import port_waterlow, port_watermedium, port_waterhigh
 instruments = SimpleNamespace()
 
 def init():
+    GPIO.setmode(GPIO.BCM)
     GPIO.setup([port_waterlow, port_watermedium, port_waterhigh], GPIO.IN)
 
     # initialize BME280 sensor for temperature and humidity

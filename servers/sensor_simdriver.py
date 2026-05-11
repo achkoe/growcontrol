@@ -3,7 +3,7 @@ import json
 from configuration import port_waterlow, port_watermedium, port_waterhigh
 
 
-def init(self):
+def init():
     pass
 
 

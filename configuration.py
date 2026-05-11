@@ -30,6 +30,13 @@ moisture_dict = {
     2: dict(channel=1),
 }
 pump_dict = {1: port_pump, 2: port_reserved}
+actors_dict = {
+    "exhaustairfan": port_fan_exhaust_air,
+    "fan": port_fan, 
+    "light": port_light, 
+    "humidifier": port_humidifier, 
+    "heater": port_heater
+}
 
 log_format = "%(module)s:%(levelname)s:%(asctime)s:%(message)s"
 
