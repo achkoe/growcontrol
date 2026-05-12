@@ -59,6 +59,7 @@ def get():
         rval = max(instruments._min, rval)      # set lower limit
         rval = instruments._slope * rval + instruments._offset
         data["moisture"].append(rval)
+    return data
    
         
 if __name__ == "__main__":

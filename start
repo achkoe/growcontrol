@@ -8,11 +8,8 @@ echo "$1"
 
 if [[ "$1" == "server" ]]; then
     python servers/sensors_server.py &
-    python servers/light_server.py &
+    python servers/actors_server.py &
     sleep 2
-    python servers/fan_server.py &
-    python servers/pump_server.py &
-#    python servers/pump_server.py 2 &
     python servers/logdata_server.py &
 fi
 

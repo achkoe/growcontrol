@@ -71,9 +71,12 @@ if __name__ == "__main__":
         with pathlib.Path.cwd().joinpath(pidfilename).open("r") as fh:
             pid_map = json.load(fh)
         for key, pid in pid_map.items():
-            p = psutil.Process(pid)
-            p.terminate()
-            print(f"{key} process terminated")
+            try:
+                p = psutil.Process(pid)
+                p.terminate()
+                print(f"{key} process terminated")
+            except Exception as e:
+                print(e)
     else:
         with pathlib.Path.cwd().joinpath(logfilename).open("w") as fh:
             # create log file

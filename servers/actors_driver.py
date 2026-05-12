@@ -34,4 +34,4 @@ if __name__ == "__main__":
     print(args)
     
     init()
-    set(args.key, True if args.value == "on" else False)
+    set(omap[args.key], True if args.value == "on" else False)
