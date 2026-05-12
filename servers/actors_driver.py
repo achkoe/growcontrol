@@ -2,7 +2,7 @@ import logging
 from dotenv import dotenv_values
 import configuration
 from base import get_loglevel
-#import RPi.GPIO as GPIO
+import RPi.GPIO as GPIO
 
 logging.basicConfig(format=configuration.log_format, level=logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
@@ -34,4 +34,4 @@ if __name__ == "__main__":
     print(args)
     
     init()
-    set(args.kay, True if args.value == "on" else False)
+    set(args.key, True if args.value == "on" else False)
