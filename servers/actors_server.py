@@ -23,6 +23,7 @@ logging.basicConfig(format=configuration.log_format, level=logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(get_loglevel("ACTOR_SERVER_LOGLEVEL"))
 SENSORS_PROXY = xmlrpc.client.ServerProxy(f"http://localhost:{configuration.sensors_server_port}")    
+driver.init()
     
 class BaseActor():
     def __init__(self, name):
