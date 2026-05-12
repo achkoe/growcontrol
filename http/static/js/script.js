@@ -34,7 +34,7 @@ async function pollStatus() {
         document.getElementById("d-time").innerText = data.time;
         
         for (const id of ["temperature", "humidity"]) {
-            document.getElementById(`d-${id}`).innerText = data[id];
+            document.getElementById(`d-${id}`).innerText = Number.parseFloat(data[id]).toFixed(1);
             let element = document.getElementById(`s-${id}`);
             element.classList.remove("status-below", "status-above");
             if (data[`${id}-status`] == "below") {
