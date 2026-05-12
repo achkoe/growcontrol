@@ -49,7 +49,7 @@ async function pollStatus() {
         }
         
         for (const id of HINT.moistures) {
-            document.getElementById(`moisture-${id}`).innerText = data.moisture[id - 1];
+            document.getElementById(`moisture-${id}`).innerText = Number.parseFloat(data.moisture[id - 1]).toFixed(1);
             let element = document.getElementById(`moisture-status-${id}`);
             element.classList.remove("status-below", "status-above", "status-okay");
             element.innerText = data["moisture-status"][id - 1] != "okay" ? data["moisture-status"][id - 1] : "";
