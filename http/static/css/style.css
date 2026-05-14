@@ -143,24 +143,25 @@
 .status-full {
     background-color: green;
 }
-
+html {margin: 0pt;}
 body {
     font-family: Arial, sans-serif;
     background: #f4f4f4;
-    margin: 0;
+    margin: 0pt;
     padding: 0;
     height: 100%;
 }
 .background {
     background-image: url('../salad.jpg');
     background-size: cover;
-    background-color: rgba(255, 255, 255, 0.6);
+    background-color: rgba(255, 255, 255, 0.4);
     background-blend-mode: lighten;
-    padding-top: 10pt;
     height: 100%;
 }
+#main {padding-top: 15px;}
 #watchdog {
     height: 100%;
+    text-align: center;
 }
 .tabs {
     display: flex;
