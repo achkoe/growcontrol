@@ -1,5 +1,6 @@
 """Watchdog for growcontrol"""
 import os
+import logging
 import pathlib
 import time
 import datetime
@@ -8,6 +9,15 @@ import argparse
 from collections import deque
 import subprocess
 import psutil
+from dotenv import dotenv_values
+import configuration
+
+
+loglevel = int(dotenv_values(pathlib.Path(__file__).parent.joinpath("servers", ".env")).get("WATCHDOG_LOGLEVEL", logging.CRITICAL))
+logging.basicConfig(format=configuration.log_format, level=loglevel)
+LOGGER = logging.getLogger(__name__)
+LOGGER.setLevel(loglevel)
+
 
 # flask --app http_server run --debug --host 0.0.0.0
 processes = {
@@ -24,11 +34,11 @@ logqueue = deque(maxlen=16)
 def start():
     for key in processes:
         process = processes[key]
-        print(" ".join(process["args"]))
+        LOGGER.warning("start {}".format(" ".join(process["args"])))
         processes[key]["p"] = subprocess.Popen(process["args"], cwd=pathlib.Path(__file__).parent.joinpath(process["folder"]))
         time.sleep(process["t"])
         
-    print(", ".join(str(processes[key]["p"].pid) for key in processes))
+    LOGGER.warning("PIDS:{}".format(", ".join(str(processes[key]["p"].pid) for key in processes)))
     with pathlib.Path.cwd().joinpath(pidfilename).open("w") as fh:
         pid_map = {"watchdog": os.getpid()}
         pid_map.update(dict((processes[key]["name"], processes[key]["p"].pid) for key in processes))
@@ -36,13 +46,10 @@ def start():
         
         
 def watch():
-    flag = False
     while True:
-        print("{}".format(["-", "+"][flag]), end=" ")
-        flag = not flag
         for key in processes:
             status = processes[key]["p"].poll()
-            print("{}: {}".format(key, status), end=" ", flush=True)
+            LOGGER.info("pid {0} {1!r}: {2}".format(processes[key]["p"].pid, processes[key]["name"], status))
             if status is not None:
                 logqueue.append("{0}: {1} has return code {2}".format(
                     datetime.datetime.now().isoformat(),
@@ -52,14 +59,12 @@ def watch():
                 with pathlib.Path.cwd().joinpath(logfilename).open("w") as fh:
                     for line in logqueue:
                         print(line, file=fh)
-                        print(line)
-                print()
+                        LOGGER.warning(line)
                 for killkey in processes:
                     if killkey == key:
                         continue
                     processes[killkey]["p"].terminate()
                 start()
-        print()
         time.sleep(1)
         
 

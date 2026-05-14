@@ -3,7 +3,7 @@
 source /home/pi/venv/vgc/bin/activate
 export PYTHONPATH=/home/pi/growcontrol
 
-echo "server | tst | http | watchdog"
+echo "server | tst | http | watchdog | kill"
 echo "$1"
 
 if [[ "$1" == "server" ]]; then
@@ -23,5 +23,10 @@ fi
 
 if [[ "$1" == "watchdog" ]]; then 
     python watchdog.py 
+fi
+
+if [[ "$1" == "kill" ]]; then 
+    pkill python 
+    pkill flask
 fi
 

@@ -60,7 +60,7 @@
         "max": 100
     },
     "temperature_high_level": {
-        "value": "19",
+        "value": "24",
         "title": "Temperature High Level",
         "type": "number",
         "unit": "\u00b0C",
