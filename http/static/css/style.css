@@ -149,8 +149,19 @@ body {
     background: #f4f4f4;
     margin: 0;
     padding: 0;
+    height: 100%;
 }
-
+.background {
+    background-image: url('../salad.jpg');
+    background-size: cover;
+    background-color: rgba(255, 255, 255, 0.6);
+    background-blend-mode: lighten;
+    padding-top: 10pt;
+    height: 100%;
+}
+#watchdog {
+    height: 100%;
+}
 .tabs {
     display: flex;
 }
@@ -166,7 +177,6 @@ body {
     font-size: 16px;
     outline: none;
     transition: background 0.2s;
-    margin-bottom: 10pt;
 }
 
 .tab.active {

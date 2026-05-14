@@ -4,24 +4,25 @@
 <head>
     <meta charset="UTF-8">
     <title>GrowControl Dashboard</title>
-    
+
     <!--
-        -->    
-        <!--
+        -->
+    <!--
         {{configuration["moisture_dict"]|tojson}}
         {{hint|tojson}}
         -->
     <script>
-        const HINT = {{hint|tojson}};
+        const HINT = {{ hint| tojson}};
     </script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/uPlot.min.css') }}">
-    <script src="{{ url_for('static', filename='js/uPlot.iife.min.js') }}"></script> 
+    <script src="{{ url_for('static', filename='js/uPlot.iife.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
     <script src="{{ url_for('static', filename='js/logdata.js') }}"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 
 <body>
+    <div id="top">
     <div class="tabs">
         <button class="tab active" data-tab="main">Main</button>
         <button class="tab" data-tab="logdata">Log data</button>
@@ -29,134 +30,132 @@
         <button class="tab" data-tab="watchdog">View watchdog</button>
     </div>
 
-    <div id="main">
+    <div class="background">
+        <div id="main">
 
-        <div class="rtable">
-            <div class="tr" id="r-time">
-                <div class="td">Time</div>
-                <div class="td" id="d-time">12:12:01</div>
-                <div class="td"></div>
-            </div>
-            <div class="tr" id="r-temperature">
-                <div class="td">Temperature</div>
-                <div class="td" id="d-temperature">25.1</div>
-                <div class="td" id="s-temperature"></div>
-            </div>
-            <div class="tr" id="r-humidity">
-                <div class="td">Humidity</div>
-                <div class="td" id="d-humidity">44</div>
-                <div class="td" id="s-humidity"></div>
-            </div>
-            <div class="tr" id="r-waterlevel">
-                <div class="td">Water Supply Level</div>
-                <div class="td" id="d-waterlevel">medium</div>
-                <div class="td"></div>
-            </div>
-            <div class="tr" id=""r-light>
-                <div class="td">Light</div>
-                <div class="td"><button class="button btn-on" id="btn-s-light" >On</button></div>
-                <div class="td"><button class="button btn-manual" id="btn-a-light">Manual</button></div>
-            </div>
-            <div class="tr">
-                <div class="td">Heater</div>
-                <div class="td"><button class="button btn-on" id="btn-s-heater">On</button></div>
-                <div class="td"><button class="button btn-auto" id="btn-a-heater">Auto</button></div>
-            </div>
-            <div class="tr">
-                <div class="td">Fan</div>
-                <div class="td"><button class="button btn-off" id="btn-s-fan">Off</button></div>
-                <div class="td"><button class="button btn-auto" id="btn-a-fan">Auto</button></div>
-            </div>
-            <div class="tr">
-                <div class="td">Humidifier</div>
-                <div class="td"><button class="button btn-on" id="btn-s-humidifier">On</button></div>
-                <div class="td"><button class="button btn-auto" id="btn-a-humidifier">Auto</button></div>
-            </div>
-            <div class="tr">
-                <div class="td">Exhaust Air Fan</div>
-                <div class="td"><button class="button btn-on" id="btn-s-exhaustairfan">On</button></div>
-                <div class="td"><button class="button btn-auto" id="btn-a-exhaustairfan">Auto</button></div>
-            </div>
-            <div class="tr">
-                <div class="td">Pump 1</div>
-                <div class="td"><button class="button btn-on" id="btn-s-pump1">On</button></div>
-                <div class="td"><button class="button btn-auto" id="btn-a-pump1">Auto</button></div>
-            </div>
-            <div class="tr">
-                <div class="td">Pump 2</div>
-                <div class="td"><button class="button btn-on" id="btn-s-pump2">On</button></div>
-                <div class="td"><button class="button btn-auto" id="btn-a-pump2">Auto</button></div>
+            <div class="rtable">
+                <div class="tr" id="r-time">
+                    <div class="td">Time</div>
+                    <div class="td" id="d-time">12:12:01</div>
+                    <div class="td"></div>
+                </div>
+                <div class="tr" id="r-temperature">
+                    <div class="td">Temperature</div>
+                    <div class="td" id="d-temperature">25.1</div>
+                    <div class="td" id="s-temperature"></div>
+                </div>
+                <div class="tr" id="r-humidity">
+                    <div class="td">Humidity</div>
+                    <div class="td" id="d-humidity">44</div>
+                    <div class="td" id="s-humidity"></div>
+                </div>
+                <div class="tr" id="r-waterlevel">
+                    <div class="td">Water Supply Level</div>
+                    <div class="td" id="d-waterlevel">medium</div>
+                    <div class="td"></div>
+                </div>
+                <div class="tr" id="" r-light>
+                    <div class="td">Light</div>
+                    <div class="td"><button class="button btn-on" id="btn-s-light">On</button></div>
+                    <div class="td"><button class="button btn-manual" id="btn-a-light">Manual</button></div>
+                </div>
+                <div class="tr">
+                    <div class="td">Heater</div>
+                    <div class="td"><button class="button btn-on" id="btn-s-heater">On</button></div>
+                    <div class="td"><button class="button btn-auto" id="btn-a-heater">Auto</button></div>
+                </div>
+                <div class="tr">
+                    <div class="td">Fan</div>
+                    <div class="td"><button class="button btn-off" id="btn-s-fan">Off</button></div>
+                    <div class="td"><button class="button btn-auto" id="btn-a-fan">Auto</button></div>
+                </div>
+                <div class="tr">
+                    <div class="td">Humidifier</div>
+                    <div class="td"><button class="button btn-on" id="btn-s-humidifier">On</button></div>
+                    <div class="td"><button class="button btn-auto" id="btn-a-humidifier">Auto</button></div>
+                </div>
+                <div class="tr">
+                    <div class="td">Exhaust Air Fan</div>
+                    <div class="td"><button class="button btn-on" id="btn-s-exhaustairfan">On</button></div>
+                    <div class="td"><button class="button btn-auto" id="btn-a-exhaustairfan">Auto</button></div>
+                </div>
+                <div class="tr">
+                    <div class="td">Pump 1</div>
+                    <div class="td"><button class="button btn-on" id="btn-s-pump1">On</button></div>
+                    <div class="td"><button class="button btn-auto" id="btn-a-pump1">Auto</button></div>
+                </div>
+                <div class="tr">
+                    <div class="td">Pump 2</div>
+                    <div class="td"><button class="button btn-on" id="btn-s-pump2">On</button></div>
+                    <div class="td"><button class="button btn-auto" id="btn-a-pump2">Auto</button></div>
+                </div>
+
+                {% for key in hint["pumps"] %}
+                <div class="tr">
+                    <div class="td">Soil Moisture {{key}}</div>
+                    <div class="td moisture" id="moisture-{{key}}"></div>
+                    <div class="td" id="moisture-status-{{key}}"></div>
+                </div>
+                {% endfor %}
             </div>
 
-            {% for key in hint["pumps"] %}
-            <div class="tr">
-                <div class="td">Soil Moisture {{key}}</div>
-                <div class="td moisture" id="moisture-{{key}}"></div>
-                <div class="td" id="moisture-status-{{key}}"></div>
-            </div>
-            {% endfor %}
-        </div>
-
-        <div class="rtable" id="table-status">
-            <div class="tr hidden r-httpstatus" >
-                <div class="td">HTTP Server Status</div>
-                <div class="td d-httpstatus red-blink"></div>
-            </div>
-            <div class="tr hidden" id="r-sensorstatus" >
-                <div class="td">Sensor Server Status</div>
-                <div class="td red-blink" id="d-sensorstatus"></div>
-            </div>
-            <div class="tr hidden" id="r-actorstatus" >
-                <div class="td">Actor Server Status</div>
-                <div class="td red-blink" id="d-actorstatus"></div>
+            <div class="rtable" id="table-status">
+                <div class="tr hidden r-httpstatus">
+                    <div class="td">HTTP Server Status</div>
+                    <div class="td d-httpstatus red-blink"></div>
+                </div>
+                <div class="tr hidden" id="r-sensorstatus">
+                    <div class="td">Sensor Server Status</div>
+                    <div class="td red-blink" id="d-sensorstatus"></div>
+                </div>
+                <div class="tr hidden" id="r-actorstatus">
+                    <div class="td">Actor Server Status</div>
+                    <div class="td red-blink" id="d-actorstatus"></div>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="tab-content" id="settings" style="display:none;">
-        <!-- Settings content here -->
-        <div class="settings-container">
-            <form method="POST" action="/settings">
-                {% for item in settings %}
-                {% if settings[item]["type"] == "number" %}
-                <div class="settings-group">
-                    <label for="{{ item }}">{{ settings[item]["title"] }} [{{ settings[item]["unit"]}}]:</label>
-                    <input 
-                    type="{{ settings[item]['type'] }}" 
-                    id="{{ item }}" 
-                    name="{{ item }}"
-                    value="{{ settings[item]['value'] }}" 
-                    {% if settings[item].get("min", "notset" ) != "notset" %}
-                    min={{settings[item]["min"]}} 
-                    {% endif %} 
-                    {% if settings[item].get("max", "notset" ) != "notset" %}
-                    max={{settings[item]["max"]}} 
-                    {% endif %} required>
-                </div>
-                {% endif %}
-                
-                {% if settings[item]["type"] == "time" %}
-                {% for subitem in ["ontime", "offtime"] %}
-                <div class="settings-group">
-                    <label for="{{item}}-{{subitem}}">{{settings[item][subitem]["title"]}}</label>
-                    <input title="{{hint['timetitle'][item][subitem]}}" class="timeinput" id="{{item}}-{{subitem}}" value="{{settings[item][subitem]['value']}}" required name="{{item}}-{{subitem}}">
-                </div>
-                {% endfor %}
-                {% endif %}
+    <div class="background">
+        <div class="tab-content" id="settings" style="display:none;">
+            <!-- Settings content here -->
+            <div class="settings-container">
+                <form method="POST" action="/settings">
+                    {% for item in settings %}
+                    {% if settings[item]["type"] == "number" %}
+                    <div class="settings-group">
+                        <label for="{{ item }}">{{ settings[item]["title"] }} [{{ settings[item]["unit"]}}]:</label>
+                        <input type="{{ settings[item]['type'] }}" id="{{ item }}" name="{{ item }}"
+                            value="{{ settings[item]['value'] }}" {% if settings[item].get("min", "notset" ) !="notset"
+                            %} min={{settings[item]["min"]}} {% endif %} {% if settings[item].get("max", "notset" )
+                            !="notset" %} max={{settings[item]["max"]}} {% endif %} required>
+                    </div>
+                    {% endif %}
 
-                {% endfor %}
-                <div class="settings-actions">
-                    <button id="submit" type="submit" class="submit">Submit</button>
-                    <button type="button" class="cancel" onclick="window.location.href='/'">Cancel</button>
-                    <button type="button" class="back" onclick="window.location.href='/'">Back</button>
-                </div>
-            </form>
+                    {% if settings[item]["type"] == "time" %}
+                    {% for subitem in ["ontime", "offtime"] %}
+                    <div class="settings-group">
+                        <label for="{{item}}-{{subitem}}">{{settings[item][subitem]["title"]}}</label>
+                        <input title="{{hint['timetitle'][item][subitem]}}" class="timeinput" id="{{item}}-{{subitem}}"
+                            value="{{settings[item][subitem]['value']}}" required name="{{item}}-{{subitem}}">
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+
+                    {% endfor %}
+                    <div class="settings-actions">
+                        <button id="submit" type="submit" class="submit">Submit</button>
+                        <button type="button" class="cancel" onclick="window.location.href='/'">Cancel</button>
+                        <button type="button" class="back" onclick="window.location.href='/'">Back</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 
     <div class="tab-content" id="logdata" style="display:none;">
         <!-- Log data content here -->
-         <div class="rtable">
+        <div class="rtable">
             <div class="tr hidden r-httpstatus">
                 <div class="td">HTTP Server Status</div>
                 <div class="td red-blink d-httpstatus"></div>
@@ -165,8 +164,8 @@
                 <div class="td">Log Server Status</div>
                 <div class="td red-blink" id="d-logstatus"></div>
             </div>
-         </div>
-         <br/>
+        </div>
+        <br />
         <div class="rtable">
             <div class="tr">
                 <div class="td">Temperature</div>
@@ -186,9 +185,13 @@
         <div id="moisturegraph"></div>
 
     </div>
-    <div class="tab-content" id="watchdog" style="display:none;">
-        <p id="watchdog-status"></p>
-        <!-- Watchdog content here -->
+
+    <div class="background">
+        <div class="tab-content" id="watchdog" style="display:none;">
+            <p id="watchdog-status"></p>
+            <!-- Watchdog content here -->
+        </div>
+    </div>
     </div>
 </body>
 
