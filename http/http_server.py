@@ -101,7 +101,7 @@ def buttonclick():
     print(f"buttonclick -> {recv}")
     _, what, element = recv["id"].split("-")
     classlist = recv["classlist"].split(" ")
-    # print(f"what={what}, element={element}, classlist={classlist}")
+    print(f"what={what}, element={element}, classlist={classlist}")
     actors_proxy.set(element, what)    
     return {}
     

@@ -37,6 +37,7 @@ actors_dict = {
     "humidifier": port_humidifier, 
     "heater": port_heater
 }
+actors_dict.update(dict((f"pump{key}", pump_dict[key]) for key in pump_dict))
 
 log_format = "%(module)s:%(levelname)s:%(asctime)s:%(message)s"
 

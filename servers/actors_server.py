@@ -118,6 +118,7 @@ class ActorTemperature(BaseActor):
             
 actorMap = dict((key, ActorTime(key)) for key in ["exhaustairfan", "fan", "light", "humidifier"])
 actorMap.update(dict((key, ActorTemperature(key)) for key in ["heater"]))
+actorMap.update(dict((f"pump{key}", ActorTime(f"pump{key}")) for key in configuration.pump_dict))
 
 class Bridge():
     def __init__(self):

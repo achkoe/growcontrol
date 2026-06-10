@@ -91,14 +91,26 @@
         "min": 0,
         "max": 100
     },
-    "pump_on_time": {
-        "value": "05:00",
-        "title": "Pump On Time",
-        "type": "time-"
+    "pump1": {
+        "type": "time",
+        "ontime": {
+            "title": "Pump 1 On Time",
+            "value": "*-*-* *:10:00"
+        },
+        "offtime": {
+            "title": "Pump 1 Off Time",
+            "value": "*-*-* *:20:00"
+        }
     },
-    "pump_off_time": {
-        "value": "06:40",
-        "title": "Pump Off Time",
-        "type": "time-"
+    "pump2": {
+        "type": "time",
+        "ontime": {
+            "title": "Pump 2 On Time",
+            "value": "*-*-* *:10:00"
+        },
+        "offtime": {
+            "title": "Pump 2 Off Time",
+            "value": "*-*-* *:20:00"
+        }
     }
 }
