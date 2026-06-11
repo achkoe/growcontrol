@@ -147,7 +147,7 @@ class Bridge():
             actorMap[key].execute()
             
     def get(self):
-        return {
+        rdict = {
             "light-on": actorMap["light"].on,
             "light-mode": actorMap["light"].mode,
             "heater-on": actorMap["heater"].on,
@@ -159,6 +159,9 @@ class Bridge():
             "exhaustairfan-on": actorMap["exhaustairfan"].on,
             "exhaustairfan-mode": actorMap["exhaustairfan"].mode,
         }
+        rdict.update(dict((f"pump{key}-on", actorMap[f"pump{key}.on"]) for key in configuration.pump_dict))
+        rdict.update(dict((f"pump{key}-mode", actorMap[f"pump{key}.mode"]) for key in configuration.pump_dict))
+        return rdict
         
     def set(self, element, action):
         print(f"actors_server:set: element={element}, action={action}")
