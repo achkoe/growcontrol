@@ -39,7 +39,7 @@ actors_dict = {
 }
 actors_dict.update(dict((f"pump{key}", pump_dict[key]) for key in pump_dict))
 
-log_format = "%(module)s:%(levelname)s:%(asctime)s:%(message)s"
+log_format = "%(module)s:%(levelname)s:%(asctime)s:%(lineno)d:%(message)s"
 
 
 # FAN is ON if port 10 is LOW

@@ -80,14 +80,14 @@ def status():
                 
         data["sensorstatus"] = "ok"
     except Exception as e:
-        print(e)
+        print(f"1: {e}")
         data["sensorstatus"] = repr(e)
         
     try:
         data.update(actors_proxy.get())
         data["actorstatus"] = "ok"
     except Exception as e:
-        print(e)
+        print(f"2: {e}")
         data["actorstatus"] = repr(e)
         
     #print(json.dumps(data, indent=4))
