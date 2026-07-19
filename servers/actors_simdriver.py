@@ -10,6 +10,10 @@ LOGGER.setLevel(get_loglevel("ACTOR_DRIVER_LOGLEVEL"))
 
 _STATE_MAP = dict()
 
+def init():
+    pass
+
+
 def set(name, state):
     _STATE_MAP.setdefault(name, None)
     if _STATE_MAP[name] is not state:
