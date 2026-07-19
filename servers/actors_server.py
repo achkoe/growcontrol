@@ -114,11 +114,24 @@ class ActorTemperature(BaseActor):
         else:
             self.on = self.on_manual
         driver.set(self.name, self.on)
-            
+
+
+class ActorPump(ActorTime):
+    def enabled(self):
+        waterlevel = SENSORS_PROXY.get()["waterlevel"] 
+        return waterlevel > 0
+    
+    def execute(self):
+        if not self.enabled():
+            self.on = False
+            driver.set(self.name, self.on)
+        else:
+            super().execute()
+    
             
 actorMap = dict((key, ActorTime(key)) for key in ["exhaustairfan", "fan", "light", "humidifier"])
 actorMap.update(dict((key, ActorTemperature(key)) for key in ["heater"]))
-actorMap.update(dict((f"pump{key}", ActorTime(f"pump{key}")) for key in configuration.pump_dict))
+actorMap.update(dict((f"pump{key}", ActorPump(f"pump{key}")) for key in configuration.pump_dict))
 
 class Bridge():
     def __init__(self):
