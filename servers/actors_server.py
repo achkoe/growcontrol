@@ -117,6 +117,13 @@ class ActorTemperature(BaseActor):
 
 
 class ActorPump(ActorTime):
+    def __init__(self, name):
+        self.name = name
+        self.on_manual = False
+        self.on_auto = False
+        self.on = False
+        self.mode = "auto"
+    
     def enabled(self):
         waterlevel = SENSORS_PROXY.get()["waterlevel"] 
         return waterlevel > 0
