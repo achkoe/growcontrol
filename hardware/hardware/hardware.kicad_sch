@@ -8,7 +8,7 @@
 		(title "Grow Control Schematic")
 	)
 	(lib_symbols
-		(symbol "4xxx:4010"
+		(symbol "4xxx:4069"
 			(pin_names
 				(offset 1.016)
 			)
@@ -23,7 +23,7 @@
 					)
 				)
 			)
-			(property "Value" "4010"
+			(property "Value" "4069"
 				(at 0 -1.27 0)
 				(effects
 					(font
@@ -40,7 +40,7 @@
 					(hide yes)
 				)
 			)
-			(property "Datasheet" "http://www.ti.com/lit/ds/symlink/cd4010b-q1.pdf"
+			(property "Datasheet" "http://www.intersil.com/content/dam/Intersil/documents/cd40/cd4069ubms.pdf"
 				(at 0 0 0)
 				(effects
 					(font
@@ -49,7 +49,7 @@
 					(hide yes)
 				)
 			)
-			(property "Description" "Hex Buffer"
+			(property "Description" "Hex inverter"
 				(at 0 0 0)
 				(effects
 					(font
@@ -66,7 +66,7 @@
 					)
 				)
 			)
-			(property "ki_keywords" "CMOS BUFFER high sink, VCC and VDD sep. VDD>VI>VCC!"
+			(property "ki_keywords" "CMOS NOT"
 				(at 0 0 0)
 				(effects
 					(font
@@ -75,7 +75,7 @@
 					(hide yes)
 				)
 			)
-			(property "ki_fp_filters" "DIP?16*"
+			(property "ki_fp_filters" "DIP?14*"
 				(at 0 0 0)
 				(effects
 					(font
@@ -84,7 +84,57 @@
 					(hide yes)
 				)
 			)
-			(symbol "4010_1_0"
+			(symbol "4069_1_0"
+				(polyline
+					(pts
+						(xy -3.81 3.81) (xy -3.81 -3.81) (xy 3.81 0) (xy -3.81 3.81)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(pin input line
+					(at -7.62 0 0)
+					(length 3.81)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin output inverted
+					(at 7.62 0 180)
+					(length 3.81)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(symbol "4069_2_0"
 				(polyline
 					(pts
 						(xy -3.81 3.81) (xy -3.81 -3.81) (xy 3.81 0) (xy -3.81 3.81)
@@ -115,7 +165,7 @@
 						)
 					)
 				)
-				(pin output line
+				(pin output inverted
 					(at 7.62 0 180)
 					(length 3.81)
 					(name "~"
@@ -125,7 +175,7 @@
 							)
 						)
 					)
-					(number "2"
+					(number "4"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -134,7 +184,7 @@
 					)
 				)
 			)
-			(symbol "4010_2_0"
+			(symbol "4069_3_0"
 				(polyline
 					(pts
 						(xy -3.81 3.81) (xy -3.81 -3.81) (xy 3.81 0) (xy -3.81 3.81)
@@ -165,57 +215,7 @@
 						)
 					)
 				)
-				(pin output line
-					(at 7.62 0 180)
-					(length 3.81)
-					(name "~"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "4"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(symbol "4010_3_0"
-				(polyline
-					(pts
-						(xy -3.81 3.81) (xy -3.81 -3.81) (xy 3.81 0) (xy -3.81 3.81)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type background)
-					)
-				)
-				(pin input line
-					(at -7.62 0 0)
-					(length 3.81)
-					(name "~"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "7"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin output line
+				(pin output inverted
 					(at 7.62 0 180)
 					(length 3.81)
 					(name "~"
@@ -234,7 +234,7 @@
 					)
 				)
 			)
-			(symbol "4010_4_0"
+			(symbol "4069_4_0"
 				(polyline
 					(pts
 						(xy -3.81 3.81) (xy -3.81 -3.81) (xy 3.81 0) (xy -3.81 3.81)
@@ -265,7 +265,7 @@
 						)
 					)
 				)
-				(pin output line
+				(pin output inverted
 					(at 7.62 0 180)
 					(length 3.81)
 					(name "~"
@@ -275,7 +275,7 @@
 							)
 						)
 					)
-					(number "10"
+					(number "8"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -284,7 +284,7 @@
 					)
 				)
 			)
-			(symbol "4010_5_0"
+			(symbol "4069_5_0"
 				(polyline
 					(pts
 						(xy -3.81 3.81) (xy -3.81 -3.81) (xy 3.81 0) (xy -3.81 3.81)
@@ -315,7 +315,7 @@
 						)
 					)
 				)
-				(pin output line
+				(pin output inverted
 					(at 7.62 0 180)
 					(length 3.81)
 					(name "~"
@@ -325,7 +325,7 @@
 							)
 						)
 					)
-					(number "12"
+					(number "10"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -334,7 +334,7 @@
 					)
 				)
 			)
-			(symbol "4010_6_0"
+			(symbol "4069_6_0"
 				(polyline
 					(pts
 						(xy -3.81 3.81) (xy -3.81 -3.81) (xy 3.81 0) (xy -3.81 3.81)
@@ -357,7 +357,7 @@
 							)
 						)
 					)
-					(number "14"
+					(number "13"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -365,7 +365,7 @@
 						)
 					)
 				)
-				(pin output line
+				(pin output inverted
 					(at 7.62 0 180)
 					(length 3.81)
 					(name "~"
@@ -375,7 +375,7 @@
 							)
 						)
 					)
-					(number "15"
+					(number "12"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -384,9 +384,9 @@
 					)
 				)
 			)
-			(symbol "4010_7_0"
+			(symbol "4069_7_0"
 				(pin power_in line
-					(at -2.54 12.7 270)
+					(at 0 12.7 270)
 					(length 5.08)
 					(name "VDD"
 						(effects
@@ -395,7 +395,7 @@
 							)
 						)
 					)
-					(number "16"
+					(number "14"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -413,25 +413,7 @@
 							)
 						)
 					)
-					(number "8"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin power_in line
-					(at 2.54 12.7 270)
-					(length 5.08)
-					(name "VCC"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
+					(number "7"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -440,7 +422,7 @@
 					)
 				)
 			)
-			(symbol "4010_7_1"
+			(symbol "4069_7_1"
 				(rectangle
 					(start -5.08 7.62)
 					(end 5.08 -7.62)
@@ -4457,6 +4439,12 @@
 		(uuid "ac6a86fb-969e-4dc3-8670-b87a590ecaa8")
 	)
 	(junction
+		(at 59.69 181.61)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "b001e451-6595-4f4d-bdc1-b4ceb5047d7a")
+	)
+	(junction
 		(at 54.61 139.7)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -4503,6 +4491,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "f2effa15-c799-4698-8d78-890969d5fa23")
+	)
+	(junction
+		(at 46.99 115.57)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "f61a10e5-77cf-48b4-a496-a4fcb45c1f10")
 	)
 	(bus_entry
 		(at 179.07 63.5)
@@ -5429,6 +5423,16 @@
 	)
 	(wire
 		(pts
+			(xy 36.83 115.57) (xy 46.99 115.57)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "676117da-8d87-4fc6-ab3e-f270c81f2c5b")
+	)
+	(wire
+		(pts
 			(xy 132.08 73.66) (xy 137.16 73.66)
 		)
 		(stroke
@@ -5509,6 +5513,16 @@
 	)
 	(wire
 		(pts
+			(xy 59.69 189.23) (xy 59.69 181.61)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "714bca08-9750-42ad-9389-ffd48dc8f7c3")
+	)
+	(wire
+		(pts
 			(xy 69.85 157.48) (xy 59.69 157.48)
 		)
 		(stroke
@@ -5516,6 +5530,16 @@
 			(type default)
 		)
 		(uuid "727831ef-4a3c-45a3-9057-1ea209c7e9d1")
+	)
+	(wire
+		(pts
+			(xy 36.83 189.23) (xy 59.69 189.23)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "733ebf56-8217-4dfa-bf10-5c73fe614a12")
 	)
 	(wire
 		(pts
@@ -5726,6 +5750,16 @@
 			(type default)
 		)
 		(uuid "8c6ded70-a91c-4215-8ccd-642bf1815ae0")
+	)
+	(wire
+		(pts
+			(xy 36.83 163.83) (xy 36.83 115.57)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8dc0285f-dc67-4462-bba8-050c95026c55")
 	)
 	(wire
 		(pts
@@ -7154,6 +7188,110 @@
 		)
 	)
 	(symbol
+		(lib_id "4xxx:4069")
+		(at 77.47 148.59 0)
+		(unit 3)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "0a3d5716-2889-4231-aeb5-f0c20c043e0e")
+		(property "Reference" "U1"
+			(at 77.47 139.7 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "4069"
+			(at 77.47 142.24 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 77.47 148.59 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "http://www.intersil.com/content/dam/Intersil/documents/cd40/cd4069ubms.pdf"
+			(at 77.47 148.59 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Hex inverter"
+			(at 77.47 148.59 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "13"
+			(uuid "b7968a53-afa7-49c9-8ed3-60b7b4b18fe1")
+		)
+		(pin "9"
+			(uuid "b017973c-9497-4931-b9cc-72c5931a5347")
+		)
+		(pin "5"
+			(uuid "9f8f201e-4cc3-49a7-96cf-00097b114ae9")
+		)
+		(pin "6"
+			(uuid "c948adee-474d-4b13-bcf6-2941c4340b60")
+		)
+		(pin "4"
+			(uuid "562af45e-50c0-4d81-8e42-0241190c3142")
+		)
+		(pin "3"
+			(uuid "d0c0dd60-6ca9-46bb-b27f-2d4d8f24034f")
+		)
+		(pin "8"
+			(uuid "2c1e290e-d5a5-449b-8a54-f84aaf0ab324")
+		)
+		(pin "1"
+			(uuid "ca7d19af-92b2-406b-b5dc-3559b138505a")
+		)
+		(pin "12"
+			(uuid "8936f90b-cee4-479d-8102-7e4806452eb9")
+		)
+		(pin "14"
+			(uuid "625dd5be-0446-4071-b45d-450512bf6e95")
+		)
+		(pin "7"
+			(uuid "bf18a3cc-3336-43a0-95a2-a9a5f290017f")
+		)
+		(pin "11"
+			(uuid "11c84214-131f-4e54-886d-b9e247f1c672")
+		)
+		(pin "10"
+			(uuid "8835c046-623f-4052-9786-5577570142ab")
+		)
+		(pin "2"
+			(uuid "b04656ea-c577-47ce-85f2-be7a187f40d5")
+		)
+		(instances
+			(project "hardware"
+				(path "/e7086ac2-04e9-43a8-953c-46f2b40b410a"
+					(reference "U1")
+					(unit 3)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Connector:Conn_01x10_Socket")
 		(at 104.14 90.17 0)
 		(mirror y)
@@ -7248,33 +7386,35 @@
 		)
 	)
 	(symbol
-		(lib_id "4xxx:4010")
-		(at 77.47 139.7 0)
-		(unit 2)
+		(lib_id "4xxx:4069")
+		(at 36.83 176.53 0)
+		(unit 7)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "11f14d5f-0610-4f55-8575-5866ecafe035")
-		(property "Reference" "U2"
-			(at 77.47 130.81 0)
+		(uuid "0cd7f439-7ff9-4520-b3be-ddf95fcb6fdf")
+		(property "Reference" "U1"
+			(at 43.18 175.2599 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(justify left)
 			)
 		)
-		(property "Value" "4010"
-			(at 77.47 133.35 0)
+		(property "Value" "4069"
+			(at 43.18 177.7999 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(justify left)
 			)
 		)
 		(property "Footprint" ""
-			(at 77.47 139.7 0)
+			(at 36.83 176.53 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7282,8 +7422,8 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "http://www.ti.com/lit/ds/symlink/cd4010b-q1.pdf"
-			(at 77.47 139.7 0)
+		(property "Datasheet" "http://www.intersil.com/content/dam/Intersil/documents/cd40/cd4069ubms.pdf"
+			(at 36.83 176.53 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7291,8 +7431,8 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "Hex Buffer"
-			(at 77.47 139.7 0)
+		(property "Description" "Hex inverter"
+			(at 36.83 176.53 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7300,56 +7440,53 @@
 				(hide yes)
 			)
 		)
-		(pin "2"
-			(uuid "23767476-08d3-4011-9e8a-be6006552bdf")
-		)
-		(pin "5"
-			(uuid "7a770f08-45d2-4479-b354-fe72059081c2")
-		)
-		(pin "4"
-			(uuid "76a92e25-b105-407b-ad10-4ce64c606c95")
-		)
-		(pin "3"
-			(uuid "22cccff1-58a7-465b-ab2f-f1a95ab2eb68")
-		)
-		(pin "8"
-			(uuid "ef8e1b7d-a222-4af3-b371-2cf405f3a109")
-		)
-		(pin "6"
-			(uuid "78904962-af31-425c-b2bf-cdb973337168")
-		)
-		(pin "15"
-			(uuid "acfea4d8-1242-43f7-a6a4-40619106fa75")
-		)
-		(pin "7"
-			(uuid "d5f3469c-db33-4733-b7c0-2f2427f0faa9")
-		)
-		(pin "1"
-			(uuid "0ff0356e-6270-44e2-82c7-db2595b6440d")
-		)
-		(pin "14"
-			(uuid "0888b8ac-bfdf-4455-ac65-a47e970d6222")
-		)
-		(pin "11"
-			(uuid "e2e0b2f3-7e14-475b-adf1-fd40e5dc74d7")
-		)
-		(pin "16"
-			(uuid "e7204d92-5b17-4649-a0b0-2597b4cdd95c")
+		(pin "13"
+			(uuid "b7968a53-afa7-49c9-8ed3-60b7b4b18fe1")
 		)
 		(pin "9"
-			(uuid "0f24c348-78e6-49c8-aa04-16b391a2f06c")
+			(uuid "b017973c-9497-4931-b9cc-72c5931a5347")
 		)
-		(pin "10"
-			(uuid "eb018c13-a5bf-4591-ab7c-dc072dbcf220")
+		(pin "5"
+			(uuid "9f8f201e-4cc3-49a7-96cf-00097b114ae9")
+		)
+		(pin "6"
+			(uuid "c948adee-474d-4b13-bcf6-2941c4340b60")
+		)
+		(pin "4"
+			(uuid "562af45e-50c0-4d81-8e42-0241190c3142")
+		)
+		(pin "3"
+			(uuid "d0c0dd60-6ca9-46bb-b27f-2d4d8f24034f")
+		)
+		(pin "8"
+			(uuid "2c1e290e-d5a5-449b-8a54-f84aaf0ab324")
+		)
+		(pin "1"
+			(uuid "ca7d19af-92b2-406b-b5dc-3559b138505a")
 		)
 		(pin "12"
-			(uuid "1d0d44b6-6c17-4f8d-a43b-39740e1d0f0c")
+			(uuid "8936f90b-cee4-479d-8102-7e4806452eb9")
+		)
+		(pin "14"
+			(uuid "625dd5be-0446-4071-b45d-450512bf6e95")
+		)
+		(pin "7"
+			(uuid "bf18a3cc-3336-43a0-95a2-a9a5f290017f")
+		)
+		(pin "11"
+			(uuid "11c84214-131f-4e54-886d-b9e247f1c672")
+		)
+		(pin "10"
+			(uuid "8835c046-623f-4052-9786-5577570142ab")
+		)
+		(pin "2"
+			(uuid "b04656ea-c577-47ce-85f2-be7a187f40d5")
 		)
 		(instances
 			(project "hardware"
 				(path "/e7086ac2-04e9-43a8-953c-46f2b40b410a"
-					(reference "U2")
-					(unit 2)
+					(reference "U1")
+					(unit 7)
 				)
 			)
 		)
@@ -7586,6 +7723,214 @@
 			(project "hardware"
 				(path "/e7086ac2-04e9-43a8-953c-46f2b40b410a"
 					(reference "J9")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "4xxx:4069")
+		(at 77.47 139.7 0)
+		(unit 2)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "2a8d8453-6ebe-41d8-9498-1b6b049eca50")
+		(property "Reference" "U1"
+			(at 77.47 130.81 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "4069"
+			(at 77.47 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 77.47 139.7 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "http://www.intersil.com/content/dam/Intersil/documents/cd40/cd4069ubms.pdf"
+			(at 77.47 139.7 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Hex inverter"
+			(at 77.47 139.7 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "13"
+			(uuid "b7968a53-afa7-49c9-8ed3-60b7b4b18fe1")
+		)
+		(pin "9"
+			(uuid "b017973c-9497-4931-b9cc-72c5931a5347")
+		)
+		(pin "5"
+			(uuid "9f8f201e-4cc3-49a7-96cf-00097b114ae9")
+		)
+		(pin "6"
+			(uuid "c948adee-474d-4b13-bcf6-2941c4340b60")
+		)
+		(pin "4"
+			(uuid "562af45e-50c0-4d81-8e42-0241190c3142")
+		)
+		(pin "3"
+			(uuid "d0c0dd60-6ca9-46bb-b27f-2d4d8f24034f")
+		)
+		(pin "8"
+			(uuid "2c1e290e-d5a5-449b-8a54-f84aaf0ab324")
+		)
+		(pin "1"
+			(uuid "ca7d19af-92b2-406b-b5dc-3559b138505a")
+		)
+		(pin "12"
+			(uuid "8936f90b-cee4-479d-8102-7e4806452eb9")
+		)
+		(pin "14"
+			(uuid "625dd5be-0446-4071-b45d-450512bf6e95")
+		)
+		(pin "7"
+			(uuid "bf18a3cc-3336-43a0-95a2-a9a5f290017f")
+		)
+		(pin "11"
+			(uuid "11c84214-131f-4e54-886d-b9e247f1c672")
+		)
+		(pin "10"
+			(uuid "8835c046-623f-4052-9786-5577570142ab")
+		)
+		(pin "2"
+			(uuid "b04656ea-c577-47ce-85f2-be7a187f40d5")
+		)
+		(instances
+			(project "hardware"
+				(path "/e7086ac2-04e9-43a8-953c-46f2b40b410a"
+					(reference "U1")
+					(unit 2)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "4xxx:4069")
+		(at 77.47 130.81 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "2aeb465c-69f7-48e1-8c1c-6c6ebfecaab0")
+		(property "Reference" "U1"
+			(at 77.47 121.92 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "4069"
+			(at 77.47 124.46 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 77.47 130.81 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "http://www.intersil.com/content/dam/Intersil/documents/cd40/cd4069ubms.pdf"
+			(at 77.47 130.81 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Hex inverter"
+			(at 77.47 130.81 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "13"
+			(uuid "b7968a53-afa7-49c9-8ed3-60b7b4b18fe1")
+		)
+		(pin "9"
+			(uuid "b017973c-9497-4931-b9cc-72c5931a5347")
+		)
+		(pin "5"
+			(uuid "9f8f201e-4cc3-49a7-96cf-00097b114ae9")
+		)
+		(pin "6"
+			(uuid "c948adee-474d-4b13-bcf6-2941c4340b60")
+		)
+		(pin "4"
+			(uuid "562af45e-50c0-4d81-8e42-0241190c3142")
+		)
+		(pin "3"
+			(uuid "d0c0dd60-6ca9-46bb-b27f-2d4d8f24034f")
+		)
+		(pin "8"
+			(uuid "2c1e290e-d5a5-449b-8a54-f84aaf0ab324")
+		)
+		(pin "1"
+			(uuid "ca7d19af-92b2-406b-b5dc-3559b138505a")
+		)
+		(pin "12"
+			(uuid "8936f90b-cee4-479d-8102-7e4806452eb9")
+		)
+		(pin "14"
+			(uuid "625dd5be-0446-4071-b45d-450512bf6e95")
+		)
+		(pin "7"
+			(uuid "bf18a3cc-3336-43a0-95a2-a9a5f290017f")
+		)
+		(pin "11"
+			(uuid "11c84214-131f-4e54-886d-b9e247f1c672")
+		)
+		(pin "10"
+			(uuid "8835c046-623f-4052-9786-5577570142ab")
+		)
+		(pin "2"
+			(uuid "b04656ea-c577-47ce-85f2-be7a187f40d5")
+		)
+		(instances
+			(project "hardware"
+				(path "/e7086ac2-04e9-43a8-953c-46f2b40b410a"
+					(reference "U1")
 					(unit 1)
 				)
 			)
@@ -7849,113 +8194,6 @@
 			(project "hardware"
 				(path "/e7086ac2-04e9-43a8-953c-46f2b40b410a"
 					(reference "J13")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "4xxx:4010")
-		(at 77.47 130.81 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "587b5ac4-c757-4c53-9486-b4d286cddb14")
-		(property "Reference" "U2"
-			(at 77.47 121.92 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "4010"
-			(at 77.47 124.46 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 77.47 130.81 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "http://www.ti.com/lit/ds/symlink/cd4010b-q1.pdf"
-			(at 77.47 130.81 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Hex Buffer"
-			(at 77.47 130.81 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "23767476-08d3-4011-9e8a-be6006552be0")
-		)
-		(pin "5"
-			(uuid "7a770f08-45d2-4479-b354-fe72059081c3")
-		)
-		(pin "4"
-			(uuid "76a92e25-b105-407b-ad10-4ce64c606c96")
-		)
-		(pin "3"
-			(uuid "22cccff1-58a7-465b-ab2f-f1a95ab2eb69")
-		)
-		(pin "8"
-			(uuid "ef8e1b7d-a222-4af3-b371-2cf405f3a10a")
-		)
-		(pin "6"
-			(uuid "78904962-af31-425c-b2bf-cdb973337169")
-		)
-		(pin "15"
-			(uuid "acfea4d8-1242-43f7-a6a4-40619106fa76")
-		)
-		(pin "7"
-			(uuid "d5f3469c-db33-4733-b7c0-2f2427f0faaa")
-		)
-		(pin "1"
-			(uuid "0ff0356e-6270-44e2-82c7-db2595b6440e")
-		)
-		(pin "14"
-			(uuid "0888b8ac-bfdf-4455-ac65-a47e970d6223")
-		)
-		(pin "11"
-			(uuid "e2e0b2f3-7e14-475b-adf1-fd40e5dc74d8")
-		)
-		(pin "16"
-			(uuid "e7204d92-5b17-4649-a0b0-2597b4cdd95d")
-		)
-		(pin "9"
-			(uuid "0f24c348-78e6-49c8-aa04-16b391a2f06d")
-		)
-		(pin "10"
-			(uuid "eb018c13-a5bf-4591-ab7c-dc072dbcf221")
-		)
-		(pin "12"
-			(uuid "1d0d44b6-6c17-4f8d-a43b-39740e1d0f0d")
-		)
-		(instances
-			(project "hardware"
-				(path "/e7086ac2-04e9-43a8-953c-46f2b40b410a"
-					(reference "U2")
 					(unit 1)
 				)
 			)
@@ -8369,6 +8607,110 @@
 		)
 	)
 	(symbol
+		(lib_id "4xxx:4069")
+		(at 77.47 157.48 0)
+		(unit 4)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "86b25e1d-badb-44d6-8c0d-8f9bdb49bd45")
+		(property "Reference" "U1"
+			(at 77.47 148.59 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "4069"
+			(at 77.47 151.13 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 77.47 157.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "http://www.intersil.com/content/dam/Intersil/documents/cd40/cd4069ubms.pdf"
+			(at 77.47 157.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Hex inverter"
+			(at 77.47 157.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "13"
+			(uuid "b7968a53-afa7-49c9-8ed3-60b7b4b18fe1")
+		)
+		(pin "9"
+			(uuid "b017973c-9497-4931-b9cc-72c5931a5347")
+		)
+		(pin "5"
+			(uuid "9f8f201e-4cc3-49a7-96cf-00097b114ae9")
+		)
+		(pin "6"
+			(uuid "c948adee-474d-4b13-bcf6-2941c4340b60")
+		)
+		(pin "4"
+			(uuid "562af45e-50c0-4d81-8e42-0241190c3142")
+		)
+		(pin "3"
+			(uuid "d0c0dd60-6ca9-46bb-b27f-2d4d8f24034f")
+		)
+		(pin "8"
+			(uuid "2c1e290e-d5a5-449b-8a54-f84aaf0ab324")
+		)
+		(pin "1"
+			(uuid "ca7d19af-92b2-406b-b5dc-3559b138505a")
+		)
+		(pin "12"
+			(uuid "8936f90b-cee4-479d-8102-7e4806452eb9")
+		)
+		(pin "14"
+			(uuid "625dd5be-0446-4071-b45d-450512bf6e95")
+		)
+		(pin "7"
+			(uuid "bf18a3cc-3336-43a0-95a2-a9a5f290017f")
+		)
+		(pin "11"
+			(uuid "11c84214-131f-4e54-886d-b9e247f1c672")
+		)
+		(pin "10"
+			(uuid "8835c046-623f-4052-9786-5577570142ab")
+		)
+		(pin "2"
+			(uuid "b04656ea-c577-47ce-85f2-be7a187f40d5")
+		)
+		(instances
+			(project "hardware"
+				(path "/e7086ac2-04e9-43a8-953c-46f2b40b410a"
+					(reference "U1")
+					(unit 4)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:R")
 		(at 62.23 121.92 0)
 		(unit 1)
@@ -8434,113 +8776,6 @@
 				(path "/e7086ac2-04e9-43a8-953c-46f2b40b410a"
 					(reference "R1")
 					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "4xxx:4010")
-		(at 77.47 175.26 0)
-		(unit 6)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "8fcd4a42-e0cc-4591-bee4-066dc73f240a")
-		(property "Reference" "U2"
-			(at 77.47 166.37 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "4010"
-			(at 77.47 168.91 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 77.47 175.26 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "http://www.ti.com/lit/ds/symlink/cd4010b-q1.pdf"
-			(at 77.47 175.26 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Hex Buffer"
-			(at 77.47 175.26 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "23767476-08d3-4011-9e8a-be6006552be1")
-		)
-		(pin "5"
-			(uuid "7a770f08-45d2-4479-b354-fe72059081c4")
-		)
-		(pin "4"
-			(uuid "76a92e25-b105-407b-ad10-4ce64c606c97")
-		)
-		(pin "3"
-			(uuid "22cccff1-58a7-465b-ab2f-f1a95ab2eb6a")
-		)
-		(pin "8"
-			(uuid "ef8e1b7d-a222-4af3-b371-2cf405f3a10b")
-		)
-		(pin "6"
-			(uuid "78904962-af31-425c-b2bf-cdb97333716a")
-		)
-		(pin "15"
-			(uuid "acfea4d8-1242-43f7-a6a4-40619106fa77")
-		)
-		(pin "7"
-			(uuid "d5f3469c-db33-4733-b7c0-2f2427f0faab")
-		)
-		(pin "1"
-			(uuid "0ff0356e-6270-44e2-82c7-db2595b6440f")
-		)
-		(pin "14"
-			(uuid "0888b8ac-bfdf-4455-ac65-a47e970d6224")
-		)
-		(pin "11"
-			(uuid "e2e0b2f3-7e14-475b-adf1-fd40e5dc74d9")
-		)
-		(pin "16"
-			(uuid "e7204d92-5b17-4649-a0b0-2597b4cdd95e")
-		)
-		(pin "9"
-			(uuid "0f24c348-78e6-49c8-aa04-16b391a2f06e")
-		)
-		(pin "10"
-			(uuid "eb018c13-a5bf-4591-ab7c-dc072dbcf222")
-		)
-		(pin "12"
-			(uuid "1d0d44b6-6c17-4f8d-a43b-39740e1d0f0e")
-		)
-		(instances
-			(project "hardware"
-				(path "/e7086ac2-04e9-43a8-953c-46f2b40b410a"
-					(reference "U2")
-					(unit 6)
 				)
 			)
 		)
@@ -8784,114 +9019,7 @@
 		)
 	)
 	(symbol
-		(lib_id "4xxx:4010")
-		(at 77.47 148.59 0)
-		(unit 3)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "dc0f3577-79a3-4b2a-9cf7-123c1f9ed071")
-		(property "Reference" "U2"
-			(at 77.47 139.7 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "4010"
-			(at 77.47 142.24 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 77.47 148.59 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "http://www.ti.com/lit/ds/symlink/cd4010b-q1.pdf"
-			(at 77.47 148.59 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Hex Buffer"
-			(at 77.47 148.59 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "23767476-08d3-4011-9e8a-be6006552be2")
-		)
-		(pin "5"
-			(uuid "7a770f08-45d2-4479-b354-fe72059081c5")
-		)
-		(pin "4"
-			(uuid "76a92e25-b105-407b-ad10-4ce64c606c98")
-		)
-		(pin "3"
-			(uuid "22cccff1-58a7-465b-ab2f-f1a95ab2eb6b")
-		)
-		(pin "8"
-			(uuid "ef8e1b7d-a222-4af3-b371-2cf405f3a10c")
-		)
-		(pin "6"
-			(uuid "78904962-af31-425c-b2bf-cdb97333716b")
-		)
-		(pin "15"
-			(uuid "acfea4d8-1242-43f7-a6a4-40619106fa78")
-		)
-		(pin "7"
-			(uuid "d5f3469c-db33-4733-b7c0-2f2427f0faac")
-		)
-		(pin "1"
-			(uuid "0ff0356e-6270-44e2-82c7-db2595b64410")
-		)
-		(pin "14"
-			(uuid "0888b8ac-bfdf-4455-ac65-a47e970d6225")
-		)
-		(pin "11"
-			(uuid "e2e0b2f3-7e14-475b-adf1-fd40e5dc74da")
-		)
-		(pin "16"
-			(uuid "e7204d92-5b17-4649-a0b0-2597b4cdd95f")
-		)
-		(pin "9"
-			(uuid "0f24c348-78e6-49c8-aa04-16b391a2f06f")
-		)
-		(pin "10"
-			(uuid "eb018c13-a5bf-4591-ab7c-dc072dbcf223")
-		)
-		(pin "12"
-			(uuid "1d0d44b6-6c17-4f8d-a43b-39740e1d0f0f")
-		)
-		(instances
-			(project "hardware"
-				(path "/e7086ac2-04e9-43a8-953c-46f2b40b410a"
-					(reference "U2")
-					(unit 3)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "4xxx:4010")
+		(lib_id "4xxx:4069")
 		(at 77.47 166.37 0)
 		(unit 5)
 		(exclude_from_sim no)
@@ -8899,8 +9027,8 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "dd1c50c7-ec39-4a21-aabc-aa058f14b201")
-		(property "Reference" "U2"
+		(uuid "d6a446cc-d91f-4103-8869-47415eb925fa")
+		(property "Reference" "U1"
 			(at 77.47 157.48 0)
 			(effects
 				(font
@@ -8908,7 +9036,7 @@
 				)
 			)
 		)
-		(property "Value" "4010"
+		(property "Value" "4069"
 			(at 77.47 160.02 0)
 			(effects
 				(font
@@ -8925,7 +9053,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "http://www.ti.com/lit/ds/symlink/cd4010b-q1.pdf"
+		(property "Datasheet" "http://www.intersil.com/content/dam/Intersil/documents/cd40/cd4069ubms.pdf"
 			(at 77.47 166.37 0)
 			(effects
 				(font
@@ -8934,7 +9062,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "Hex Buffer"
+		(property "Description" "Hex inverter"
 			(at 77.47 166.37 0)
 			(effects
 				(font
@@ -8943,80 +9071,77 @@
 				(hide yes)
 			)
 		)
-		(pin "2"
-			(uuid "23767476-08d3-4011-9e8a-be6006552be3")
-		)
-		(pin "5"
-			(uuid "7a770f08-45d2-4479-b354-fe72059081c6")
-		)
-		(pin "4"
-			(uuid "76a92e25-b105-407b-ad10-4ce64c606c99")
-		)
-		(pin "3"
-			(uuid "22cccff1-58a7-465b-ab2f-f1a95ab2eb6c")
-		)
-		(pin "8"
-			(uuid "ef8e1b7d-a222-4af3-b371-2cf405f3a10d")
-		)
-		(pin "6"
-			(uuid "78904962-af31-425c-b2bf-cdb97333716c")
-		)
-		(pin "15"
-			(uuid "acfea4d8-1242-43f7-a6a4-40619106fa79")
-		)
-		(pin "7"
-			(uuid "d5f3469c-db33-4733-b7c0-2f2427f0faad")
-		)
-		(pin "1"
-			(uuid "0ff0356e-6270-44e2-82c7-db2595b64411")
-		)
-		(pin "14"
-			(uuid "0888b8ac-bfdf-4455-ac65-a47e970d6226")
-		)
-		(pin "11"
-			(uuid "e2e0b2f3-7e14-475b-adf1-fd40e5dc74db")
-		)
-		(pin "16"
-			(uuid "e7204d92-5b17-4649-a0b0-2597b4cdd960")
+		(pin "13"
+			(uuid "b7968a53-afa7-49c9-8ed3-60b7b4b18fe1")
 		)
 		(pin "9"
-			(uuid "0f24c348-78e6-49c8-aa04-16b391a2f070")
+			(uuid "b017973c-9497-4931-b9cc-72c5931a5347")
 		)
-		(pin "10"
-			(uuid "eb018c13-a5bf-4591-ab7c-dc072dbcf224")
+		(pin "5"
+			(uuid "9f8f201e-4cc3-49a7-96cf-00097b114ae9")
+		)
+		(pin "6"
+			(uuid "c948adee-474d-4b13-bcf6-2941c4340b60")
+		)
+		(pin "4"
+			(uuid "562af45e-50c0-4d81-8e42-0241190c3142")
+		)
+		(pin "3"
+			(uuid "d0c0dd60-6ca9-46bb-b27f-2d4d8f24034f")
+		)
+		(pin "8"
+			(uuid "2c1e290e-d5a5-449b-8a54-f84aaf0ab324")
+		)
+		(pin "1"
+			(uuid "ca7d19af-92b2-406b-b5dc-3559b138505a")
 		)
 		(pin "12"
-			(uuid "1d0d44b6-6c17-4f8d-a43b-39740e1d0f10")
+			(uuid "8936f90b-cee4-479d-8102-7e4806452eb9")
+		)
+		(pin "14"
+			(uuid "625dd5be-0446-4071-b45d-450512bf6e95")
+		)
+		(pin "7"
+			(uuid "bf18a3cc-3336-43a0-95a2-a9a5f290017f")
+		)
+		(pin "11"
+			(uuid "11c84214-131f-4e54-886d-b9e247f1c672")
+		)
+		(pin "10"
+			(uuid "8835c046-623f-4052-9786-5577570142ab")
+		)
+		(pin "2"
+			(uuid "b04656ea-c577-47ce-85f2-be7a187f40d5")
 		)
 		(instances
 			(project "hardware"
 				(path "/e7086ac2-04e9-43a8-953c-46f2b40b410a"
-					(reference "U2")
+					(reference "U1")
 					(unit 5)
 				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "4xxx:4010")
-		(at 77.47 157.48 0)
-		(unit 4)
+		(lib_id "4xxx:4069")
+		(at 77.47 175.26 0)
+		(unit 6)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "e89f8cb0-57bd-4680-8867-1bd304f64b4b")
-		(property "Reference" "U2"
-			(at 77.47 148.59 0)
+		(uuid "f05d5412-238d-4a42-bd1b-a5bc8f34232c")
+		(property "Reference" "U1"
+			(at 77.47 166.37 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 			)
 		)
-		(property "Value" "4010"
-			(at 77.47 151.13 0)
+		(property "Value" "4069"
+			(at 77.47 168.91 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9024,7 +9149,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 77.47 157.48 0)
+			(at 77.47 175.26 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9032,8 +9157,8 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "http://www.ti.com/lit/ds/symlink/cd4010b-q1.pdf"
-			(at 77.47 157.48 0)
+		(property "Datasheet" "http://www.intersil.com/content/dam/Intersil/documents/cd40/cd4069ubms.pdf"
+			(at 77.47 175.26 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9041,8 +9166,8 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "Hex Buffer"
-			(at 77.47 157.48 0)
+		(property "Description" "Hex inverter"
+			(at 77.47 175.26 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9050,56 +9175,53 @@
 				(hide yes)
 			)
 		)
-		(pin "2"
-			(uuid "23767476-08d3-4011-9e8a-be6006552be4")
-		)
-		(pin "5"
-			(uuid "7a770f08-45d2-4479-b354-fe72059081c7")
-		)
-		(pin "4"
-			(uuid "76a92e25-b105-407b-ad10-4ce64c606c9a")
-		)
-		(pin "3"
-			(uuid "22cccff1-58a7-465b-ab2f-f1a95ab2eb6d")
-		)
-		(pin "8"
-			(uuid "ef8e1b7d-a222-4af3-b371-2cf405f3a10e")
-		)
-		(pin "6"
-			(uuid "78904962-af31-425c-b2bf-cdb97333716d")
-		)
-		(pin "15"
-			(uuid "acfea4d8-1242-43f7-a6a4-40619106fa7a")
-		)
-		(pin "7"
-			(uuid "d5f3469c-db33-4733-b7c0-2f2427f0faae")
-		)
-		(pin "1"
-			(uuid "0ff0356e-6270-44e2-82c7-db2595b64412")
-		)
-		(pin "14"
-			(uuid "0888b8ac-bfdf-4455-ac65-a47e970d6227")
-		)
-		(pin "11"
-			(uuid "e2e0b2f3-7e14-475b-adf1-fd40e5dc74dc")
-		)
-		(pin "16"
-			(uuid "e7204d92-5b17-4649-a0b0-2597b4cdd961")
+		(pin "13"
+			(uuid "b7968a53-afa7-49c9-8ed3-60b7b4b18fe1")
 		)
 		(pin "9"
-			(uuid "0f24c348-78e6-49c8-aa04-16b391a2f071")
+			(uuid "b017973c-9497-4931-b9cc-72c5931a5347")
 		)
-		(pin "10"
-			(uuid "eb018c13-a5bf-4591-ab7c-dc072dbcf225")
+		(pin "5"
+			(uuid "9f8f201e-4cc3-49a7-96cf-00097b114ae9")
+		)
+		(pin "6"
+			(uuid "c948adee-474d-4b13-bcf6-2941c4340b60")
+		)
+		(pin "4"
+			(uuid "562af45e-50c0-4d81-8e42-0241190c3142")
+		)
+		(pin "3"
+			(uuid "d0c0dd60-6ca9-46bb-b27f-2d4d8f24034f")
+		)
+		(pin "8"
+			(uuid "2c1e290e-d5a5-449b-8a54-f84aaf0ab324")
+		)
+		(pin "1"
+			(uuid "ca7d19af-92b2-406b-b5dc-3559b138505a")
 		)
 		(pin "12"
-			(uuid "1d0d44b6-6c17-4f8d-a43b-39740e1d0f11")
+			(uuid "8936f90b-cee4-479d-8102-7e4806452eb9")
+		)
+		(pin "14"
+			(uuid "625dd5be-0446-4071-b45d-450512bf6e95")
+		)
+		(pin "7"
+			(uuid "bf18a3cc-3336-43a0-95a2-a9a5f290017f")
+		)
+		(pin "11"
+			(uuid "11c84214-131f-4e54-886d-b9e247f1c672")
+		)
+		(pin "10"
+			(uuid "8835c046-623f-4052-9786-5577570142ab")
+		)
+		(pin "2"
+			(uuid "b04656ea-c577-47ce-85f2-be7a187f40d5")
 		)
 		(instances
 			(project "hardware"
 				(path "/e7086ac2-04e9-43a8-953c-46f2b40b410a"
-					(reference "U2")
-					(unit 4)
+					(reference "U1")
+					(unit 6)
 				)
 			)
 		)
