@@ -44,6 +44,7 @@ class BaseActor():
         else:
             print(f"ERROR: unknown mode: {mode!r}")
 
+
 class ActorTime(BaseActor):
     def __init__(self, name):
         super().__init__(name)
@@ -125,7 +126,10 @@ class ActorPump(ActorTime):
         self.mode = "auto"
     
     def enabled(self):
-        waterlevel = SENSORS_PROXY.get()["waterlevel"] 
+        try:
+            waterlevel = SENSORS_PROXY.get()["waterlevel"] 
+        except Exception as e:
+            waterlevel = 0
         return waterlevel > 0
     
     def execute(self):
@@ -139,6 +143,7 @@ class ActorPump(ActorTime):
 actorMap = dict((key, ActorTime(key)) for key in ["exhaustairfan", "fan", "light", "humidifier"])
 actorMap.update(dict((key, ActorTemperature(key)) for key in ["heater"]))
 actorMap.update(dict((f"pump{key}", ActorPump(f"pump{key}")) for key in configuration.pump_dict))
+actorMap["humidifier"].on_auto = False
 
 class Bridge():
     def __init__(self):
@@ -201,6 +206,7 @@ class Bridge():
 class TheServer(SimpleXMLRPCServer):
     def service_actions(self):
         self.instance._execute()
+
 
 class RequestHandler(SimpleXMLRPCRequestHandler):
     rpc_paths = ('/RPC2',)

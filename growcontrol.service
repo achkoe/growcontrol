@@ -1,0 +1,13 @@
+[Unit]
+Description=Grow Controller
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=10
+ExecStart=bash -C /home/pi/growcontrol/startall.sh
+
+[Install]
+WantedBy=multi-user.target
