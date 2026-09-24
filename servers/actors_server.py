@@ -46,8 +46,9 @@ class BaseActor():
 
 
 class ActorTime(BaseActor):
-    def __init__(self, name):
+    def __init__(self, name, invert=False):
         super().__init__(name)
+        self.invert = invert
         self.on_time_it = None
         self.off_time_it = None
         self.on_time = None
@@ -80,7 +81,7 @@ class ActorTime(BaseActor):
             self.on = self.on_auto
         else:
             self.on = self.on_manual
-        driver.set(self.name, self.on)
+        driver.set(self.name, not self.on if self.invert else self.on)
         
         
 class ActorTemperature(BaseActor):
@@ -119,7 +120,7 @@ class ActorTemperature(BaseActor):
 
 class ActorPump(ActorTime):
     def __init__(self, name):
-        self.name = name
+        super().__init__(name)
         self.on_manual = False
         self.on_auto = False
         self.on = False
@@ -140,7 +141,8 @@ class ActorPump(ActorTime):
             super().execute()
     
             
-actorMap = dict((key, ActorTime(key)) for key in ["exhaustairfan", "fan", "light", "humidifier"])
+actorMap = dict((key, ActorTime(key, invert=True)) for key in ["exhaustairfan", "fan"])
+actorMap.update(dict((key, ActorTime(key)) for key in ["light", "humidifier"]))
 actorMap.update(dict((key, ActorTemperature(key)) for key in ["heater"]))
 actorMap.update(dict((f"pump{key}", ActorPump(f"pump{key}")) for key in configuration.pump_dict))
 actorMap["humidifier"].on_auto = False
