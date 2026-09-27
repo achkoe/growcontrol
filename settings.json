@@ -3,11 +3,11 @@
         "type": "time",
         "ontime": {
             "title": "Light On Time",
-            "value": "05:30"
+            "value": "05:31"
         },
         "offtime": {
             "title": "Light Off Time",
-            "value": "17:50"
+            "value": "18:20"
         }
     },
     "fan": {

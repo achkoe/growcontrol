@@ -3,8 +3,10 @@
 import os
 import json
 import logging
+import logging.handlers
 import xmlrpc.client
-from datetime import datetime
+import datetime
+#from datetime import datetime
 from xmlrpc.server import SimpleXMLRPCServer
 from xmlrpc.server import SimpleXMLRPCRequestHandler
 from dotenv import dotenv_values
@@ -22,6 +24,9 @@ IDENTITY = "actor_server.py v0.0.1"
 logging.basicConfig(format=configuration.log_format, level=logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(get_loglevel("ACTOR_SERVER_LOGLEVEL"))
+# fh = logging.handlers.RotatingFileHandler("_actors.log", maxBytes=1E5, backupCount=1)
+# fh.setLevel(logging.DEBUG)
+# LOGGER.addHandler(fh)
 SENSORS_PROXY = xmlrpc.client.ServerProxy(f"http://localhost:{configuration.sensors_server_port}")    
 driver.init()
     
@@ -55,35 +60,31 @@ class ActorTime(BaseActor):
         self.off_time = None
                     
     def set_on_time(self, t):
-        self.on_time_it = BaseIterator(t, datetime.now())
+        # self.on_time_it = BaseIterator(t, datetime.now())
+        self.on_time_it = BaseIterator(t, datetime.datetime.combine(datetime.date.today(), datetime.time()))
         self.on_time = next(self.on_time_it)
 
     def set_off_time(self, t):
-        self.off_time_it = BaseIterator(t, datetime.now())
+        # self.off_time_it = BaseIterator(t, datetime.now())
+        self.off_time_it = BaseIterator(t, datetime.datetime.combine(datetime.date.today(), datetime.time()))
         self.off_time = next(self.off_time_it)
         
     def execute(self):
-        now = datetime.now()
-        message = "{}: t={} : now >= on_time={} : now >= off_time={}".format(
-            self.name,
-            now.isoformat(),
-            now >= self.on_time,
-            now >= self.off_time,
-        )
+        now = datetime.datetime.now()
+        message = "{}: t={} : now >= on_time={} : now >= off_time={}".format(self.name, now.isoformat(), now >= self.on_time, now >= self.off_time)
         if now >= self.on_time:
             self.on_auto = True
             self.on_time = next(self.on_time_it)
         if now >= self.off_time:
             self.on_auto = False
             self.off_time = next(self.off_time_it)
-        LOGGER.info("{} : on_auto={}".format(message, self.on_auto))
+        ## LOGGER.warning("{} : on_auto={}".format(message, self.on_auto))
         if self.mode == "auto":
             self.on = self.on_auto
         else:
             self.on = self.on_manual
         driver.set(self.name, not self.on if self.invert else self.on)
-        
-        
+                
 class ActorTemperature(BaseActor):
     def __init__(self, name):
         super().__init__(name)
