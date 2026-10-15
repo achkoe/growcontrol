@@ -95,11 +95,11 @@
         "type": "time",
         "ontime": {
             "title": "Pump 1 On Time",
-            "value": "*-*-* 15:38:00"
+            "value": "*-*-* 07:15:00"
         },
         "offtime": {
             "title": "Pump 1 Off Time",
-            "value": "*-*-* 15:39:00"
+            "value": "*-*-* 07:16:00"
         }
     },
     "pump2": {
@@ -110,7 +110,7 @@
         },
         "offtime": {
             "title": "Pump 2 Off Time",
-            "value": "*-*-* 07:12:00"
+            "value": "*-*-* 07:11:00"
         }
     }
 }
