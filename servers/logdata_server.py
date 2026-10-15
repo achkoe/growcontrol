@@ -40,7 +40,13 @@ class Bridge():
         except Exception:
             return
         
-        if data != self.previous_data or time.time() - self.output[-1]["time"] >= INTERVAL:
+        any_change = False
+        for key in ["light-on", "heater-on", "fan-on", "humidifier-on", "exhaustairfan-on"]:
+            if data.get(key, None) != self.previous_data.get(key, None):
+                any_change = True
+                break
+
+        if any_change is True or time.time() - self.output[-1]["time"] >= INTERVAL:
             self.previous_data = data
             data["time"] = time.time()
             self.output.append(data)
